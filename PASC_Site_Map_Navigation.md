@@ -433,12 +433,12 @@ This website consists of **two main sections:**
 │  - Recent activity           │
 └──────────────────────────────┘
                 │
-        ┌───────┴───────┬───────────┬──────────┐
-        ▼               ▼           ▼          ▼
-   ┌─────────┐    ┌─────────┐  ┌─────────┐  ┌────────┐
-   │ANNOUNCE-│    │  EVENT  │  │  FILES  │  │SETTINGS│
-   │ MENTS   │    │  INFO   │  │         │  │        │
-   └─────────┘    └─────────┘  └─────────┘  └────────┘
+        ┌───────┴───────┬───────────┬──────────┬──────────┐
+        ▼               ▼           ▼          ▼          ▼
+   ┌─────────┐    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌────────┐
+   │ANNOUNCE-│    │  EVENT  │  │ GOOGLE  │  │  FILES  │  │SETTINGS│
+   │ MENTS   │    │  INFO   │  │  FORMS  │  │         │  │        │
+   └─────────┘    └─────────┘  └─────────┘  └─────────┘  └────────┘
 ```
 
 ### 4.2 Admin Panel Pages
@@ -503,6 +503,55 @@ This website consists of **two main sections:**
 
 **Delete Confirmation:**
 - "Are you sure?" popup
+
+---
+
+#### **GOOGLE FORMS MANAGEMENT** (`/admin/forms.cfm`)
+
+**Purpose:** Add, edit, and manage embedded Google Forms
+
+**Features:**
+
+**List View:**
+- Table showing all Google Forms:
+  - Form name
+  - Which page it appears on
+  - Active status (Yes/No)
+  - Date added
+  - Actions (Edit | Delete | Preview)
+- "Add New Form" button
+- Filter by page location
+
+**Add/Edit Form:**
+- **Form Name** (text input) - e.g., "Workshop Application Form"
+- **Google Form URL** (text input) - Paste full form URL or embed code
+- **Display on Page** (dropdown):
+  - Home
+  - About
+  - Workshops
+  - Register
+  - Resources
+  - Contact
+- **Description** (textarea, optional) - What is this form for?
+- **Display Order** (number) - If multiple forms on same page
+- **Active** (checkbox) - Show/hide form without deleting
+- **Schedule Visibility** (optional - Phase 2):
+  - Show from date
+  - Show until date
+- Save/Cancel buttons
+
+**Preview Function:**
+- Preview how form will look on the page
+- Test before activating
+
+**Delete Confirmation:**
+- "Are you sure you want to delete this form?" popup
+
+**Smart Features:**
+- Automatically detects if URL is iframe code or direct URL
+- Validates Google Forms URLs
+- Shows which forms are currently visible on site
+- Quick toggle Active/Inactive
 
 ---
 
@@ -712,6 +761,7 @@ Announcement appears on homepage immediately
 /admin/login             → Admin login
 /admin/dashboard         → Admin dashboard
 /admin/announcements     → Manage announcements
+/admin/forms             → Manage Google Forms
 /admin/event-info        → Manage event details
 /admin/files             → File uploads
 /admin/settings          → Admin settings

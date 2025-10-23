@@ -165,6 +165,16 @@ Create a professional, custom-designed website for the PASC (Pennsylvania Associ
    - Update embedded form URLs
    - Swap out forms as needed (e.g., January survey)
 
+6. **Google Forms Management**
+   - Add new Google Forms to any page (embed codes/URLs)
+   - Select which page each form appears on (Workshops, Register, Resources, etc.)
+   - Activate/deactivate forms without deleting them
+   - Update form URLs when Google Forms are recreated
+   - Set display order if multiple forms on one page
+   - Add descriptions for each form
+   - Schedule form visibility (optional - show between specific dates)
+   - Database stores: form name, URL, page location, active status, description
+
 #### 3.2.3 Admin Panel Must Be:
 - **Simple/intuitive** - team members are students, not technical
 - **Mobile-friendly** - students may update from phones
@@ -219,6 +229,7 @@ Create a professional, custom-designed website for the PASC (Pennsylvania Associ
 ### 5.2 Technology Stack
 - **Backend:** ColdFusion (CFML) - Lucee engine
 - **Database:** Microsoft SQL Server (included in hosting)
+  - Tables needed: announcements, event_info, google_forms, uploaded_files, admin_users (approximately 5-6 tables)
 - **Frontend:** HTML5, CSS3, JavaScript
 - **Forms:** Google Forms (embedded via iframe)
 - **Control Panel:** Plesk (provided by host)
@@ -267,9 +278,10 @@ Create a professional, custom-designed website for the PASC (Pennsylvania Associ
 ✅ Custom website with space theme design  
 ✅ Multiple pages with navigation  
 ✅ Embedded Google Forms (workshop applications, registration, t-shirt orders)  
+✅ Admin panel to manage which Google Forms appear on which pages  
 ✅ Dynamic announcements/news section  
 ✅ Admin panel for content updates  
-✅ Database for announcements and dynamic content  
+✅ Database for announcements, forms management, and dynamic content  
 ✅ Mobile-responsive design  
 ✅ Contact information page  
 ✅ Downloadable resources (PDF pamphlets)  
