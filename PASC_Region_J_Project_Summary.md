@@ -109,18 +109,21 @@ Approximately **50 high schools** across the 5 counties participate in Region J 
 
 **Custom Logo Plan:**
 - Oliver wants to create a custom "Region J" version
-- Add purple "J" to the existing PASC logo
+- Add orange/gold "J" to the existing PASC logo (matches Region J's official color on the PASC regional map)
 - Make it unique for Region J and this conference
 
 ### Color Scheme
 **Neshaminy School Colors:** Red and Blue (NOT using these)
 
 **Conference Theme Colors:**
-- **Purple** (primary - space theme)
+- **Orange/Gold** (Region J official color from PASC map - primary branding)
+- **Purple** (space theme accent)
 - **Blue** (accent - space/cosmic)
 - **Pink/Neon** (highlights - cosmic/galactic)
 - **Dark navy/black** (backgrounds - deep space)
 - Description from Oliver: "doing outer space/planets theme - so purple shirts with design, also blue and pink colors that resemble space colors, neon"
+
+**Note:** Logo will feature orange/gold "J" to match Region J's official regional color, while website theme uses space colors (purple, blue, pink, neon).
 
 ### Visual References
 - **Instagram:** @pascregionj (active with conference photos and updates)
