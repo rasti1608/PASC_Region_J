@@ -53,22 +53,22 @@ Think of the site as a **cosmic journey**:
 
 ### Primary Colors
 
-| Role | Color Name | Swatch | Hex Code | RGB | Use Case |
-|------|------------|--------|----------|-----|----------|
-| **Primary** | Deep Purple | ![#5b2db3](https://via.placeholder.com/20/5b2db3/5b2db3.png) | `#5b2db3` | rgb(91, 45, 179) | Cosmic background, hero areas, primary branding |
-| **Primary Alt** | Rich Purple | ![#6b3fd6](https://via.placeholder.com/20/6b3fd6/6b3fd6.png) | `#6b3fd6` | rgb(107, 63, 214) | Lighter purple variant for gradients |
-| **Accent 1** | Space Blue | ![#1a2a6c](https://via.placeholder.com/20/1a2a6c/1a2a6c.png) | `#1a2a6c` | rgb(26, 42, 108) | Secondary panels, navigation hover, depth |
-| **Accent 2** | Neon Pink | ![#ff5edc](https://via.placeholder.com/20/ff5edc/ff5edc.png) | `#ff5edc` | rgb(255, 94, 220) | Call-to-action buttons, highlights, energy |
-| **Highlight** | Electric Blue | ![#37f9f0](https://via.placeholder.com/20/37f9f0/37f9f0.png) | `#37f9f0` | rgb(55, 249, 240) | Underline links, icon glow, interactive elements |
-| **Background** | Almost Black | ![#0b0c10](https://via.placeholder.com/20/0b0c10/0b0c10.png) | `#0b0c10` | rgb(11, 12, 16) | Site background, deep space effect |
-| **Text Primary** | Off-White | ![#f5f5f5](https://via.placeholder.com/20/f5f5f5/f5f5f5.png) | `#f5f5f5` | rgb(245, 245, 245) | Main body text, legibility on dark theme |
-| **Text Secondary** | Muted Gray | ![#cccccc](https://via.placeholder.com/20/cccccc/cccccc.png) | `#cccccc` | rgb(204, 204, 204) | Secondary text, captions, metadata |
+| Role | Color Name | Hex Code | RGB | Use Case |
+|------|------------|----------|-----|----------|
+| **Primary** | Deep Purple | `#5b2db3` | rgb(91, 45, 179) | Cosmic background, hero areas, primary branding |
+| **Primary Alt** | Rich Purple | `#6b3fd6` | rgb(107, 63, 214) | Lighter purple variant for gradients |
+| **Accent 1** | Space Blue | `#1a2a6c` | rgb(26, 42, 108) | Secondary panels, navigation hover, depth |
+| **Accent 2** | Neon Pink | `#ff5edc` | rgb(255, 94, 220) | Call-to-action buttons, highlights, energy |
+| **Highlight** | Electric Blue | `#37f9f0` | rgb(55, 249, 240) | Underline links, icon glow, interactive elements |
+| **Background** | Almost Black | `#0b0c10` | rgb(11, 12, 16) | Site background, deep space effect |
+| **Text Primary** | Off-White | `#f5f5f5` | rgb(245, 245, 245) | Main body text, legibility on dark theme |
+| **Text Secondary** | Muted Gray | `#cccccc` | rgb(204, 204, 204) | Secondary text, captions, metadata |
 
 ### Region J Branding Color
 
-| Role | Color Name | Swatch | Hex Code | RGB | Use Case |
-|------|------------|--------|----------|-----|----------|
-| **Region J Brand** | Orange/Gold | ![#FF8C00](https://via.placeholder.com/20/FF8C00/FF8C00.png) | `#FF8C00` | rgb(255, 140, 0) | Logo "J" overlay, Region J badges, official regional identifier |
+| Role | Color Name | Hex Code | RGB | Use Case |
+|------|------------|----------|-----|----------|
+| **Region J Brand** | Orange/Gold | `#FF8C00` | rgb(255, 140, 0) | Logo "J" overlay, Region J badges, official regional identifier |
 
 ### Color Usage Notes
 
@@ -581,16 +581,16 @@ Password-protected area for student council team to manage content without touch
 
 ### Color Scheme (Admin)
 
-| Element | Swatch | Color |
-|---------|--------|-------|
-| Background | ![#1a1a2e](https://via.placeholder.com/20/1a1a2e/1a1a2e.png) | `#1a1a2e` (lighter than public site) |
-| Card Background | ![#16213e](https://via.placeholder.com/20/16213e/16213e.png) | `#16213e` |
-| Text Primary | ![#f5f5f5](https://via.placeholder.com/20/f5f5f5/f5f5f5.png) | `#f5f5f5` |
-| Text Secondary | ![#cccccc](https://via.placeholder.com/20/cccccc/cccccc.png) | `#cccccc` |
-| Borders | ![#37f9f0](https://via.placeholder.com/20/37f9f0/37f9f0.png) | `#37f9f0` (electric blue) |
-| Success | ![#00ff88](https://via.placeholder.com/20/00ff88/00ff88.png) | `#00ff88` (green) |
-| Warning | ![#ff8c00](https://via.placeholder.com/20/ff8c00/ff8c00.png) | `#ff8c00` (orange) |
-| Error | ![#ff5555](https://via.placeholder.com/20/ff5555/ff5555.png) | `#ff5555` (red) |
+| Element | Color | Notes |
+|---------|-------|-------|
+| Background | `#1a1a2e` | Lighter than public site |
+| Card Background | `#16213e` | |
+| Text Primary | `#f5f5f5` | |
+| Text Secondary | `#cccccc` | |
+| Borders | `#37f9f0` | Electric blue |
+| Success | `#00ff88` | Green |
+| Warning | `#ff8c00` | Orange |
+| Error | `#ff5555` | Red |
 
 ### Layout
 
