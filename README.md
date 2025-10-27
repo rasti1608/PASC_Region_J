@@ -107,7 +107,7 @@ For technical details, setup instructions, and developer documentation, see:
 ## 📧 Contact
 
 **Questions about the website?**  
-Email: rasto@comcast.net
+Contact: info@pascregionj.com
 
 **Questions about the conference?**  
 Visit: [pascregionj.com/contact.cfm](https://pascregionj.com/contact.cfm)
