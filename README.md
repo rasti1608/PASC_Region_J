@@ -2,240 +2,119 @@
 
 **Lead Beyond Limits - February 13, 2026**
 
-A custom-built conference website with a full-featured Content Management System (CMS) for managing announcements and conference information.
+A custom-built website for the Pennsylvania Association of Student Councils (PASC) Region J Leadership Conference, featuring an easy-to-use admin system for managing announcements and conference updates.
 
-![ColdFusion](https://img.shields.io/badge/ColdFusion-2021-blue)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-2019-red)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Live Site](https://img.shields.io/badge/status-live-brightgreen)
+![Conference](https://img.shields.io/badge/event-Feb%2013%202026-blue)
 
-## 🚀 Project Overview
+## 🌟 What Is This?
 
-This is a professional conference website built for the Pennsylvania Association of Student Councils (PASC) Region J 2026 Leadership Conference. The site features a custom admin panel for managing dynamic content, announcements, and conference information.
+This is the official website for the PASC Region J Conference 2026, hosted at Neshaminy High School. The site provides information about the conference and includes a powerful admin panel that lets organizers easily update announcements without needing to know how to code.
 
-**Live Site:** [pascregionj.com](https://pascregionj.com)
+**Live Website:** [pascregionj.com](https://pascregionj.com)
 
-## ✨ Features
+## 📱 What Can Visitors See?
 
-### Public Website
-- **Responsive Design** - Mobile-friendly layout that works on all devices
-- **Dynamic Announcements** - Homepage displays active announcements managed through admin panel
-- **Featured Content** - Highlight important announcements with featured badges
-- **Date-Based Publishing** - Schedule announcements to appear/disappear automatically
-- **Conference Information** - About, Gallery, Workshops, Registration, Contact, and Resources pages
-- **SSL Security** - Full HTTPS encryption
+- **Conference Information** - Theme, date, location, and schedule
+- **Latest Announcements** - Important updates displayed right on the homepage
+- **Workshop Details** - Information about available sessions
+- **Photo Gallery** - Pictures from past events
+- **Registration Info** - How to sign up for the conference
+- **Resources** - Helpful materials and downloads
+- **Contact Information** - How to reach organizers
 
-### Admin Panel
-- **Secure Authentication** - Password-protected admin access
-- **Announcement Management**
-  - Create, Read, Update, Delete (CRUD) operations
-  - Rich text content editing
-  - Toggle active/inactive status
-  - Featured announcement marking
-  - Custom display ordering (drag-to-reorder)
-  - Publish date scheduling with start/end dates
-- **Smart Ordering System**
-  - New announcements automatically appear at top
-  - Automatic gap-closing when deleting items
-  - Manual reordering via dropdown selection
-- **Status Indicators**
-  - Live/Inactive/Future status badges
-  - Visual date validation
-  - Featured announcement highlighting
+The website works on phones, tablets, and computers!
 
-## 🛠️ Technology Stack
+## 🎯 What Can Organizers Do?
 
-**Backend:**
-- ColdFusion 2021
-- Microsoft SQL Server 2019
-- T-SQL for database operations
+The admin panel (at `/admin/`) lets conference organizers:
 
-**Frontend:**
-- HTML5 / CSS3
-- Vanilla JavaScript
-- Responsive CSS Grid & Flexbox
-- Custom CSS animations
+- **Post Announcements** - Share news and updates with attendees
+- **Schedule Posts** - Set announcements to appear on specific dates
+- **Highlight Important News** - Mark special announcements as "featured"
+- **Organize Content** - Easily reorder announcements by importance
+- **Control Visibility** - Show or hide announcements anytime
+- **Edit Anytime** - Update content whenever needed
 
-**Hosting:**
-- DailyRazor ColdFusion Hosting
-- SSL/TLS encryption (Let's Encrypt)
+**No coding knowledge required!** Everything is done through simple forms and buttons.
 
-## 📁 Project Structure
+## ✨ Cool Features
 
-```
-pascregionj/
-├── admin/                          # Admin panel
-│   ├── announcements/              # Announcement management
-│   │   ├── index.cfm              # List all announcements
-│   │   ├── add.cfm                # Create new announcement
-│   │   ├── edit.cfm               # Edit existing announcement
-│   │   └── delete.cfm             # Delete announcement
-│   ├── login.cfm                  # Admin authentication
-│   ├── dashboard.cfm              # Admin dashboard
-│   └── logout.cfm                 # Session cleanup
-├── includes/                       # Shared templates
-│   ├── header.cfm                 # Site header & navigation
-│   ├── footer.cfm                 # Site footer
-│   ├── auth_check.cfm             # Authentication verification
-│   └── db_config.cfm              # Database configuration
-├── assets/                         # Static resources
-│   ├── css/                       # Stylesheets
-│   │   ├── style.css              # Main site styles
-│   │   ├── admin-dashboard.css    # Admin panel styles
-│   │   └── mobile-menu.css        # Mobile navigation
-│   ├── js/                        # JavaScript files
-│   │   └── main.js                # Site functionality
-│   └── img/                       # Images & logos
-├── index.cfm                      # Homepage
-├── about.cfm                      # About page
-├── gallery.cfm                    # Photo gallery
-├── workshops.cfm                  # Workshop information
-├── contact.cfm                    # Contact form
-├── resources.cfm                  # Resources page
-├── Application.cfc                # ColdFusion application settings
-└── database/
-    └── schema.sql                 # Database schema & setup
+### For Students & Attendees
+- Clean, modern design with space theme
+- Easy navigation on any device
+- Important announcements always at the top
+- Quick access to registration and workshop info
 
-```
+### For Conference Organizers
+- Secure login to admin area
+- Add new announcements in seconds
+- Announcements automatically appear on homepage
+- Schedule posts for future dates
+- Mark important announcements with a star
+- Drag-and-drop style ordering (via dropdowns)
 
-## 🗄️ Database Schema
+## 🏗️ How Was This Built?
 
-**announcements** table:
-```sql
-- id (INT, PRIMARY KEY, IDENTITY)
-- title (NVARCHAR(500))
-- content (NVARCHAR(MAX))
-- is_active (BIT)
-- is_featured (BIT)
-- display_order (INT)
-- publish_start (DATE)
-- publish_end (DATE, NULL)
-- created_by (INT)
-- created_at (DATETIME)
-- updated_at (DATETIME)
-```
+**Development Time:** ~25 hours (over one weekend)  
+**Purpose:** Built by a dad for his son's school conference  
+**Goal:** Create a professional website that's easy to manage
 
-**admin_users** table:
-```sql
-- id (INT, PRIMARY KEY, IDENTITY)
-- username (NVARCHAR(100))
-- password_hash (NVARCHAR(255))
-- email (NVARCHAR(255))
-- full_name (NVARCHAR(255))
-- is_active (BIT)
-- created_at (DATETIME)
-- last_login (DATETIME)
-```
+This was a learning project that became a real, production-ready website. It proves that with the right tools (and some AI help!), you can build professional web applications quickly.
 
-## 🚀 Installation & Setup
+## 💻 Technical Details (For Developers)
 
-### Prerequisites
-- ColdFusion 2021+ (or Lucee 5.3+)
-- Microsoft SQL Server 2019+ (or Azure SQL Database)
-- Web server (IIS or Apache)
+**Built With:**
+- ColdFusion (backend programming)
+- Microsoft SQL Server (database)
+- HTML/CSS/JavaScript (frontend)
+- Responsive design (mobile-friendly)
 
-### Setup Steps
+**Code Stats:**
+- ~2,300 lines of code
+- 22 files
+- Custom CMS from scratch
+- Fully secure with HTTPS
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/rasti1608/PASC_Region_J.git
-   cd PASC_Region_J
-   ```
+For detailed technical documentation, see the `/docs/` folder in this repository.
 
-2. **Database Setup**
-   - Create a new SQL Server database
-   - Run the SQL scripts in `/database/schema.sql`
-   - Update datasource name in `Application.cfc`
+## 🚀 Future Plans
 
-3. **Configure ColdFusion Datasource**
-   - Open ColdFusion Administrator
-   - Add datasource: `pasc_regionj`
-   - Configure connection to your SQL Server database
+Ideas for future versions:
+- Online registration form with payment
+- Photo gallery management
+- Workshop sign-up system
+- Automated email notifications
+- Attendee check-in system
 
-4. **Set Application Variables**
-   - Edit `Application.cfc`
-   - Update `this.datasource` with your datasource name
-   - Configure session timeout settings
+## 👨‍💻 About This Project
 
-5. **Create Admin User**
-   - Run the admin user creation script
-   - Or insert directly into `admin_users` table with hashed password
+**Created By:** Rastislav Toscak  
+**For:** Oliver Toscak & PASC Region J Conference 2026  
+**When:** October 2025  
+**Why:** To provide a professional web presence for the student leadership conference
 
-6. **Deploy Files**
-   - Copy all files to your web root
-   - Ensure `admin/` folder has proper permissions
-   - Verify includes folder is accessible
+Built as both a learning experience and a practical tool. The goal was to create something that looks professional, works reliably, and can be easily managed by people who aren't tech experts.
 
-7. **Test Installation**
-   - Visit your site homepage
-   - Login to `/admin/` with admin credentials
-   - Create a test announcement
+## 📖 Documentation
 
-## 🔐 Security Features
+For technical details, setup instructions, and developer documentation, see:
+- `PASC_Database_Schema.sql` - Database structure
+- `PASC_Design_Implementation_Specification.md` - Technical design docs
+- `PASC_Site_Map_Navigation.md` - Site structure and navigation
+- `PASC_Business_Requirements_Document.md` - Project requirements
 
-- **Password Hashing** - Secure password storage with salt
-- **Session Management** - Secure session handling with timeouts
-- **SQL Injection Protection** - All queries use `cfqueryparam`
-- **Authentication Checks** - Every admin page verifies login status
-- **HTTPS Encryption** - Full SSL/TLS implementation
-- **XSS Prevention** - HTML encoding on user inputs
+## 📧 Contact
 
-## 📊 Key Features Implementation
+**Questions about the website?**  
+Email: rasto@comcast.net
 
-### Announcement Ordering System
-- **Add New**: Automatically becomes position #1, all others shift down
-- **Delete**: Automatically closes gaps, renumbers remaining items
-- **Reorder**: Dropdown selection with smart position swapping
-- **Display**: Always shows in correct order on homepage
-
-### Date-Based Publishing
-- **Future Announcements**: Won't appear until `publish_start` date
-- **Expired Announcements**: Automatically hidden after `publish_end` date
-- **Active Status**: Manual toggle to show/hide immediately
-
-### Status Indicators
-- 🟢 **Live** - Currently visible on site
-- ⚪ **Inactive** - Hidden from public view
-- 🔵 **Future** - Scheduled for future publication
-
-## 📈 Future Enhancements
-
-- [ ] Gallery photo management system
-- [ ] Online registration form with payment processing
-- [ ] Workshop management admin panel
-- [ ] Email notification system
-- [ ] Multi-user admin roles & permissions
-- [ ] Content versioning & revision history
-- [ ] Analytics dashboard
-- [ ] PDF generation for schedules/materials
-
-## 💡 Development Notes
-
-**Built with AI assistance** - This project was developed using Claude AI to accelerate development while maintaining professional code quality.
-
-**Development Time**: ~25 hours (MVP)
-**Lines of Code**: ~2,277
-**Files**: 22
-
-## 📄 License
-
-MIT License - Feel free to use this code for your own projects!
-
-## 👨‍💻 Author
-
-**Rastislav Toscak**
-- Email: rasto@comcast.net
-- GitHub: [@rasti1608](https://github.com/rasti1608)
-
-Built for Oliver Toscak's PASC Region J Conference 2026
-
-## 🙏 Acknowledgments
-
-- Pennsylvania Association of Student Councils (PASC)
-- PASC Region J Leadership Team
-- Neshaminy High School (Conference Host)
+**Questions about the conference?**  
+Visit: [pascregionj.com/contact.cfm](https://pascregionj.com/contact.cfm)
 
 ---
 
-**⭐ If you find this project useful, please star the repository!**
+**⭐ Like this project? Star it on GitHub!**
 
 *Last Updated: October 27, 2025*
+
