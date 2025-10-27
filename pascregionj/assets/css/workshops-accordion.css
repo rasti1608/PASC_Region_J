@@ -1,0 +1,116 @@
+/*******************************************************************************
+* File: workshops-accordion.css
+* Created: October 26, 2025
+* Author: Rastislav Toscak
+* Purpose: Custom Bootstrap accordion styling for workshops forms
+* Project: PASC Region J Conference 2026 Website
+*******************************************************************************/
+
+/* Accordion Container */
+.accordion {
+    max-width: 1000px;
+    margin: 0 auto 60px;
+}
+
+/* Accordion Items */
+.accordion-item {
+    background: rgba(26, 31, 58, 0.6);
+    border: 2px solid rgba(79, 195, 247, 0.3);
+    border-radius: 15px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+    border-color: rgba(79, 195, 247, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(79, 195, 247, 0.2);
+}
+
+/* Accordion Button/Header */
+.accordion-button {
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 25px 30px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.2) 0%, rgba(129, 140, 248, 0.2) 100%);
+    color: #4fc3f7;
+    box-shadow: none;
+}
+
+.accordion-button:hover {
+    background: linear-gradient(135deg, rgba(79, 195, 247, 0.15) 0%, rgba(129, 140, 248, 0.15) 100%);
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(79, 195, 247, 0.25);
+    border-color: rgba(79, 195, 247, 0.5);
+}
+
+/* Custom Arrow Icon */
+.accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%234fc3f7'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Accordion Body */
+.accordion-body {
+    padding: 30px;
+    background: rgba(10, 14, 39, 0.6);
+}
+
+/* Form Container Inside Accordion */
+.accordion .form-container {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.accordion .form-container iframe {
+    border-radius: 8px;
+    display: block;
+    width: 100%;
+    min-height: 1200px;
+    border: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .accordion-button {
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+
+    .accordion-body {
+        padding: 20px 15px;
+    }
+
+    .accordion .form-container {
+        padding: 5px;
+    }
+
+    .accordion .form-container iframe {
+        min-height: 1000px;
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion-button {
+        font-size: 1rem;
+        padding: 15px;
+    }
+
+    .accordion .form-container iframe {
+        min-height: 900px;
+    }
+}

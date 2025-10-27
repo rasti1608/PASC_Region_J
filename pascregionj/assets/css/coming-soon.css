@@ -1,0 +1,239 @@
+/*******************************************************************************
+* File: coming-soon.css
+* Created: October 26, 2025
+* Author: Rastislav Toscak
+* Purpose: Styles for "Coming Soon" placeholder pages
+* Project: PASC Region J Conference 2026 Website
+*******************************************************************************/
+
+/* Coming Soon Section */
+.coming-soon-section {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+    min-height: calc(100vh - 400px);
+}
+
+.coming-soon-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Coming Soon Icon */
+.coming-soon-icon {
+    margin: 0 auto 40px;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(79, 195, 247, 0.1);
+    border-radius: 50%;
+    border: 3px solid rgba(79, 195, 247, 0.3);
+}
+
+.coming-soon-icon svg {
+    filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.5));
+}
+
+/* Typography */
+.coming-soon-content h2 {
+    font-size: 3rem;
+    color: #4fc3f7;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.coming-soon-text {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #b0b8d4;
+    margin-bottom: 20px;
+}
+
+.coming-soon-subtext {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #8892b0;
+    margin-bottom: 50px;
+}
+
+/* Details Section */
+.coming-soon-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin: 50px 0;
+}
+
+.detail-item {
+    background: rgba(26, 31, 58, 0.6);
+    border: 2px solid rgba(79, 195, 247, 0.3);
+    border-radius: 15px;
+    padding: 30px 20px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+    transform: translateY(-5px);
+    border-color: rgba(79, 195, 247, 0.6);
+    box-shadow: 0 15px 40px rgba(79, 195, 247, 0.2);
+}
+
+.detail-item h3 {
+    color: #4fc3f7;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.detail-item p {
+    color: #ffffff;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Contact Info Box */
+.contact-info-box {
+    background: rgba(26, 31, 58, 0.6);
+    border: 2px solid rgba(79, 195, 247, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    margin: 50px 0;
+    backdrop-filter: blur(10px);
+}
+
+.contact-info-box h3 {
+    color: #4fc3f7;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.contact-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    text-align: left;
+}
+
+.contact-method strong {
+    display: block;
+    color: #4fc3f7;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.contact-method p {
+    color: #b0b8d4;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.contact-method a {
+    color: #4fc3f7;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.contact-method a:hover {
+    color: #818cf8;
+    text-decoration: underline;
+}
+
+/* Resources Preview */
+.resources-preview {
+    margin: 50px 0;
+}
+
+.resources-preview h3 {
+    color: #4fc3f7;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    text-align: left;
+}
+
+.preview-item {
+    background: rgba(26, 31, 58, 0.6);
+    border: 2px solid rgba(79, 195, 247, 0.3);
+    border-radius: 10px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.preview-item:hover {
+    transform: translateY(-3px);
+    border-color: rgba(79, 195, 247, 0.6);
+    box-shadow: 0 10px 30px rgba(79, 195, 247, 0.2);
+}
+
+.preview-item h4 {
+    color: #4fc3f7;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.preview-item p {
+    color: #8892b0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Buttons */
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .coming-soon-content h2 {
+        font-size: 2.2rem;
+    }
+    
+    .coming-soon-text {
+        font-size: 1.1rem;
+    }
+    
+    .coming-soon-details,
+    .contact-methods,
+    .preview-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+    }
+    
+    .cta-buttons .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .coming-soon-section {
+        padding: 40px 15px;
+    }
+    
+    .coming-soon-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .contact-info-box,
+    .detail-item,
+    .preview-item {
+        padding: 20px;
+    }
+}
