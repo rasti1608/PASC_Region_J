@@ -664,7 +664,27 @@ a:hover {
 /* About Intro Section */
 .about-intro {
     padding: var(--spacing-xxl) 0;
+    position: relative;
     background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+}
+
+.about-intro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.about-intro > .container {
+    position: relative;
+    z-index: 1;
 }
 
 .about-grid {
@@ -697,10 +717,35 @@ a:hover {
     filter: drop-shadow(0 0 20px rgba(255, 193, 7, 0.3));
 }
 
+/* Rotate About page logo when music plays */
+.large-logo.rotating {
+    animation: navLogoRotate 20s linear infinite;
+}
+
 /* Mission & Vision Boxes */
 .mission-vision {
     padding: var(--spacing-xxl) 0;
+    position: relative;
     background: linear-gradient(135deg, rgba(91, 75, 138, 0.3) 0%, rgba(74, 144, 226, 0.2) 100%);
+}
+
+.mission-vision::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.mission-vision > .container {
+    position: relative;
+    z-index: 1;
 }
 
 .mission-vision-grid {
@@ -736,7 +781,27 @@ a:hover {
 /* What We Do Section */
 .what-we-do {
     padding: var(--spacing-xxl) 0;
+    position: relative;
     background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+}
+
+.what-we-do::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.what-we-do > .container {
+    position: relative;
+    z-index: 1;
 }
 
 .section-title {
@@ -798,7 +863,27 @@ a:hover {
 /* Why Join Section */
 .why-join {
     padding: var(--spacing-xxl) 0;
+    position: relative;
     background: linear-gradient(135deg, rgba(26, 35, 50, 0.8) 0%, rgba(91, 75, 138, 0.3) 100%);
+}
+
+.why-join::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.why-join > .container {
+    position: relative;
+    z-index: 1;
 }
 
 .benefits-grid {

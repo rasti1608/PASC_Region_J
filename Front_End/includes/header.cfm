@@ -256,7 +256,9 @@
         function updateAllPlayers(isPlaying) {
             // Get nav logo
             const navLogo = document.getElementById('navLogo');
-            
+            // Get About page logo
+            const aboutLogo = document.querySelector('.large-logo');
+
             // Update header button
             if (headerBtn && headerIcon) {
                 if (isPlaying) {
@@ -265,16 +267,18 @@
                     // Show equalizers
                     if (equalizerLeft) equalizerLeft.style.display = 'flex';
                     if (equalizerRight) equalizerRight.style.display = 'flex';
-                    // Rotate logo
+                    // Rotate logos
                     if (navLogo) navLogo.classList.add('rotating');
+                    if (aboutLogo) aboutLogo.classList.add('rotating');
                 } else {
                     headerBtn.classList.remove('playing');
                     headerIcon.innerHTML = '&#9654;'; // Play icon
                     // Hide equalizers
                     if (equalizerLeft) equalizerLeft.style.display = 'none';
                     if (equalizerRight) equalizerRight.style.display = 'none';
-                    // Stop logo rotation
+                    // Stop logo rotations
                     if (navLogo) navLogo.classList.remove('rotating');
+                    if (aboutLogo) aboutLogo.classList.remove('rotating');
                 }
             }
             
