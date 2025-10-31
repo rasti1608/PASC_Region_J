@@ -218,5 +218,14 @@ coverage/
 # Project-Specific Exclusions
 # ========================================
 
-# Add any project-specific files to ignore below:
-# (Currently none)
+# ColdFusion/Lucee server configuration
+server.json
+
+# URL rewrite configuration (environment-specific)
+urlrewrite.xml
+
+# IIS web server configuration (local settings)
+web.config
+
+# Reference files (examples, not for production)
+reference_files/

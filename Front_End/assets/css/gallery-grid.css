@@ -1,0 +1,414 @@
+/*******************************************************************************
+* File: gallery-grid.css
+* Created: October 31, 2025
+* Updated: October 31, 2025
+* Author: Gallery Implementation
+* Purpose: Photo gallery grid layout with advanced pagination and lightbox modal
+*          Based on exhibit_d.html reference design
+* Project: PASC Region J Conference 2026 Website
+*******************************************************************************/
+
+/* ========================================
+   GALLERY SECTION
+   ======================================== */
+
+.gallery-section {
+    padding: 60px 20px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+    min-height: 60vh;
+}
+
+/* Space nebula background overlay */
+.gallery-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.gallery-section > .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   PAGINATION CONTROLS (TOP AND BOTTOM)
+   ======================================== */
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.page-info {
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-button {
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.nav-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-input {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    color: black;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    width: 60px;
+    text-align: center;
+}
+
+.page-input:focus {
+    outline: 2px solid rgba(138, 43, 226, 0.8);
+    background: white;
+}
+
+/* ========================================
+   GALLERY GRID
+   ======================================== */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.gallery-item {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+    display: block;
+}
+
+.gallery-item .info {
+    padding: 10px;
+    text-align: center;
+}
+
+.gallery-item .date {
+    font-weight: bold;
+    font-size: 0.95em;
+    opacity: 0.95;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+/* ========================================
+   LIGHTBOX MODAL
+   ======================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    position: relative;
+    margin: auto;
+    display: block;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    object-fit: contain;
+    border-radius: 8px;
+    border: 3px solid white;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10002;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #ff6b6b;
+}
+
+/* Modal Navigation Arrows */
+.modal-arrows {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 100px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 10002;
+}
+
+.arrow-left,
+.arrow-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 15px 20px;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: all;
+    transition: all 0.3s ease;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow-left {
+    left: 20px;
+}
+
+.arrow-right {
+    right: 20px;
+}
+
+.arrow-left:hover,
+.arrow-right:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.arrow-left:disabled,
+.arrow-right:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%);
+}
+
+/* Photo Counter */
+.modal-info {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    z-index: 10002;
+}
+
+/* ========================================
+   EMPTY GALLERY STATE
+   ======================================== */
+
+.gallery-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--color-text-secondary, #b8c2cc);
+}
+
+.gallery-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.gallery-empty h2 {
+    color: var(--color-accent, #ffd700);
+    font-size: 2rem;
+    margin-bottom: 16px;
+}
+
+.gallery-empty p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .gallery-section {
+        padding: 50px 15px;
+    }
+
+    .gallery-grid {
+        gap: 12px;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 767px) {
+    .gallery-section {
+        padding: 40px 10px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .nav-buttons {
+        justify-content: center;
+    }
+
+    .page-info {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .nav-button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .gallery-item img {
+        height: 150px;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        max-width: 95vw;
+        max-height: 85vh;
+    }
+
+    .close {
+        top: 10px;
+        right: 10px;
+        font-size: 32px;
+    }
+
+    .arrow-left,
+    .arrow-right {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        padding: 10px;
+    }
+
+    .arrow-left {
+        left: 10px;
+    }
+
+    .arrow-right {
+        right: 10px;
+    }
+
+    .modal-info {
+        bottom: 10px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra small mobile (< 480px) */
+@media (max-width: 480px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .gallery-item img {
+        height: 120px;
+    }
+
+    .nav-button {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .page-input {
+        width: 50px;
+        font-size: 13px;
+    }
+}

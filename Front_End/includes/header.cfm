@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="/assets/css/hero-video.css">
     <link rel="stylesheet" href="/assets/css/animations.css">
     <link rel="stylesheet" href="/assets/css/anthem-player.css">
+    <link rel="stylesheet" href="/assets/css/gallery-grid.css">
 
     <!--- Optional: Favicon --->
     <link rel="icon" type="image/png" href="/assets/img/favicon.png">
