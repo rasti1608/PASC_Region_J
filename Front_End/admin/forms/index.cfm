@@ -19,6 +19,17 @@
 <!--- Get page location from URL (default to Workshops) --->
 <cfparam name="url.location" default="Workshops">
 
+<!--- Handle status filter form submission --->
+<cfif structKeyExists(form, "statusFilter")>
+    <cfset session["forms_#url.location#_statusFilter"] = form.statusFilter>
+    <cflocation url="index.cfm?location=#url.location#" addtoken="false">
+</cfif>
+
+<!--- Initialize session filter for current tab --->
+<cfif NOT structKeyExists(session, "forms_#url.location#_statusFilter")>
+    <cfset session["forms_#url.location#_statusFilter"] = "all">
+</cfif>
+
 <!--- Handle order change from dropdown --->
 <cfif structKeyExists(form, "form_id") AND structKeyExists(form, "new_order")>
     <!--- Get current order of the form being moved --->
@@ -90,6 +101,9 @@
         updated_at
     FROM dbo.forms
     WHERE page_location = <cfqueryparam value="#url.location#" cfsqltype="cf_sql_varchar">
+    <cfif session["forms_#url.location#_statusFilter"] NEQ "all">
+        AND is_active = <cfqueryparam value="#session['forms_#url.location#_statusFilter'] EQ 'active' ? 1 : 0#" cfsqltype="cf_sql_bit">
+    </cfif>
     ORDER BY display_order ASC, created_at DESC
 </cfquery>
 
@@ -161,6 +175,101 @@
             background: #4a90e2;
             color: white;
         }
+
+        /* Search box and filters */
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .status-filter {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #333;
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .status-filter:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .search-results {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 20px 0;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .pagination-info {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: #ffffff;
+            color: #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: #f5f5f5;
+            border-color: #4a90e2;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.active {
+            background: #4a90e2;
+            color: #ffffff;
+            border-color: #4a90e2;
+        }
     </style>
 </head>
 <body>
@@ -195,8 +304,32 @@
                         <h2>#url.location# Forms (#qForms.recordCount#)</h2>
                         <a href="add.cfm?location=#url.location#" class="btn btn-primary">+ Add New Form</a>
                     </div>
+
+                    <!--- Search Box and Status Filter --->
+                    <div class="search-container">
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="search-input"
+                            placeholder="Search by form name or description..."
+                            onkeyup="filterTable()">
+                        <form method="post" action="index.cfm?location=#url.location#" style="display: inline;">
+                            <select name="statusFilter" class="status-filter" onchange="this.form.submit()">
+                                <option value="all" <cfif session["forms_#url.location#_statusFilter"] EQ "all">selected</cfif>>All Statuses</option>
+                                <option value="active" <cfif session["forms_#url.location#_statusFilter"] EQ "active">selected</cfif>>Active</option>
+                                <option value="inactive" <cfif session["forms_#url.location#_statusFilter"] EQ "inactive">selected</cfif>>Inactive</option>
+                            </select>
+                        </form>
+                        <span class="search-results" id="searchResults"></span>
+                    </div>
+
+                    <!--- Top Pagination --->
+                    <div class="pagination-container" id="paginationContainerTop">
+                        <div class="pagination-info" id="paginationInfoTop"></div>
+                        <div class="pagination-controls" id="paginationControlsTop"></div>
+                    </div>
                 </cfoutput>
-                
+
                 <cfif qForms.recordCount EQ 0>
                     <div class="empty-state">
                         <cfoutput>
@@ -210,17 +343,17 @@
                             <tr>
                                 <th>Order</th>
                                 <th>Form Details</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th class="col-status">Status</th>
+                                <th class="actions">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tableBody">
                             <cfoutput query="qForms">
-                                <tr>
+                                <tr data-search="#lCase(htmlEditFormat(form_name))# #lCase(htmlEditFormat(form_description))#" data-status="#is_active ? 'active' : 'inactive'#">
                                     <td class="text-center">
                                         <form method="post" action="index.cfm?location=#url.location#" style="margin: 0;">
                                             <input type="hidden" name="form_id" value="#id#">
-                                            <select name="new_order" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px; border: 1px solid ##ddd;">
+                                            <select name="new_order" onchange="this.form.submit()">
                                                 <cfloop from="1" to="#totalCount#" index="loopIndex">
                                                     <option value="#loopIndex#" <cfif display_order EQ loopIndex>selected</cfif>>#loopIndex#</option>
                                                 </cfloop>
@@ -237,7 +370,7 @@
                                             </cfif>
                                         </cfif>
                                     </td>
-                                    <td>
+                                    <td class="col-status">
                                         <cfif is_active>
                                             <span class="badge badge-success">✓ Active</span>
                                         <cfelse>
@@ -255,9 +388,199 @@
                             </cfoutput>
                         </tbody>
                     </table>
+
+                    <!--- Pagination --->
+                    <div class="pagination-container" id="paginationContainer">
+                        <div class="pagination-info" id="paginationInfo"></div>
+                        <div class="pagination-controls" id="paginationControls"></div>
+                    </div>
                 </cfif>
             </div>
         </main>
     </div>
+
+    <!--- JavaScript --->
+    <script>
+    // Pagination variables
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let filteredRows = [];
+
+    // Search and Pagination function
+    function filterTable() {
+        const searchInput = document.getElementById('searchInput');
+        const searchFilter = searchInput.value.toLowerCase();
+        const tableBody = document.getElementById('tableBody');
+        const rows = Array.from(tableBody.getElementsByTagName('tr'));
+
+        // Filter rows by search only (status filtering is server-side)
+        filteredRows = rows.filter(row => {
+            const searchData = row.getAttribute('data-search');
+            // Check search match
+            return !searchFilter || (searchData && searchData.indexOf(searchFilter) > -1);
+        });
+
+        // Update search results text
+        const resultsSpan = document.getElementById('searchResults');
+        if (searchFilter.length > 0) {
+            resultsSpan.textContent = filteredRows.length + ' result' + (filteredRows.length !== 1 ? 's' : '') + ' found';
+        } else {
+            resultsSpan.textContent = '';
+        }
+
+        // Reset to page 1 when filters change
+        currentPage = 1;
+
+        // Apply pagination
+        paginateRows();
+    }
+
+    function paginateRows() {
+        const tableBody = document.getElementById('tableBody');
+        const allRows = Array.from(tableBody.getElementsByTagName('tr'));
+
+        // Hide all rows first
+        allRows.forEach(row => row.style.display = 'none');
+
+        // Calculate pagination
+        const totalItems = filteredRows.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+        // Show only current page rows
+        for (let i = startIndex; i < endIndex; i++) {
+            filteredRows[i].style.display = '';
+        }
+
+        // Update pagination info (both top and bottom)
+        const paginationInfo = document.getElementById('paginationInfo');
+        const paginationInfoTop = document.getElementById('paginationInfoTop');
+        const infoText = totalItems > 0
+            ? `Showing ${startIndex + 1}-${endIndex} of ${totalItems} total`
+            : 'No results found';
+
+        paginationInfo.textContent = infoText;
+        paginationInfoTop.textContent = infoText;
+
+        // Update pagination controls
+        updatePaginationControls(totalPages);
+    }
+
+    function updatePaginationControls(totalPages) {
+        // Always show pagination (even with 1 or 0 pages)
+        // Ensure at least 1 page
+        if (totalPages < 1) totalPages = 1;
+
+        // Update both top and bottom pagination
+        buildPaginationControls('paginationControls', totalPages);
+        buildPaginationControls('paginationControlsTop', totalPages);
+    }
+
+    function buildPaginationControls(containerId, totalPages) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        // Previous button
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '« Previous';
+        prevBtn.className = 'pagination-btn';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                paginateRows();
+            }
+        };
+        container.appendChild(prevBtn);
+
+        if (totalPages > 1) {
+            // Page numbers
+            const maxPagesToShow = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+            if (endPage - startPage < maxPagesToShow - 1) {
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.textContent = '1';
+                firstBtn.className = 'pagination-btn';
+                firstBtn.onclick = () => {
+                    currentPage = 1;
+                    paginateRows();
+                };
+                container.appendChild(firstBtn);
+
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.style.padding = '0 8px';
+                    ellipsis.style.color = '#666';
+                    container.appendChild(ellipsis);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = 'pagination-btn' + (i === currentPage ? ' active' : '');
+                pageBtn.onclick = ((page) => {
+                    return () => {
+                        currentPage = page;
+                        paginateRows();
+                    };
+                })(i);
+                container.appendChild(pageBtn);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.style.padding = '0 8px';
+                    ellipsis.style.color = '#666';
+                    container.appendChild(ellipsis);
+                }
+
+                const lastBtn = document.createElement('button');
+                lastBtn.textContent = totalPages;
+                lastBtn.className = 'pagination-btn';
+                lastBtn.onclick = () => {
+                    currentPage = totalPages;
+                    paginateRows();
+                };
+                container.appendChild(lastBtn);
+            }
+        } else {
+            // Single page - show page 1 button (active but no click needed)
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = '1';
+            pageBtn.className = 'pagination-btn active';
+            pageBtn.disabled = true;
+            container.appendChild(pageBtn);
+        }
+
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = 'Next »';
+        nextBtn.className = 'pagination-btn';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                paginateRows();
+            }
+        };
+        container.appendChild(nextBtn);
+    }
+
+    // Initialize pagination on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        filterTable();
+    });
+    </script>
 </body>
 </html>

@@ -9,8 +9,28 @@
 /* Coming Soon Section */
 .coming-soon-section {
     padding: 80px 20px;
+    position: relative;
     background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
     min-height: calc(100vh - 400px);
+}
+
+.coming-soon-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.coming-soon-section > .container {
+    position: relative;
+    z-index: 1;
 }
 
 .coming-soon-content {

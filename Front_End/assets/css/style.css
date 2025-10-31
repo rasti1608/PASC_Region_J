@@ -736,7 +736,7 @@ a:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/assets/img/space-nebula.png');
+    background-image: url('/assets/img/intro-background.png');
     background-size: cover;
     background-position: center;
     opacity: 0.25;
@@ -874,7 +874,7 @@ a:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('/assets/img/space-nebula.png');
+    background-image: url('/assets/img/intro-background.png');
     background-size: cover;
     background-position: center;
     opacity: 0.25;
@@ -958,7 +958,27 @@ a:hover {
 /* Workshop Intro Section */
 .workshop-intro {
     padding: var(--spacing-xxl) 0;
+    position: relative;
     background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+}
+
+.workshop-intro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.workshop-intro > .container {
+    position: relative;
+    z-index: 1;
 }
 
 .intro-content h2 {
@@ -1018,7 +1038,27 @@ a:hover {
 /* Form Section */
 .form-section {
     padding: var(--spacing-xxl) 0;
+    position: relative;
     background: linear-gradient(135deg, rgba(26, 35, 50, 0.8) 0%, rgba(91, 75, 138, 0.3) 100%);
+}
+
+.form-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/planet-pink.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.20;
+    z-index: 0;
+}
+
+.form-section > .container {
+    position: relative;
+    z-index: 1;
 }
 
 .form-intro {

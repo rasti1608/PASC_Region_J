@@ -1,0 +1,459 @@
+/*******************************************************************************
+* File: contact-form.css
+* Created: October 31, 2025
+* Author: Contact Form System Implementation
+* Purpose: Styles for contact form page with two-column layout
+* Project: PASC Region J Conference 2026 Website
+*******************************************************************************/
+
+/* ========================================
+   CONTACT FORM SECTION
+   ======================================== */
+
+.contact-form-section {
+    padding: 60px 20px;
+    position: relative;
+    background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+    min-height: 80vh;
+}
+
+/* Space nebula background overlay */
+.contact-form-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/space-nebula.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.contact-form-section > .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   CONTACT INTRO
+   ======================================== */
+
+.contact-intro {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.contact-intro h2 {
+    color: #4fc3f7;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.contact-intro p {
+    color: #b0b8d4;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   ALERT MESSAGES
+   ======================================== */
+
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.alert-success {
+    background: rgba(76, 175, 80, 0.15);
+    border: 2px solid rgba(76, 175, 80, 0.5);
+}
+
+.alert-error {
+    background: rgba(244, 67, 54, 0.15);
+    border: 2px solid rgba(244, 67, 54, 0.5);
+}
+
+.alert-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.alert-content h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+}
+
+.alert-content p {
+    color: #b0b8d4;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.alert-content ul {
+    margin: 10px 0 0 0;
+    padding-left: 20px;
+    color: #b0b8d4;
+}
+
+.alert-content ul li {
+    margin-bottom: 5px;
+}
+
+/* ========================================
+   TWO-COLUMN LAYOUT
+   ======================================== */
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+/* ========================================
+   FORM COLUMN (LEFT - 60%)
+   ======================================== */
+
+.contact-form-column {
+    width: 100%;
+}
+
+.form-card {
+    background: rgba(26, 31, 58, 0.8);
+    border: 2px solid rgba(79, 195, 247, 0.3);
+    border-radius: 15px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+}
+
+.form-card h3 {
+    color: #4fc3f7;
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* ========================================
+   FORM ELEMENTS
+   ======================================== */
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    background: #ffffff;
+    border-color: #4fc3f7;
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.char-counter {
+    text-align: right;
+    color: #8892b0;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.form-note {
+    color: #8892b0;
+    font-size: 0.9rem;
+    margin-top: 15px;
+}
+
+/* Honeypot field - hidden from users */
+.honeypot-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* ========================================
+   SUBMIT BUTTON
+   ======================================== */
+
+.btn-submit {
+    width: 100%;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.4);
+}
+
+.btn-icon {
+    font-size: 1.3rem;
+}
+
+/* ========================================
+   INFO COLUMN (RIGHT - 40%)
+   ======================================== */
+
+.contact-info-column {
+    width: 100%;
+}
+
+.info-card {
+    background: rgba(26, 31, 58, 0.8);
+    border: 2px solid rgba(79, 195, 247, 0.3);
+    border-radius: 15px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    margin-bottom: 30px;
+}
+
+.info-card h3 {
+    color: #4fc3f7;
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* ========================================
+   INFO ITEMS
+   ======================================== */
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.info-content h4 {
+    color: #4fc3f7;
+    font-size: 1.1rem;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.info-content p {
+    color: #b0b8d4;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.info-content a {
+    color: #4fc3f7;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.info-content a:hover {
+    color: #818cf8;
+    text-decoration: underline;
+}
+
+/* ========================================
+   QUICK LINKS
+   ======================================== */
+
+.quick-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-links li {
+    margin-bottom: 15px;
+}
+
+.quick-links li:last-child {
+    margin-bottom: 0;
+}
+
+.quick-links a {
+    color: #b0b8d4;
+    text-decoration: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    padding: 8px 0;
+}
+
+.quick-links a::before {
+    content: '→';
+    margin-right: 10px;
+    color: #4fc3f7;
+    font-weight: bold;
+}
+
+.quick-links a:hover {
+    color: #4fc3f7;
+    transform: translateX(5px);
+}
+
+/* ========================================
+   FORM ACTIONS (after successful submission)
+   ======================================== */
+
+.form-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .contact-form-section {
+        padding: 50px 15px;
+    }
+
+    .form-card,
+    .info-card {
+        padding: 30px;
+    }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 767px) {
+    .contact-form-section {
+        padding: 40px 10px;
+    }
+
+    .contact-intro h2 {
+        font-size: 2rem;
+    }
+
+    .contact-intro p {
+        font-size: 1rem;
+    }
+
+    .form-card,
+    .info-card {
+        padding: 25px 20px;
+    }
+
+    .form-card h3,
+    .info-card h3 {
+        font-size: 1.5rem;
+    }
+
+    .alert {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .alert-icon {
+        font-size: 2rem;
+    }
+
+    .btn-submit {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Extra small mobile (< 480px) */
+@media (max-width: 480px) {
+    .contact-intro h2 {
+        font-size: 1.8rem;
+    }
+
+    .form-card,
+    .info-card {
+        padding: 20px 15px;
+    }
+
+    .info-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .info-icon {
+        font-size: 1.5rem;
+    }
+}

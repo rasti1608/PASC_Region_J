@@ -21,6 +21,20 @@
 <cfset isForms = (currentFolder EQ "forms")>
 <cfset isGallery = (currentFolder EQ "gallery")>
 <cfset isDocuments = (currentFolder EQ "documents")>
+<cfset isContacts = (currentFolder EQ "contacts")>
+
+<!--- Get count of new contact submissions for badge --->
+<cftry>
+    <cfquery name="qNewContacts" datasource="#application.datasource#">
+        SELECT COUNT(*) as newCount
+        FROM dbo.contact_submissions
+        WHERE status = 'new'
+    </cfquery>
+    <cfset newContactCount = qNewContacts.newCount>
+    <cfcatch>
+        <cfset newContactCount = 0>
+    </cfcatch>
+</cftry>
 </cfsilent>
 
 <aside class="admin-sidebar">
@@ -55,7 +69,15 @@
                 <span class="nav-icon">📁</span>
                 <span class="nav-text">Documents</span>
             </a>
-            
+
+            <a href="/admin/contacts/index.cfm" class="nav-item #isContacts ? 'active' : ''#">
+                <span class="nav-icon">📧</span>
+                <span class="nav-text">Contact Submissions</span>
+                <cfif newContactCount gt 0>
+                    <span class="nav-badge">#newContactCount#</span>
+                </cfif>
+            </a>
+
             <div class="nav-divider"></div>
             
             <a href="/" class="nav-item" target="_blank">

@@ -113,6 +113,18 @@ body {
     margin: 15px 20px;
 }
 
+.nav-badge {
+    margin-left: auto;
+    background: #ff9800;
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    min-width: 20px;
+    text-align: center;
+}
+
 .coming-soon {
     margin-left: auto;
     font-size: 0.7rem;
@@ -485,6 +497,8 @@ body {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
 .data-table thead {
@@ -512,6 +526,52 @@ body {
 
 .data-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+/* ORDER column styling */
+.data-table th:first-child,
+.data-table td:first-child {
+    width: 80px;
+    text-align: center;
+}
+
+/* ORDER dropdown styling */
+.data-table td.text-center select,
+.data-table td:first-child select {
+    width: 60px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+/* ACTIONS column styling */
+.data-table th.actions,
+.data-table td.actions {
+    width: 150px;
+    text-align: center;
+    white-space: nowrap;
+    padding: 15px 10px;
+}
+
+/* STATUS column styling */
+.data-table th.col-status,
+.data-table td.col-status {
+    width: 100px;
+    text-align: center;
+}
+
+/* Zebra striping for tables */
+.data-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f1f3f5;
 }
 
 .text-center {

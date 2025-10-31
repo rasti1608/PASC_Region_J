@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="/assets/css/animations.css">
     <link rel="stylesheet" href="/assets/css/anthem-player.css">
     <link rel="stylesheet" href="/assets/css/gallery-grid.css">
+    <link rel="stylesheet" href="/assets/css/contact-form.css">
 
     <!--- Optional: Favicon --->
     <link rel="icon" type="image/png" href="/assets/img/favicon.png">
