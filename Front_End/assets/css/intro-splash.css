@@ -1,0 +1,309 @@
+/*******************************************************************************
+* File: intro-splash.css
+* Created: October 30, 2025
+* Author: CSS Refactoring
+* Purpose: Intro splash screen with orbiting planets (index.cfm only)
+* Project: PASC Region J Conference 2026 Website
+*******************************************************************************/
+
+/* Prevent horizontal scroll during intro */
+body { overflow-x: hidden; }
+
+/* Intro Splash Screen Styles */
+#intro-splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease-in-out;
+    overflow: hidden;
+    opacity: 0; /* Hidden until video loads */
+    background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%); /* Loading background */
+}
+
+#intro-splash.loaded {
+    opacity: 1; /* Show when video is ready */
+}
+
+/* Intro Video Backgrounds */
+.intro-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.intro-video-desktop {
+    display: block;
+}
+
+.intro-video-mobile {
+    display: none;
+}
+
+#intro-splash.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Stars */
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* Planet Container and Orbits */
+.planet-container {
+    position: relative;
+    width: 640px;
+    height: 640px;
+    margin-bottom: 40px;
+}
+
+.orbit {
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.orbit-1 {
+    width: 260px;
+    height: 260px;
+    animation: rotate 8s linear infinite;
+    animation-delay: 0s;
+}
+
+.orbit-2 {
+    width: 380px;
+    height: 380px;
+    animation: rotate 12s linear infinite reverse;
+    animation-delay: -9s;
+}
+
+.orbit-3 {
+    width: 500px;
+    height: 500px;
+    animation: rotate 16s linear infinite;
+    animation-delay: -4s;
+}
+
+.orbit-4 {
+    width: 620px;
+    height: 620px;
+    animation: rotate 20s linear infinite reverse;
+    animation-delay: -15s;
+}
+
+@keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Planets */
+.planet {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.planet img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+}
+
+.planet-1 {
+    width: 35px;
+    height: 35px;
+}
+
+.planet-2 {
+    width: 55px;
+    height: 55px;
+}
+
+.planet-3 {
+    width: 45px;
+    height: 45px;
+}
+
+.planet-4 {
+    width: 65px;
+    height: 65px;
+}
+
+/* Center Logo */
+.center-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    background-image: url('/assets/img/logo.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    box-shadow: 0 0 80px rgba(255, 140, 66, 0.6);
+    animation: pulse 2s ease-in-out infinite, rotate360 20s linear infinite;
+}
+
+@keyframes rotate360 {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 0 80px rgba(255, 140, 66, 0.6);
+        filter: brightness(1);
+    }
+    50% {
+        box-shadow: 0 0 120px rgba(255, 140, 66, 0.9);
+        filter: brightness(1.2);
+    }
+}
+
+/* Intro Text */
+.intro-text {
+    text-align: center;
+    color: white;
+    z-index: 10;
+}
+
+.intro-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 0.5s forwards;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.intro-subtitle {
+    font-size: 1.5rem;
+    color: #ffd700;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 1.5s forwards;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.intro-date {
+    font-size: 1.2rem;
+    color: #00d4ff;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 2s forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Skip Button */
+.skip-btn {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    padding: 12px 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 3s forwards;
+}
+
+.skip-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Main Site Visibility */
+#main-site {
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+#main-site.visible {
+    opacity: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    /* Show mobile video, hide desktop video */
+    .intro-video-desktop {
+        display: none;
+    }
+
+    .intro-video-mobile {
+        display: block;
+    }
+
+    .planet-container {
+        width: 420px;
+        height: 420px;
+        margin-bottom: 30px;
+    }
+
+    .orbit-1 { width: 170px; height: 170px; animation-delay: 0s; }
+    .orbit-2 { width: 250px; height: 250px; animation-delay: -9s; }
+    .orbit-3 { width: 330px; height: 330px; animation-delay: -4s; }
+    .orbit-4 { width: 410px; height: 410px; animation-delay: -15s; }
+
+    .center-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .planet-1 { width: 28px; height: 28px; }
+    .planet-2 { width: 44px; height: 44px; }
+    .planet-3 { width: 36px; height: 36px; }
+    .planet-4 { width: 52px; height: 52px; }
+
+    .intro-title { font-size: 1.8rem; }
+    .intro-subtitle { font-size: 1.1rem; }
+    .intro-date { font-size: 1rem; }
+    .skip-btn { bottom: 20px; right: 20px; padding: 10px 20px; font-size: 0.9rem; }
+}

@@ -1,0 +1,222 @@
+# ========================================
+# PASC Region J - .gitignore
+# ========================================
+# Created: October 31, 2025
+# Purpose: Exclude IDE files, OS files, temporary files, and sensitive data
+# ========================================
+
+# ========================================
+# IDE & Editor Files
+# ========================================
+
+# Eclipse / IDE
+.project
+.classpath
+.settings/
+.buildpath
+.metadata/
+.recommenders/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Claude Code IDE
+.claude/
+.claude/settings.local.json
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+
+# Vim
+*.swp
+*.swo
+*.swn
+.*.sw[a-z]
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# JetBrains
+*.iml
+.idea/
+
+# ========================================
+# ColdFusion / Application Settings
+# ========================================
+
+# IDE-specific settings
+settings.xml
+cfeclipse.properties
+
+# Local configuration overrides (may contain credentials)
+config.local.cfm
+Application.local.cfc
+.env
+.env.local
+.env.*.local
+
+# ColdFusion component caching
+WEB-INF/cfclasses/
+
+# ========================================
+# OS-Specific Files
+# ========================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+nul
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ========================================
+# Temporary & Backup Files
+# ========================================
+
+# General temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+*.cache
+
+# Log files
+*.log
+logs/
+*.log.*
+
+# Swap files
+*.swp
+
+# ========================================
+# Build & Dependency Directories
+# ========================================
+
+# Node.js (if used for frontend tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.yarn/
+
+# Sass/CSS preprocessing
+.sass-cache/
+
+# Build output
+dist/
+build/
+out/
+
+# Grunt
+.grunt/
+
+# Bower
+bower_components/
+
+# ========================================
+# Version Control & Archives
+# ========================================
+
+# Git
+*.orig
+*.rej
+
+# Compressed files (if not part of project)
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# ========================================
+# Database & Credentials
+# ========================================
+
+# Database dumps (exclude local dev dumps)
+*.sql.bak
+dump.sql
+backup.sql
+
+# Credentials and API keys
+credentials.cfm
+secrets.cfm
+api_keys.cfm
+.htpasswd
+
+# ========================================
+# Testing & Coverage
+# ========================================
+
+# Test coverage reports
+coverage/
+.nyc_output/
+*.coverage
+
+# ========================================
+# FTP & Deployment
+# ========================================
+
+# FTP deployment logs
+.ftp-deploy-sync-state.json
+.ftp-deploy-cache.json
+
+# ========================================
+# Miscellaneous
+# ========================================
+
+# Package files
+*.dmg
+*.pkg
+*.msi
+*.exe
+
+# Adobe files (source files, not exports)
+*.psd
+
+# Office temp files
+~$*
+
+# ========================================
+# Project-Specific Exclusions
+# ========================================
+
+# Add any project-specific files to ignore below:
+# (Currently none)
