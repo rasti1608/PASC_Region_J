@@ -1,0 +1,68 @@
+name: Deploy to DigitalRazor via FTP
+
+# Trigger deployment on push to main branch
+on:
+  push:
+    branches:
+      - main
+
+# Allow manual workflow dispatch from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Front_End to FTP
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # Step 2: Deploy Front_End folder to FTP server
+      - name: Deploy to DigitalRazor FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # FTP server configuration
+          server: ftp.pascregionj.com
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+
+          # Deploy only Front_End folder contents
+          local-dir: ./Front_End/
+          server-dir: /httpdocs/
+
+          # Security and performance settings
+          protocol: ftps
+          port: 21
+
+          # Exclude unnecessary files from deployment
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/.vscode/**
+            **/.idea/**
+            **/Thumbs.db
+            **/*.psd
+            **/.env
+            **/.env.*
+
+          # Logging
+          log-level: standard
+
+          # Safety options
+          dangerous-clean-slate: false
+
+      # Step 3: Deployment summary
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "✅ Deployment successful!"
+          echo "📁 Deployed: Front_End folder"
+          echo "🌐 Server: ftp.pascregionj.com"
+          echo "📂 Remote path: /httpdocs/"
+          echo "🕒 Timestamp: $(date)"
