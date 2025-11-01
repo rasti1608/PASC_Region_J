@@ -517,7 +517,6 @@ body {
 
 .data-table td {
     padding: 15px;
-    border-bottom: 1px solid #f0f0f0;
 }
 
 .data-table tbody tr:hover {
@@ -559,6 +558,141 @@ body {
 .data-table td.col-status {
     width: 100px;
     text-align: center;
+}
+
+/* ANNOUNCEMENTS TABLE - Column widths */
+#announcements-table th:nth-child(1),
+#announcements-table td:nth-child(1) {
+    width: 10%;  /* ORDER column */
+}
+
+#announcements-table th:nth-child(2),
+#announcements-table td:nth-child(2) {
+    width: 50%;  /* TITLE column */
+}
+
+#announcements-table th:nth-child(3),
+#announcements-table td:nth-child(3) {
+    width: 10%;  /* STATUS column */
+}
+
+#announcements-table th:nth-child(4),
+#announcements-table td:nth-child(4) {
+    width: 15%;  /* PUBLISH DATE column */
+}
+
+#announcements-table th:nth-child(5),
+#announcements-table td:nth-child(5) {
+    width: 15%;  /* ACTIONS column */
+}
+
+/* FORMS TABLE - Column widths */
+#forms-table th:nth-child(1),
+#forms-table td:nth-child(1) {
+    width: 10%;  /* ORDER column */
+}
+
+#forms-table th:nth-child(2),
+#forms-table td:nth-child(2) {
+    width: 60%;  /* FORM DETAILS column */
+}
+
+#forms-table th:nth-child(3),
+#forms-table td:nth-child(3) {
+    width: 15%;  /* STATUS column */
+}
+
+#forms-table th:nth-child(4),
+#forms-table td:nth-child(4) {
+    width: 15%;  /* ACTIONS column */
+}
+
+/* GALLERY TABLE - Column widths */
+#gallery-table th:nth-child(1),
+#gallery-table td:nth-child(1) {
+    width: 8%;  /* ORDER column */
+}
+
+#gallery-table th:nth-child(2),
+#gallery-table td:nth-child(2) {
+    width: 12%;  /* THUMBNAIL column */
+}
+
+#gallery-table th:nth-child(3),
+#gallery-table td:nth-child(3) {
+    width: 50%;  /* TITLE column */
+}
+
+#gallery-table th:nth-child(4),
+#gallery-table td:nth-child(4) {
+    width: 15%;  /* STATUS column */
+}
+
+#gallery-table th:nth-child(5),
+#gallery-table td:nth-child(5) {
+    width: 15%;  /* ACTIONS column */
+}
+
+/* DOCUMENTS TABLE - Column widths */
+#documents-table th:nth-child(1),
+#documents-table td:nth-child(1) {
+    width: 10%;  /* ORDER column */
+}
+
+#documents-table th:nth-child(2),
+#documents-table td:nth-child(2) {
+    width: 10%;  /* TYPE column */
+}
+
+#documents-table th:nth-child(3),
+#documents-table td:nth-child(3) {
+    width: 50%;  /* DOCUMENT DETAILS column */
+}
+
+#documents-table th:nth-child(4),
+#documents-table td:nth-child(4) {
+    width: 15%;  /* STATUS column */
+}
+
+#documents-table th:nth-child(5),
+#documents-table td:nth-child(5) {
+    width: 15%;  /* ACTIONS column */
+}
+
+/* CONTACTS TABLE - Column widths */
+#contacts-table th:nth-child(1),
+#contacts-table td:nth-child(1) {
+    width: 10%;  /* STATUS column */
+}
+
+#contacts-table th:nth-child(2),
+#contacts-table td:nth-child(2) {
+    width: 10%;  /* DATE & TIME column */
+}
+
+#contacts-table th:nth-child(3),
+#contacts-table td:nth-child(3) {
+    width: 15%;  /* NAME column */
+}
+
+#contacts-table th:nth-child(4),
+#contacts-table td:nth-child(4) {
+    width: 15%;  /* EMAIL column */
+}
+
+#contacts-table th:nth-child(5),
+#contacts-table td:nth-child(5) {
+    width: 15%;  /* SUBJECT column */
+}
+
+#contacts-table th:nth-child(6),
+#contacts-table td:nth-child(6) {
+    width: 25%;  /* PREVIEW column */
+}
+
+#contacts-table th:nth-child(7),
+#contacts-table td:nth-child(7) {
+    width: 10%;  /* ACTIONS column */
 }
 
 /* Zebra striping for tables */

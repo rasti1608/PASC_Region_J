@@ -274,7 +274,7 @@
                         <a href="add.cfm" class="btn btn-primary">Create Your First Announcement</a>
                     </div>
                 <cfelse>
-                    <table class="data-table">
+                    <table class="data-table" id="announcements-table">
                         <thead>
                             <tr>
                                 <th>Order</th>

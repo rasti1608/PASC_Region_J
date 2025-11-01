@@ -354,7 +354,7 @@
                         </cfoutput>
                     </div>
                 <cfelse>
-                    <table class="data-table">
+                    <table class="data-table" id="gallery-table">
                         <thead>
                             <tr>
                                 <th>Order</th>

@@ -290,7 +290,7 @@
                         <a href="upload.cfm" class="btn btn-primary">Upload Your First Document</a>
                     </div>
                 <cfelse>
-                    <table class="data-table">
+                    <table class="data-table" id="documents-table">
                         <thead>
                             <tr>
                                 <th>Order</th>

@@ -441,7 +441,7 @@
                         <p>No contact form submissions yet.</p>
                     </div>
                 <cfelse>
-                    <table class="data-table" id="submissionsTable">
+                    <table class="data-table" id="contacts-table">
                         <thead>
                             <tr>
                                 <th class="col-status">Status</th>
