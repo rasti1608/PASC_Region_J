@@ -4,20 +4,15 @@
 *******************************************************************************
 * File:        /index.cfm
 * Created:     October 25, 2025
+* Updated:     November 1, 2025 - Added pre-intro splash for audio permission
 * Author:      Rastislav Toscak
 * 
 * Purpose:     Homepage for PASC Region J Conference 2026 website
-*              Displays hero section with conference title and tagline
-*              Shows active announcements from database
-*              Includes quick info cards and call-to-action sections
+*              Features animated intro sequence with audio
 *
-* Sections:    1. Hero section with space theme
-*              2. Announcements grid (dynamic from database)
-*              3. Quick info cards
-*              4. Call-to-action buttons
-*
-* Database:    Queries dbo.announcements table
-*              Uses publish_start and publish_end for date filtering
+* Flow:        1. Pre-intro splash (LAUNCH SITE button)
+*              2. Animated intro with audio (7-10 seconds)
+*              3. Main site content
 *
 * Project:     PASC Region J Conference 2026 Website
 *              Lead Beyond Limits - February 13, 2026
@@ -60,16 +55,193 @@
     <link rel="stylesheet" href="/assets/css/anthem-player.css">
     <link rel="stylesheet" href="/assets/css/intro-splash.css">
     <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+    
+    <style>
+        /* Pre-Intro Splash Screen Styles */
+        #pre-intro-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2d3561 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+        
+        #pre-intro-splash.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .pre-intro-bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        .pre-intro-content {
+            text-align: center;
+            z-index: 2;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .pre-intro-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        .pre-intro-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(79, 195, 247, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        .pre-intro-subtitle {
+            font-size: 1.5rem;
+            color: #4fc3f7;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .pre-intro-date {
+            font-size: 1.1rem;
+            color: #b0b8d4;
+            margin-bottom: 50px;
+        }
+        
+        .launch-button {
+            background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%);
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 20px 60px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .launch-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 195, 247, 0.6);
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+        }
+        
+        .launch-button:active {
+            transform: translateY(-1px);
+        }
+        
+        .rocket-icon {
+            font-size: 1.5rem;
+            animation: rocketBounce 1s infinite;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes rocketBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .pre-intro-title {
+                font-size: 2rem;
+            }
+            
+            .pre-intro-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .pre-intro-date {
+                font-size: 1rem;
+            }
+            
+            .launch-button {
+                font-size: 1.1rem;
+                padding: 18px 40px;
+            }
+            
+            .pre-intro-logo {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
 </head>
 <body class="index-page">
-    <!--- Animated Intro Splash Screen --->
-    <div id="intro-splash">
-        <!--- Intro Video Backgrounds --->
-        <video class="intro-video intro-video-desktop" autoplay muted loop playsinline>
+    <!--- PRE-INTRO SPLASH SCREEN (NEW) --->
+    <div id="pre-intro-splash">
+        <!--- Background Video (optional - same as intro or static) --->
+        <video class="pre-intro-bg-video" autoplay muted loop playsinline>
             <source src="/assets/video/intro-space-background.mp4" type="video/mp4">
         </video>
         
-        <video class="intro-video intro-video-mobile" autoplay muted loop playsinline>
+        <div class="pre-intro-content">
+            <img src="/assets/img/logo.png" alt="PASC Region J" class="pre-intro-logo">
+            <h1 class="pre-intro-title">PASC REGION J</h1>
+            <p class="pre-intro-subtitle">Leadership Conference 2026</p>
+            <p class="pre-intro-date">Lead Beyond Limits &middot; February 13, 2026</p>
+            
+            <button class="launch-button" onclick="launchSite()">
+                <span class="rocket-icon">🚀</span>
+                <span>LAUNCH SITE</span>
+            </button>
+        </div>
+    </div>
+
+    <!--- Animated Intro Splash Screen (EXISTING - Now with Audio) --->
+    <div id="intro-splash" style="display: none;">
+        <!--- Intro Video Backgrounds WITH AUDIO --->
+        <video id="introVideoDesktop" class="intro-video intro-video-desktop" muted loop playsinline>
+            <source src="/assets/video/intro-space-background.mp4" type="video/mp4">
+        </video>
+        
+        <video id="introVideoMobile" class="intro-video intro-video-mobile" muted loop playsinline>
             <source src="/assets/video/intro-space-background_M.mp4" type="video/mp4">
         </video>
         
@@ -133,26 +305,6 @@
             <h1 class="hero-title" id="heroTitle">PASC REGION J CONFERENCE 2026</h1>
             <p class="hero-subtitle" id="heroSubtitle">Lead Beyond Limits - February 13, 2026</p>
             
-            <!--- Conference Anthem Player
-            <div class="anthem-player">
-                <div class="anthem-icon">&#127925;</div>
-                <div class="anthem-info">
-                    <div class="anthem-title">Conference Anthem: "One Orbit"</div>
-                    <div class="anthem-subtitle">by IronRUST &middot; We're all on one orbit</div>
-                    <div class="anthem-progress-container">
-                        <div class="anthem-progress-bar" onclick="seekIndexAnthem(event)">
-                            <div class="anthem-progress-fill" id="anthemProgressFillIndex"></div>
-                        </div>
-                        <div class="anthem-time-display">
-                            <span id="anthemCurrentTimeIndex">0:00</span> / <span id="anthemTotalTimeIndex">0:00</span>
-                        </div>
-                    </div>
-                </div>
-                <button id="anthemPlayBtn" class="anthem-play-btn" onclick="toggleAnthem()">
-                    <i class="play-icon">&#9654;</i>
-                </button>
-            </div> --->
-            
             <!--- Mobile-Only Anthem Player (ABOVE buttons) --->
             <div class="anthem-player-mobile">
                 <div class="anthem-icon-mobile">&#127925;</div>
@@ -186,29 +338,21 @@
     <div class="container">
         <h2 class="section-title">Latest Announcements</h2>
         
-        <cfif qAnnouncements.recordCount gt 0>
+        <cfif qAnnouncements.recordCount GT 0>
             <div class="announcements-grid">
-                <cfoutput query="qAnnouncements">
-                    <article class="announcement-card <cfif is_featured>featured</cfif>">
-                        <div class="announcement-header">
-                            <h3 class="announcement-title">#title#</h3>
-                            <time class="announcement-date" datetime="#dateFormat(publish_start, 'yyyy-mm-dd')#">
-                                #dateFormat(publish_start, "mmmm d, yyyy")#
-                            </time>
-                        </div>
-                        <div class="announcement-content">
-                            #content#
-                        </div>
+                <cfoutput query="qAnnouncements" maxrows="3">
+                    <div class="announcement-card <cfif is_featured>featured</cfif>">
                         <cfif is_featured>
-                            <span class="featured-badge">Featured</span>
+                            <span class="featured-badge">⭐ Featured</span>
                         </cfif>
-                    </article>
+                        <h3>#htmlEditFormat(title)#</h3>
+                        <p>#htmlEditFormat(content)#</p>
+                        <span class="announcement-date">#dateFormat(publish_start, "mmmm d, yyyy")#</span>
+                    </div>
                 </cfoutput>
             </div>
         <cfelse>
-            <div class="no-announcements">
-                <p>No announcements at this time. Check back soon!</p>
-            </div>
+            <p class="no-announcements">No announcements at this time. Check back soon!</p>
         </cfif>
     </div>
 </section>
@@ -262,9 +406,58 @@
     </div> <!--- End #main-site --->
 
     <script>
+        // ═══════════════════════════════════════════════════════════════
+        // PRE-INTRO TO INTRO TRANSITION (NEW)
+        // ═══════════════════════════════════════════════════════════════
+        
+        function launchSite() {
+            const preIntro = document.getElementById('pre-intro-splash');
+            const intro = document.getElementById('intro-splash');
+            
+            // Fade out pre-intro
+            preIntro.classList.add('fade-out');
+            
+            setTimeout(function() {
+                preIntro.style.display = 'none';
+                intro.style.display = 'block';
+                
+                // UNMUTE AND PLAY INTRO VIDEO WITH AUDIO
+                const desktopVideo = document.getElementById('introVideoDesktop');
+                const mobileVideo = document.getElementById('introVideoMobile');
+                
+                // Determine which video is active
+                const activeVideo = window.innerWidth <= 768 ? mobileVideo : desktopVideo;
+                
+                // Unmute the active video (NOW AUDIO WILL PLAY!)
+                activeVideo.muted = false;
+                activeVideo.play();
+                
+                // Start intro animation
+                createStars();
+                intro.classList.add('loaded');
+                
+                // Mark intro as seen
+                sessionStorage.setItem('introSeen', 'true');
+                
+                // Auto-skip intro after 10 seconds (adjust as needed)
+                setTimeout(function() {
+                    skipIntro();
+                }, 10000); // 10 seconds - change to 7000 for 7 seconds
+            }, 800);
+        }
+        
+        // ═══════════════════════════════════════════════════════════════
+        // EXISTING INTRO FUNCTIONS
+        // ═══════════════════════════════════════════════════════════════
+        
         // Generate random stars
         function createStars() {
             const starsContainer = document.getElementById('stars');
+            if (!starsContainer) return;
+            
+            // Clear existing stars first
+            starsContainer.innerHTML = '';
+            
             const starCount = 100;
             
             for (let i = 0; i < starCount; i++) {
@@ -282,66 +475,49 @@
         
         // Skip intro and show main site
         function skipIntro() {
-            const splash = document.getElementById('intro-splash');
+            const intro = document.getElementById('intro-splash');
             const mainSite = document.getElementById('main-site');
             
-            splash.classList.add('fade-out');
+            // Mute intro videos when skipping
+            const desktopVideo = document.getElementById('introVideoDesktop');
+            const mobileVideo = document.getElementById('introVideoMobile');
+            if (desktopVideo) desktopVideo.muted = true;
+            if (mobileVideo) mobileVideo.muted = true;
+            
+            intro.classList.add('fade-out');
             mainSite.classList.add('visible');
             
             setTimeout(() => {
-                splash.style.display = 'none';
+                intro.style.display = 'none';
             }, 800);
         }
         
-        // Initialize on page load
+        // ═══════════════════════════════════════════════════════════════
+        // INITIALIZE ON PAGE LOAD
+        // ═══════════════════════════════════════════════════════════════
+        
         window.addEventListener('DOMContentLoaded', function() {
-            // Check if intro was already seen this session
+            // Check if intro sequence was already seen this session
             if (sessionStorage.getItem('introSeen')) {
-                // Skip intro immediately if already seen
-                const splash = document.getElementById('intro-splash');
+                // Skip entire intro sequence if already seen
+                const preIntro = document.getElementById('pre-intro-splash');
+                const intro = document.getElementById('intro-splash');
                 const mainSite = document.getElementById('main-site');
-                splash.style.display = 'none';
+                
+                preIntro.style.display = 'none';
+                intro.style.display = 'none';
                 mainSite.classList.add('visible');
             } else {
-                // Show intro for first time this session
-                createStars();
-                
-                // Wait for intro videos to load before showing intro
-                const desktopVideo = document.querySelector('.intro-video-desktop');
-                const mobileVideo = document.querySelector('.intro-video-mobile');
-                const splash = document.getElementById('intro-splash');
-                
-                // Determine which video is active based on screen size
-                const activeVideo = window.innerWidth <= 768 ? mobileVideo : desktopVideo;
-                
-                // Function to show intro once video is ready
-                function showIntro() {
-                    splash.classList.add('loaded');
-                    
-                    // Mark intro as seen for this session
-                    sessionStorage.setItem('introSeen', 'true');
-                    
-                    // Auto-skip intro after 7 seconds
-                    setTimeout(function() {
-                        skipIntro();
-                    }, 7000);
-                }
-                
-                // Check if video is already loaded
-                if (activeVideo.readyState >= 3) {
-                    // Video is already loaded
-                    showIntro();
-                } else {
-                    // Wait for video to load
-                    activeVideo.addEventListener('canplay', showIntro, { once: true });
-                    
-                    // Fallback: show after 2 seconds even if video not loaded
-                    setTimeout(showIntro, 2000);
-                }
+                // Show pre-intro splash (user must click LAUNCH SITE)
+                const preIntro = document.getElementById('pre-intro-splash');
+                preIntro.style.display = 'flex';
             }
         });
         
-        // Index Page Progress Bar Updates
+        // ═══════════════════════════════════════════════════════════════
+        // INDEX PAGE ANTHEM PLAYER (EXISTING)
+        // ═══════════════════════════════════════════════════════════════
+        
         window.addEventListener('DOMContentLoaded', function() {
             // Get global audio from header
             const globalAudio = document.getElementById('globalAnthemAudio');
