@@ -57,6 +57,13 @@
     <link rel="icon" type="image/png" href="/assets/img/favicon.png">
     
     <style>
+        /* CRITICAL: Ensure planet-container is centered */
+        #intro-splash .planet-container {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+        }
         /* Pre-Intro Splash Screen Styles */
         #pre-intro-splash {
             position: fixed;
