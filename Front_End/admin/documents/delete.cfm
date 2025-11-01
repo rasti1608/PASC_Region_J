@@ -266,7 +266,7 @@
                     
                     <form method="post" action="delete.cfm?id=#id#">
                         <div class="delete-actions">
-                            <button type="submit" name="confirm_delete" value="yes" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this document?');">
+                            <button type="submit" name="confirm_delete" value="yes" class="btn btn-danger">
                                 🗑️ Yes, Delete Document
                             </button>
                             <a href="index.cfm" class="btn btn-secondary">

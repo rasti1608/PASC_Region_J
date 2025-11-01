@@ -191,7 +191,7 @@
                     <div class="form-actions">
                         <button type="submit" name="submit" class="btn btn-primary">Update Announcement</button>
                         <a href="index.cfm" class="btn btn-secondary">Cancel</a>
-                        <a href="delete.cfm?id=#url.id#" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this announcement?');">Delete</a>
+                        <a href="delete.cfm?id=#url.id#" class="btn btn-danger">Delete</a>
                     </div>
                 </form>
                 </cfoutput>

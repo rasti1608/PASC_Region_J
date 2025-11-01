@@ -261,8 +261,7 @@
                                         <a href="edit.cfm?id=#id#" class="btn btn-sm btn-edit" title="Edit User">✏️</a>
                                         <a href="index.cfm?toggle=#id#"
                                            class="btn btn-sm btn-toggle"
-                                           title="Toggle Active/Inactive"
-                                           onclick="return confirm('Are you sure you want to change this user\'s status?');">
+                                           title="Toggle Active/Inactive">
                                             <cfif is_active>👁️<cfelse>🚫</cfif>
                                         </a>
                                         <a href="delete.cfm?id=#id#" class="btn btn-sm btn-delete" title="Delete User">🗑️</a>

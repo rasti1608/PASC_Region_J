@@ -235,9 +235,7 @@
                                 </div>
 
                                 <div class="form-actions" style="margin: 0; padding: 0; border: none;">
-                                    <button type="submit"
-                                            class="btn btn-danger"
-                                            onclick="return confirm('FINAL WARNING: This will permanently delete the user. Are you absolutely sure?');">
+                                    <button type="submit" class="btn btn-danger">
                                         🗑️ Yes, Delete User
                                     </button>
                                     <a href="index.cfm" class="btn btn-secondary">Cancel</a>
