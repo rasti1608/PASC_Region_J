@@ -695,6 +695,37 @@ body {
     width: 10%;  /* ACTIONS column */
 }
 
+/* USERS TABLE - Column widths */
+#users-table th:nth-child(1),
+#users-table td:nth-child(1) {
+    width: 15%;  /* USERNAME column */
+}
+
+#users-table th:nth-child(2),
+#users-table td:nth-child(2) {
+    width: 25%;  /* FULL NAME column */
+}
+
+#users-table th:nth-child(3),
+#users-table td:nth-child(3) {
+    width: 25%;  /* EMAIL column */
+}
+
+#users-table th:nth-child(4),
+#users-table td:nth-child(4) {
+    width: 15%;  /* ROLE column */
+}
+
+#users-table th:nth-child(5),
+#users-table td:nth-child(5) {
+    width: 10%;  /* STATUS column */
+}
+
+#users-table th:nth-child(6),
+#users-table td:nth-child(6) {
+    width: 10%;  /* ACTIONS column */
+}
+
 /* Zebra striping for tables */
 .data-table tbody tr:nth-child(odd) {
     background-color: #ffffff;

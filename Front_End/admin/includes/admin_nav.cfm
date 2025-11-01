@@ -22,6 +22,8 @@
 <cfset isGallery = (currentFolder EQ "gallery")>
 <cfset isDocuments = (currentFolder EQ "documents")>
 <cfset isContacts = (currentFolder EQ "contacts")>
+<cfset isUsers = (currentFolder EQ "users")>
+<cfset isProfile = (currentPage CONTAINS "profile")>
 
 <!--- Get count of new contact submissions for badge --->
 <cftry>
@@ -78,6 +80,16 @@
                 </cfif>
             </a>
 
+            <!--- User Management (Admin Only) --->
+            <cfif ListFindNoCase(session.permissions, "user_management")>
+                <div class="nav-divider"></div>
+
+                <a href="/admin/users/index.cfm" class="nav-item #isUsers ? 'active' : ''#">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">User Management</span>
+                </a>
+            </cfif>
+
             <div class="nav-divider"></div>
             
             <a href="/" class="nav-item" target="_blank">
@@ -94,10 +106,37 @@
     
     <div class="sidebar-footer">
         <cfoutput>
-            <p class="user-info">
+            <div class="user-info">
+                <!--- Profile Picture or Placeholder --->
+                <cfif structKeyExists(session, "profile_picture") AND len(session.profile_picture)>
+                    <img src="/assets/img/profiles/#session.profile_picture#"
+                         alt="Profile"
+                         style="width:40px; height:40px; border-radius:50%; margin-bottom:10px; display:block; margin-left:auto; margin-right:auto;">
+                <cfelse>
+                    <div style="width:40px; height:40px; border-radius:50%; background:##4fc3f7;
+                                display:flex; align-items:center; justify-content:center;
+                                font-size:20px; margin:0 auto 10px auto;">
+                        👤
+                    </div>
+                </cfif>
+
                 <strong>#request.admin_full_name#</strong><br>
-                <small>@#request.admin_username#</small>
-            </p>
+                <small style="color: ##b0b8d4;">
+                    <cfif structKeyExists(session, "role_name")>
+                        #session.role_name#
+                    <cfelse>
+                        @#request.admin_username#
+                    </cfif>
+                </small>
+            </div>
+
+            <!--- My Profile Link --->
+            <div style="margin-top:15px;">
+                <a href="/admin/profile.cfm" class="nav-item #isProfile ? 'active' : ''#" style="padding:8px 15px;">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">My Profile</span>
+                </a>
+            </div>
         </cfoutput>
     </div>
 </aside>

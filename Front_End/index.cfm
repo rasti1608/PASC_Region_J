@@ -119,6 +119,45 @@
             letter-spacing: 2px;
         }
         
+        /* Special styling for the J only */
+        .pre-intro-title .special-j {
+            font-size: 5rem;
+            font-weight: 900;
+            font-family: 'Century Schoolbook', 'Century Schoolbook Bold', 'Georgia', serif;
+            color: #FF9800;
+            display: inline-block;
+            font-style: italic;
+            transform: rotate(8deg) scaleX(1.3);
+            animation: glowJ 2s ease-in-out infinite;
+            -webkit-text-stroke: 2px #FF9800;
+            text-stroke: 2px #FF9800;
+            letter-spacing: 2px;
+        }
+        
+        @keyframes glowJ {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(255, 152, 0, 0.8);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(255, 152, 0, 1), 0 0 60px rgba(255, 152, 0, 0.6);
+            }
+        }
+        
+        /* Apply special J to both pre-intro and animated intro */
+        .intro-title .special-j {
+            font-size: 5rem;
+            font-weight: 900;
+            font-family: 'Century Schoolbook', 'Century Schoolbook Bold', 'Georgia', serif;
+            color: #FF9800;
+            display: inline-block;
+            font-style: italic;
+            transform: rotate(8deg) scaleX(1.3);
+            animation: glowJ 2s ease-in-out infinite;
+            -webkit-text-stroke: 2px #FF9800;
+            text-stroke: 2px #FF9800;
+            letter-spacing: 2px;
+        }
+        
         .pre-intro-subtitle {
             font-size: 1.5rem;
             color: #4fc3f7;
@@ -148,6 +187,7 @@
             gap: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            margin: 0 auto;
         }
         
         .launch-button:hover {
@@ -200,6 +240,11 @@
                 font-size: 2rem;
             }
             
+            .pre-intro-title .special-j,
+            .intro-title .special-j {
+                font-size: 3.2rem;
+            }
+            
             .pre-intro-subtitle {
                 font-size: 1.2rem;
             }
@@ -230,7 +275,7 @@
         
         <div class="pre-intro-content">
             <img src="/assets/img/logo.png" alt="PASC Region J" class="pre-intro-logo">
-            <h1 class="pre-intro-title">PASC REGION <span style="color: #FF9800;">J</span></h1>
+            <h1 class="pre-intro-title">PASC REGION <span class="special-j">J</span></h1>
             <p class="pre-intro-subtitle">Leadership Conference 2026</p>
             <p class="pre-intro-date">Lead Beyond Limits &middot; February 13, 2026</p>
             
@@ -279,7 +324,7 @@
         </div>
         
         <div class="intro-text">
-            <h1 class="intro-title">PASC REGION <span style="color: #FF9800;">J</span></h1>
+            <h1 class="intro-title">PASC REGION <span class="special-j">J</span></h1>
             <p class="intro-subtitle">Lead Beyond Limits</p>
             <p class="intro-date">February 13, 2026</p>
         </div>

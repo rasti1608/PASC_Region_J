@@ -19,7 +19,7 @@
 <!--- Get statistics --->
 <cftry>
     <cfquery name="qStats" datasource="#application.datasource#">
-        SELECT 
+        SELECT
             (SELECT COUNT(*) FROM dbo.announcements WHERE is_active = 1) as active_announcements,
             (SELECT COUNT(*) FROM dbo.forms WHERE is_active = 1) as active_forms,
             (SELECT COUNT(*) FROM dbo.gallery WHERE is_active = 1) as active_gallery
@@ -31,6 +31,21 @@
         <cfset querySetCell(qStats, "active_announcements", 0)>
         <cfset querySetCell(qStats, "active_forms", 0)>
         <cfset querySetCell(qStats, "active_gallery", 0)>
+    </cfcatch>
+</cftry>
+
+<!--- Get active users count (last 30 minutes) --->
+<cftry>
+    <cfquery name="qActiveUsers" datasource="#application.datasource#">
+        SELECT COUNT(DISTINCT user_id) AS active_count
+        FROM dbo.admin_sessions
+        WHERE last_activity > DATEADD(MINUTE, -30, GETDATE())
+    </cfquery>
+    <cfcatch>
+        <!--- If query fails, set default --->
+        <cfset qActiveUsers = queryNew("active_count", "integer")>
+        <cfset queryAddRow(qActiveUsers)>
+        <cfset querySetCell(qActiveUsers, "active_count", 0)>
     </cfcatch>
 </cftry>
 
@@ -90,10 +105,14 @@
                     <div class="stat-card">
                         <div class="stat-icon">👥</div>
                         <div class="stat-info">
-                            <h3>1</h3>
-                            <p>Active Admin</p>
+                            <h3>#qActiveUsers.active_count#</h3>
+                            <p>Active Users</p>
                         </div>
-                        <span class="stat-link">Online</span>
+                        <cfif ListFindNoCase(session.permissions, "user_management")>
+                            <a href="users/index.cfm" class="stat-link">Manage →</a>
+                        <cfelse>
+                            <span class="stat-link">Currently logged in</span>
+                        </cfif>
                     </div>
                 </cfoutput>
             </div>
