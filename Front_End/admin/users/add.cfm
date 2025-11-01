@@ -283,5 +283,8 @@
         confirmPasswordInput.addEventListener('input', validatePasswordMatch);
     }
     </script>
+
+    <!--- Session Heartbeat --->
+    <cfinclude template="../includes/admin_footer.cfm">
 </body>
 </html>

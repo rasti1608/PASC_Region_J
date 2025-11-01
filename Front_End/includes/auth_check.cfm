@@ -134,7 +134,7 @@
     <cftry>
         <cfquery datasource="#application.datasource#">
             DELETE FROM dbo.admin_sessions
-            WHERE last_activity < DATEADD(MINUTE, -60, GETDATE())
+            WHERE last_activity < DATEADD(MINUTE, -5, GETDATE())
         </cfquery>
         <cfcatch type="any">
             <!--- Cleanup failure should not break the page --->

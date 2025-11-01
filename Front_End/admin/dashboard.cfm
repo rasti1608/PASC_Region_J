@@ -34,12 +34,12 @@
     </cfcatch>
 </cftry>
 
-<!--- Get active users count (last 30 minutes) --->
+<!--- Get active users count (last 2 minutes - real-time with heartbeat) --->
 <cftry>
     <cfquery name="qActiveUsers" datasource="#application.datasource#">
-        SELECT COUNT(user_id) AS active_count
+        SELECT COUNT(DISTINCT user_id) AS active_count
         FROM dbo.admin_sessions
-        WHERE last_activity > DATEADD(MINUTE, -30, GETDATE())
+        WHERE last_activity > DATEADD(MINUTE, -2, GETDATE())
     </cfquery>
     <cfcatch>
         <!--- If query fails, set default --->
@@ -109,7 +109,8 @@
                         <div class="stat-icon">👥</div>
                         <div class="stat-info">
                             <h3>#qActiveUsers.active_count#</h3>
-                            <p>Active Users</p>
+                            <p>Active Sessions</p>
+                            <small style="color: ##999; font-size: 0.85rem; display: block; margin-top: 4px;">Currently online</small>
                         </div>
                         <cfif ListFindNoCase(session.permissions, "user_management")>
                             <a href="users/index.cfm" class="stat-link">Manage →</a>
@@ -170,5 +171,8 @@
             </div>
         </main>
     </div>
+
+    <!--- Session Heartbeat --->
+    <cfinclude template="includes/admin_footer.cfm">
 </body>
 </html>
