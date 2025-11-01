@@ -107,6 +107,9 @@
         
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <div class="content-header">
                 <h1>Edit Announcement</h1>
                 <p><a href="index.cfm">← Back to Announcements</a></p>

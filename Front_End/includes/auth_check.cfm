@@ -88,22 +88,44 @@
 
 <!--- Update session tracking --->
 <cftry>
-    <cfquery datasource="#application.datasource#">
-        MERGE INTO dbo.admin_sessions AS target
-        USING (SELECT
-            <cfqueryparam value="#session.admin_user_id#" cfsqltype="cf_sql_integer"> AS user_id,
-            <cfqueryparam value="#session.cfid#_#session.cftoken#" cfsqltype="cf_sql_varchar"> AS session_id
-        ) AS source
-        ON target.session_id = source.session_id
-        WHEN MATCHED THEN
-            UPDATE SET last_activity = GETDATE()
-        WHEN NOT MATCHED THEN
-            INSERT (user_id, session_id, last_activity, created_at)
-            VALUES (source.user_id, source.session_id, GETDATE(), GETDATE());
+    <!--- First, try to update existing session --->
+    <cfquery name="qUpdateSession" datasource="#application.datasource#">
+        UPDATE dbo.admin_sessions
+        SET last_activity = GETDATE()
+        WHERE session_id = <cfqueryparam value="#session.cfid#_#session.cftoken#" cfsqltype="cf_sql_varchar">
     </cfquery>
+
+    <!--- If no rows updated, insert new session record --->
+    <cfif qUpdateSession.recordCount EQ 0>
+        <cfquery datasource="#application.datasource#">
+            INSERT INTO dbo.admin_sessions (user_id, session_id, last_activity, created_at)
+            VALUES (
+                <cfqueryparam value="#session.admin_user_id#" cfsqltype="cf_sql_integer">,
+                <cfqueryparam value="#session.cfid#_#session.cftoken#" cfsqltype="cf_sql_varchar">,
+                GETDATE(),
+                GETDATE()
+            )
+        </cfquery>
+    </cfif>
+
     <cfcatch type="any">
-        <!--- Session tracking failure should not break the page --->
+        <!--- Log session tracking errors for debugging --->
+        <cflog file="auth_check" type="error"
+               text="Session tracking error: #cfcatch.message# - #cfcatch.detail# - User: #session.admin_user_id#">
     </cfcatch>
 </cftry>
+
+<!--- Clean up expired sessions (run randomly ~1% of page loads to avoid overhead) --->
+<cfif randRange(1, 100) EQ 1>
+    <cftry>
+        <cfquery datasource="#application.datasource#">
+            DELETE FROM dbo.admin_sessions
+            WHERE last_activity < DATEADD(MINUTE, -60, GETDATE())
+        </cfquery>
+        <cfcatch type="any">
+            <!--- Cleanup failure should not break the page --->
+        </cfcatch>
+    </cftry>
+</cfif>
 
 </cfsilent>

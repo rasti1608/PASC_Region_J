@@ -220,6 +220,9 @@
         
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <cfoutput query="qDocument">
                 <div class="delete-confirm">
                     <div class="delete-header">

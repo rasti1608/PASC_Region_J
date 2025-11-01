@@ -37,7 +37,7 @@
 <!--- Get active users count (last 30 minutes) --->
 <cftry>
     <cfquery name="qActiveUsers" datasource="#application.datasource#">
-        SELECT COUNT(DISTINCT user_id) AS active_count
+        SELECT COUNT(user_id) AS active_count
         FROM dbo.admin_sessions
         WHERE last_activity > DATEADD(MINUTE, -30, GETDATE())
     </cfquery>
@@ -62,9 +62,12 @@
     <div class="admin-wrapper">
         <!--- Sidebar Navigation --->
         <cfinclude template="includes/admin_nav.cfm">
-        
+
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="includes/admin_header.cfm">
+
             <div class="content-header">
                 <h1>Dashboard</h1>
                 <cfoutput>

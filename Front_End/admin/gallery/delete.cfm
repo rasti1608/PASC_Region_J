@@ -227,6 +227,9 @@
         
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <cfoutput query="qImage">
                 <div class="delete-confirmation">
                     <div class="delete-icon">⚠️</div>

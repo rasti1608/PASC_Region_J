@@ -229,6 +229,9 @@
         
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <div class="content-header">
                 <h1>Manage Announcements</h1>
                 <p>Create and manage homepage announcements</p>

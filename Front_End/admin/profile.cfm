@@ -35,6 +35,7 @@
             u.last_login,
             u.created_at,
             u.password_changed_at,
+            u.profile_picture,
             r.role_name
         FROM dbo.admin_users u
         LEFT JOIN dbo.roles r ON u.role_id = r.id
@@ -117,6 +118,135 @@
     </cfif>
 </cfif>
 
+<!--- Process Profile Picture Upload --->
+<cfif structKeyExists(form, "upload_picture")>
+    <cftry>
+        <!--- Upload file FIRST --->
+        <cffile action="upload"
+                filefield="profile_picture"
+                destination="#expandPath('/assets/img/profiles/')#"
+                nameconflict="makeunique"
+                result="uploadResult">
+
+        <!--- NOW validate the uploaded file using uploadResult --->
+        <cfset fileExt = lCase(listLast(uploadResult.serverFile, "."))>
+        <cfset allowedExtensions = "jpg,jpeg,png,gif">
+
+        <!--- Validate file extension --->
+        <cfif NOT listFindNoCase(allowedExtensions, fileExt)>
+            <!--- Delete invalid file --->
+            <cffile action="delete" file="#uploadResult.serverDirectory#/#uploadResult.serverFile#">
+            <cfset variables.pictureError = "Invalid file type. Only JPG, PNG, and GIF files are allowed.">
+
+        <!--- Validate file size (5MB = 5242880 bytes) --->
+        <cfelseif uploadResult.fileSize GT 5242880>
+            <!--- Delete oversized file --->
+            <cffile action="delete" file="#uploadResult.serverDirectory#/#uploadResult.serverFile#">
+            <cfset variables.pictureError = "File too large. Maximum file size is 5MB.">
+
+        <!--- File is valid, process it --->
+        <cfelse>
+            <!--- Rename file to user_id.jpg --->
+            <cfset newFileName = "#session.admin_user_id#.jpg">
+            <cfset newFilePath = "#expandPath('/assets/img/profiles/')##newFileName#">
+
+            <!--- Delete old profile picture if exists --->
+            <cfif fileExists(newFilePath)>
+                <cffile action="delete" file="#newFilePath#">
+            </cfif>
+
+            <!--- Rename uploaded file --->
+            <cffile action="rename"
+                    source="#uploadResult.serverDirectory#/#uploadResult.serverFile#"
+                    destination="#newFilePath#">
+
+            <!--- Update database --->
+            <cfquery datasource="#application.datasource#">
+                UPDATE dbo.admin_users
+                SET profile_picture = <cfqueryparam value="#newFileName#" cfsqltype="cf_sql_varchar">,
+                    updated_at = GETDATE()
+                WHERE id = <cfqueryparam value="#session.admin_user_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Update session variable --->
+            <cfset session.profile_picture = newFileName>
+
+            <cfset variables.pictureSuccess = "Profile picture uploaded successfully!">
+
+            <!--- Reload profile data --->
+            <cfquery name="getUserProfile" datasource="#application.datasource#">
+                SELECT
+                    u.id,
+                    u.username,
+                    u.full_name,
+                    u.email,
+                    u.password_hash,
+                    u.role_id,
+                    u.is_active,
+                    u.last_login,
+                    u.created_at,
+                    u.password_changed_at,
+                    u.profile_picture,
+                    r.role_name
+                FROM dbo.admin_users u
+                LEFT JOIN dbo.roles r ON u.role_id = r.id
+                WHERE u.id = <cfqueryparam value="#session.admin_user_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+        </cfif>
+
+        <cfcatch type="any">
+            <cfset variables.pictureError = "Error uploading file: #cfcatch.message#">
+        </cfcatch>
+    </cftry>
+</cfif>
+
+<!--- Process Profile Picture Removal --->
+<cfif structKeyExists(form, "remove_picture")>
+    <cftry>
+        <!--- Delete file if exists --->
+        <cfif len(getUserProfile.profile_picture) AND fileExists(expandPath("/assets/img/profiles/#getUserProfile.profile_picture#"))>
+            <cffile action="delete" file="#expandPath('/assets/img/profiles/#getUserProfile.profile_picture#')#">
+        </cfif>
+
+        <!--- Update database --->
+        <cfquery datasource="#application.datasource#">
+            UPDATE dbo.admin_users
+            SET profile_picture = NULL,
+                updated_at = GETDATE()
+            WHERE id = <cfqueryparam value="#session.admin_user_id#" cfsqltype="cf_sql_integer">
+        </cfquery>
+
+        <!--- Update session variable --->
+        <cfset session.profile_picture = "">
+
+        <cfset variables.pictureSuccess = "Profile picture removed successfully.">
+
+        <!--- Reload profile data --->
+        <cfquery name="getUserProfile" datasource="#application.datasource#">
+            SELECT
+                u.id,
+                u.username,
+                u.full_name,
+                u.email,
+                u.password_hash,
+                u.role_id,
+                u.is_active,
+                u.last_login,
+                u.created_at,
+                u.password_changed_at,
+                u.profile_picture,
+                r.role_name
+            FROM dbo.admin_users u
+            LEFT JOIN dbo.roles r ON u.role_id = r.id
+            WHERE u.id = <cfqueryparam value="#session.admin_user_id#" cfsqltype="cf_sql_integer">
+        </cfquery>
+
+        <cfcatch type="any">
+            <cfset variables.pictureError = "Error removing profile picture: #cfcatch.message#">
+        </cfcatch>
+    </cftry>
+</cfif>
+
 <!--- Process Password Change --->
 <cfif structKeyExists(form, "change_password")>
     <!--- Validate password fields --->
@@ -191,6 +321,9 @@
 
         <!--- Main Content --->
         <main class="admin-content">
+            <!--- Top Header Bar --->
+            <cfinclude template="includes/admin_header.cfm">
+
             <!--- Content Header --->
             <div class="content-header">
                 <h1>My Profile</h1>
@@ -245,6 +378,61 @@
                         <button type="submit" name="update_info" class="btn btn-primary">Update Profile</button>
                     </div>
                 </form>
+            </div>
+
+            <!--- Profile Picture Section --->
+            <div class="section">
+                <h2>Profile Picture</h2>
+
+                <cfif structKeyExists(variables, "pictureSuccess")>
+                    <div class="alert alert-success">
+                        <cfoutput>#variables.pictureSuccess#</cfoutput>
+                    </div>
+                </cfif>
+
+                <cfif structKeyExists(variables, "pictureError")>
+                    <div class="alert alert-error">
+                        <cfoutput>#variables.pictureError#</cfoutput>
+                    </div>
+                </cfif>
+
+                <div class="profile-picture-section">
+                    <!--- Display Current Picture --->
+                    <cfoutput>
+                        <cfif len(getUserProfile.profile_picture) AND fileExists(expandPath("/assets/img/profiles/#getUserProfile.profile_picture#"))>
+                            <img src="/assets/img/profiles/#getUserProfile.profile_picture#?v=#now().getTime()#"
+                                 alt="Profile Picture"
+                                 class="profile-picture-preview">
+                        <cfelse>
+                            <div class="profile-placeholder">
+                                👤
+                            </div>
+                        </cfif>
+                    </cfoutput>
+
+                    <!--- Upload Form --->
+                    <form method="post" enctype="multipart/form-data" class="admin-form" style="max-width: 500px; margin: 0 auto;">
+                        <div class="form-group">
+                            <label for="profile_picture">Choose New Picture</label>
+                            <input type="file"
+                                   id="profile_picture"
+                                   name="profile_picture"
+                                   accept=".jpg,.jpeg,.png,.gif">
+                            <small>Maximum file size: 5MB. Allowed types: JPG, PNG, GIF</small>
+                        </div>
+
+                        <div class="form-actions" style="justify-content: center;">
+                            <button type="submit" name="upload_picture" class="btn btn-primary">Upload Picture</button>
+                            <cfif len(getUserProfile.profile_picture)>
+                                <button type="submit" name="remove_picture" class="btn btn-secondary"
+                                        style="background: #dc3545; color: white;"
+                                        onclick="return confirm('Are you sure you want to remove your profile picture?');">
+                                    Remove Picture
+                                </button>
+                            </cfif>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <!--- Change Password Section --->

@@ -92,6 +92,9 @@
         
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <div class="content-header">
                 <cfoutput query="qForm">
                     <div>

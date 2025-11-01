@@ -144,6 +144,9 @@
 
         <!--- Main Content --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <!--- Content Header --->
             <div class="content-header">
                 <h1>User Management</h1>

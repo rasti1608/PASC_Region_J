@@ -365,6 +365,9 @@
 
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <div class="content-header">
                 <h1>Contact Submissions</h1>
                 <p>View and manage contact form submissions</p>

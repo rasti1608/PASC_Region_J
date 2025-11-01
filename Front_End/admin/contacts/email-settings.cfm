@@ -171,6 +171,9 @@
 
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <div style="margin-bottom: 20px;">
                 <a href="index.cfm" style="color: #4a90e2; text-decoration: none;">← Back to Contact Submissions</a>
             </div>

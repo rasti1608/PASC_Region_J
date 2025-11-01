@@ -279,6 +279,9 @@
         
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <div class="content-header">
                 <h1>Forms Management</h1>
                 <p>Manage Google Forms for workshops and registration</p>

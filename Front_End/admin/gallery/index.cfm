@@ -295,6 +295,9 @@
         
         <!--- Main Content Area --->
         <main class="admin-content">
+            <!--- Fixed Header Bar --->
+            <cfinclude template="../includes/admin_header.cfm">
+
             <div class="content-header">
                 <h1>Gallery Management</h1>
                 <p>Manage images for About page and event gallery</p>

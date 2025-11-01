@@ -14,11 +14,11 @@
 --->
 
 <!--- Delete session from admin_sessions table --->
-<cfif structKeyExists(session, "sessionid")>
+<cfif structKeyExists(session, "cfid") AND structKeyExists(session, "cftoken")>
     <cftry>
         <cfquery datasource="#application.datasource#">
             DELETE FROM dbo.admin_sessions
-            WHERE session_id = <cfqueryparam value="#session.sessionid#" cfsqltype="cf_sql_varchar">
+            WHERE session_id = <cfqueryparam value="#session.cfid#_#session.cftoken#" cfsqltype="cf_sql_varchar">
         </cfquery>
         <cfcatch type="any">
             <!--- Session deletion failure should not prevent logout --->
