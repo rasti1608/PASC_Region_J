@@ -230,7 +230,7 @@
         
         <div class="pre-intro-content">
             <img src="/assets/img/logo.png" alt="PASC Region J" class="pre-intro-logo">
-            <h1 class="pre-intro-title">PASC REGION J</h1>
+            <h1 class="pre-intro-title">PASC REGION <span style="color: #FF9800;">J</span></h1>
             <p class="pre-intro-subtitle">Leadership Conference 2026</p>
             <p class="pre-intro-date">Lead Beyond Limits &middot; February 13, 2026</p>
             
@@ -279,7 +279,7 @@
         </div>
         
         <div class="intro-text">
-            <h1 class="intro-title">PASC REGION J</h1>
+            <h1 class="intro-title">PASC REGION <span style="color: #FF9800;">J</span></h1>
             <p class="intro-subtitle">Lead Beyond Limits</p>
             <p class="intro-date">February 13, 2026</p>
         </div>
