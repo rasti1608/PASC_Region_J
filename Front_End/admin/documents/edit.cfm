@@ -279,6 +279,7 @@
                                 💾 Save Changes
                             </button>
                             <a href="index.cfm" class="btn btn-secondary">Cancel</a>
+                            <a href="delete.cfm?id=#url.id#" class="btn btn-danger">Delete</a>
                         </div>
                     </form>
                 </cfoutput>

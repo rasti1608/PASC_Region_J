@@ -159,6 +159,7 @@
                                 💾 Update Form
                             </button>
                             <a href="index.cfm?location=#page_location#" class="btn btn-secondary">Cancel</a>
+                            <a href="delete.cfm?id=#url.id#" class="btn btn-danger">Delete</a>
                         </div>
                     </form>
                 </cfoutput>
