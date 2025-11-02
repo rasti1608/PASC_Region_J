@@ -96,6 +96,7 @@
             u.username,
             u.full_name,
             u.email,
+            u.profile_picture,
             u.role_id,
             u.is_active,
             u.last_login,
@@ -220,6 +221,7 @@
                         <table class="data-table" id="users-table">
                             <thead>
                                 <tr>
+                                    <th class="col-picture">Picture</th>
                                     <th>Username</th>
                                     <th>Full Name</th>
                                     <th>Email</th>
@@ -231,6 +233,15 @@
                             <tbody id="tableBody">
                                 <cfoutput query="qUsers">
                                 <tr data-search="#lCase(htmlEditFormat(username))# #lCase(htmlEditFormat(full_name))# #lCase(htmlEditFormat(email))#">
+                                    <td data-label="PICTURE" class="col-picture">
+                                        <cfif len(profile_picture) AND fileExists(expandPath("/assets/img/profiles/#profile_picture#"))>
+                                            <img src="/assets/img/profiles/#profile_picture#"
+                                                 alt="#htmlEditFormat(full_name)#"
+                                                 class="table-profile-pic">
+                                        <cfelse>
+                                            <div class="table-profile-placeholder">👤</div>
+                                        </cfif>
+                                    </td>
                                     <td data-label="USERNAME">
                                         <strong>#htmlEditFormat(username)#</strong>
                                         <cfif id EQ session.admin_user_id>

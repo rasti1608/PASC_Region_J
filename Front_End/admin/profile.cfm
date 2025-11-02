@@ -332,13 +332,7 @@
             <!--- Top Header Bar --->
             <cfinclude template="includes/admin_header.cfm">
 
-            <!--- Content Header --->
-            <div class="content-header">
-                <h1>My Profile</h1>
-                <p>Manage your personal information and account settings</p>
-            </div>
-
-            <!--- Success/Error Messages --->
+            <!--- Success/Error Messages - Full Width --->
             <cfif structKeyExists(variables, "successMessage")>
                 <div class="alert alert-success">
                     <cfoutput>#variables.successMessage#</cfoutput>
@@ -350,6 +344,12 @@
                     <cfoutput>#variables.errorMessage#</cfoutput>
                 </div>
             </cfif>
+
+            <!--- Content Header --->
+            <div class="content-header">
+                <h1>My Profile</h1>
+                <p>Manage your personal information and account settings</p>
+            </div>
 
             <!--- Personal Information Section --->
             <div class="section">

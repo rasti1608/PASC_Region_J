@@ -778,32 +778,38 @@ body {
 /* USERS TABLE - Column widths */
 #users-table th:nth-child(1),
 #users-table td:nth-child(1) {
-    width: 15%;  /* USERNAME column */
+    width: 8%;  /* PICTURE column */
+    text-align: center;
 }
 
 #users-table th:nth-child(2),
 #users-table td:nth-child(2) {
-    width: 25%;  /* FULL NAME column */
+    width: 15%;  /* USERNAME column */
 }
 
 #users-table th:nth-child(3),
 #users-table td:nth-child(3) {
-    width: 25%;  /* EMAIL column */
+    width: 20%;  /* FULL NAME column - reduced from 25% */
 }
 
 #users-table th:nth-child(4),
 #users-table td:nth-child(4) {
-    width: 15%;  /* ROLE column */
+    width: 22%;  /* EMAIL column - reduced from 25% */
 }
 
 #users-table th:nth-child(5),
 #users-table td:nth-child(5) {
-    width: 10%;  /* STATUS column */
+    width: 15%;  /* ROLE column */
 }
 
 #users-table th:nth-child(6),
 #users-table td:nth-child(6) {
-    width: 20%;  /* ACTIONS column */
+    width: 10%;  /* STATUS column */
+}
+
+#users-table th:nth-child(7),
+#users-table td:nth-child(7) {
+    width: 10%;  /* ACTIONS column - reduced from 20% */
 }
 
 /* Zebra striping for tables */
@@ -926,6 +932,34 @@ body {
     object-fit: cover;
     border: 2px solid #4fc3f7;
     box-shadow: 0 2px 8px rgba(79, 195, 247, 0.3);
+}
+
+/* Table Profile Picture Styles */
+.table-profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4fc3f7;
+    display: block;
+    margin: 0 auto;
+}
+
+.table-profile-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin: 0 auto;
+    color: #ffffff;
+}
+
+.col-picture {
+    text-align: center;
 }
 
 /* Fixed Admin Header */
