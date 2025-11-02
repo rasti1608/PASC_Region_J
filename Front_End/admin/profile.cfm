@@ -256,6 +256,10 @@
         <cfset variables.passwordError = "New password is required.">
     <cfelseif len(trim(form.new_password)) LT 8>
         <cfset variables.passwordError = "New password must be at least 8 characters long.">
+    <cfelseif NOT REFind("[A-Z]", trim(form.new_password))>
+        <cfset variables.passwordError = "Password must contain at least one uppercase letter (A-Z).">
+    <cfelseif NOT REFind("[0-9]", trim(form.new_password))>
+        <cfset variables.passwordError = "Password must contain at least one number (0-9).">
     <cfelseif form.new_password NEQ form.confirm_new_password>
         <cfset variables.passwordError = "New passwords do not match.">
     <cfelseif trim(form.current_password) EQ trim(form.new_password)>
@@ -396,43 +400,42 @@
                     </div>
                 </cfif>
 
-                <div class="profile-picture-section">
+                <form method="post" enctype="multipart/form-data" class="admin-form">
                     <!--- Display Current Picture --->
-                    <cfoutput>
-                        <cfif len(getUserProfile.profile_picture) AND fileExists(expandPath("/assets/img/profiles/#getUserProfile.profile_picture#"))>
-                            <img src="/assets/img/profiles/#getUserProfile.profile_picture#?v=#now().getTime()#"
-                                 alt="Profile Picture"
-                                 class="profile-picture-preview">
-                        <cfelse>
-                            <div class="profile-placeholder">
-                                👤
-                            </div>
-                        </cfif>
-                    </cfoutput>
-
-                    <!--- Upload Form --->
-                    <form method="post" enctype="multipart/form-data" class="admin-form" style="max-width: 500px; margin: 0 auto;">
-                        <div class="form-group">
-                            <label for="profile_picture">Choose New Picture</label>
-                            <input type="file"
-                                   id="profile_picture"
-                                   name="profile_picture"
-                                   accept=".jpg,.jpeg,.png,.gif">
-                            <small>Maximum file size: 5MB. Allowed types: JPG, PNG, GIF</small>
-                        </div>
-
-                        <div class="form-actions" style="justify-content: center;">
-                            <button type="submit" name="upload_picture" class="btn btn-primary">Upload Picture</button>
-                            <cfif len(getUserProfile.profile_picture)>
-                                <button type="submit" name="remove_picture" class="btn btn-secondary"
-                                        style="background: #dc3545; color: white;"
-                                        onclick="return confirm('Are you sure you want to remove your profile picture?');">
-                                    Remove Picture
-                                </button>
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <cfoutput>
+                            <cfif len(getUserProfile.profile_picture) AND fileExists(expandPath("/assets/img/profiles/#getUserProfile.profile_picture#"))>
+                                <img src="/assets/img/profiles/#getUserProfile.profile_picture#?v=#now().getTime()#"
+                                     alt="Profile Picture"
+                                     class="profile-picture-preview">
+                            <cfelse>
+                                <div class="profile-placeholder">
+                                    👤
+                                </div>
                             </cfif>
-                        </div>
-                    </form>
-                </div>
+                        </cfoutput>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile_picture">Choose New Picture</label>
+                        <input type="file"
+                               id="profile_picture"
+                               name="profile_picture"
+                               accept=".jpg,.jpeg,.png,.gif">
+                        <small>Maximum file size: 5MB. Allowed types: JPG, PNG, GIF</small>
+                    </div>
+
+                    <div class="form-actions" style="justify-content: center;">
+                        <button type="submit" name="upload_picture" class="btn btn-primary">Upload Picture</button>
+                        <cfif len(getUserProfile.profile_picture)>
+                            <button type="submit" name="remove_picture" class="btn btn-secondary"
+                                    style="background: #dc3545; color: white;"
+                                    onclick="return confirm('Are you sure you want to remove your profile picture?');">
+                                Remove Picture
+                            </button>
+                        </cfif>
+                    </div>
+                </form>
             </div>
 
             <!--- Change Password Section --->
@@ -469,8 +472,10 @@
                                name="new_password"
                                required
                                minlength="8"
+                               pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                               title="Must be at least 8 characters with one uppercase letter and one number"
                                autocomplete="new-password">
-                        <small>Minimum 8 characters.</small>
+                        <small>Must be at least 8 characters with one uppercase letter (A-Z) and one number (0-9).</small>
                     </div>
 
                     <div class="form-group">
@@ -480,6 +485,8 @@
                                name="confirm_new_password"
                                required
                                minlength="8"
+                               pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                               title="Must be at least 8 characters with one uppercase letter and one number"
                                autocomplete="new-password">
                     </div>
 
@@ -558,10 +565,23 @@
         </main>
     </div>
 
-    <!--- Password Match Validation JavaScript --->
+    <!--- Password Validation JavaScript --->
     <script>
     const newPasswordInput = document.getElementById('new_password');
     const confirmNewPasswordInput = document.getElementById('confirm_new_password');
+
+    function validatePasswordStrength(password) {
+        if (password.length < 8) {
+            return 'Password must be at least 8 characters long';
+        }
+        if (!/[A-Z]/.test(password)) {
+            return 'Password must contain at least one uppercase letter (A-Z)';
+        }
+        if (!/[0-9]/.test(password)) {
+            return 'Password must contain at least one number (0-9)';
+        }
+        return '';
+    }
 
     function validatePasswordMatch() {
         if (confirmNewPasswordInput.value && newPasswordInput.value !== confirmNewPasswordInput.value) {
@@ -572,7 +592,11 @@
     }
 
     if (newPasswordInput && confirmNewPasswordInput) {
-        newPasswordInput.addEventListener('input', validatePasswordMatch);
+        newPasswordInput.addEventListener('input', function() {
+            const error = validatePasswordStrength(this.value);
+            this.setCustomValidity(error);
+            validatePasswordMatch();
+        });
         confirmNewPasswordInput.addEventListener('input', validatePasswordMatch);
     }
     </script>

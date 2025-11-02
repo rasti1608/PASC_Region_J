@@ -13,6 +13,12 @@
 --->
 
 <div class="admin-header">
+    <!--- Mobile Hamburger Menu Button --->
+    <button class="hamburger-menu" id="hamburger-menu" aria-label="Toggle menu">
+        <span class="hamburger-icon">☰</span>
+        <span class="close-icon" style="display: none;">✕</span>
+    </button>
+
     <div class="header-right">
         <cfoutput>
             <!--- Profile/Settings Button --->
@@ -34,3 +40,6 @@
         </cfoutput>
     </div>
 </div>
+
+<!--- Mobile Overlay (for closing sidebar when clicking outside) --->
+<div class="mobile-overlay" id="mobile-overlay"></div>

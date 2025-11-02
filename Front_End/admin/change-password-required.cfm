@@ -71,6 +71,10 @@
         <cfset variables.errorMessage = "New password is required.">
     <cfelseif len(trim(form.new_password)) LT 8>
         <cfset variables.errorMessage = "Password must be at least 8 characters long.">
+    <cfelseif NOT REFind("[A-Z]", trim(form.new_password))>
+        <cfset variables.errorMessage = "Password must contain at least one uppercase letter (A-Z).">
+    <cfelseif NOT REFind("[0-9]", trim(form.new_password))>
+        <cfset variables.errorMessage = "Password must contain at least one number (0-9).">
     <cfelseif form.new_password NEQ form.confirm_password>
         <cfset variables.errorMessage = "Passwords do not match.">
     <cfelse>
@@ -189,6 +193,8 @@
                            name="new_password"
                            required
                            minlength="8"
+                           pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                           title="Must be at least 8 characters with one uppercase letter and one number"
                            autocomplete="new-password"
                            oninput="checkPasswordStrength()">
 
@@ -202,6 +208,8 @@
                            name="confirm_password"
                            required
                            minlength="8"
+                           pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                           title="Must be at least 8 characters with one uppercase letter and one number"
                            autocomplete="new-password">
                 </div>
 
@@ -209,8 +217,9 @@
                     <h4>Password Requirements:</h4>
                     <ul>
                         <li>Minimum 8 characters</li>
-                        <li>Recommended: Mix of uppercase, lowercase, numbers, and symbols</li>
-                        <li>Avoid common words or personal information</li>
+                        <li><strong>At least one uppercase letter (A-Z)</strong></li>
+                        <li><strong>At least one number (0-9)</strong></li>
+                        <li>Recommended: Mix of symbols and avoid common words</li>
                     </ul>
                 </div>
 
@@ -234,10 +243,27 @@
 
     <!--- JavaScript for Password Strength and Validation --->
     <script>
+    const newPasswordInput = document.getElementById('new_password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+
     function checkPasswordStrength() {
-        const password = document.getElementById('new_password').value;
+        const password = newPasswordInput.value;
         const strengthDiv = document.getElementById('passwordStrength');
 
+        // Enforce password requirements first
+        if (password.length > 0) {
+            if (password.length < 8) {
+                newPasswordInput.setCustomValidity('Password must be at least 8 characters long');
+            } else if (!/[A-Z]/.test(password)) {
+                newPasswordInput.setCustomValidity('Password must contain at least one uppercase letter (A-Z)');
+            } else if (!/[0-9]/.test(password)) {
+                newPasswordInput.setCustomValidity('Password must contain at least one number (0-9)');
+            } else {
+                newPasswordInput.setCustomValidity('');
+            }
+        }
+
+        // Visual strength indicator
         if (password.length === 0) {
             strengthDiv.style.display = 'none';
             return;
@@ -265,9 +291,6 @@
     }
 
     // Password match validation
-    const newPasswordInput = document.getElementById('new_password');
-    const confirmPasswordInput = document.getElementById('confirm_password');
-
     function validatePasswordMatch() {
         if (confirmPasswordInput.value && newPasswordInput.value !== confirmPasswordInput.value) {
             confirmPasswordInput.setCustomValidity('Passwords do not match');

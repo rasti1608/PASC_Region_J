@@ -91,6 +91,10 @@
                 <cfset variables.errorMessage = "New password is required when 'Change Password' is checked.">
             <cfelseif len(trim(form.new_password)) LT 8>
                 <cfset variables.errorMessage = "Password must be at least 8 characters long.">
+            <cfelseif NOT REFind("[A-Z]", trim(form.new_password))>
+                <cfset variables.errorMessage = "Password must contain at least one uppercase letter (A-Z).">
+            <cfelseif NOT REFind("[0-9]", trim(form.new_password))>
+                <cfset variables.errorMessage = "Password must contain at least one number (0-9).">
             <cfelseif form.new_password NEQ form.confirm_password>
                 <cfset variables.errorMessage = "Passwords do not match.">
             </cfif>
@@ -303,8 +307,10 @@
                                        id="new_password"
                                        name="new_password"
                                        minlength="8"
+                                       pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                                       title="Must be at least 8 characters with one uppercase letter and one number"
                                        autocomplete="new-password">
-                                <small>Minimum 8 characters. User will NOT be required to change this password.</small>
+                                <small>Must be at least 8 characters with one uppercase letter (A-Z) and one number (0-9). User will NOT be required to change this password.</small>
                             </div>
 
                             <div class="form-group">
@@ -313,6 +319,8 @@
                                        id="confirm_password"
                                        name="confirm_password"
                                        minlength="8"
+                                       pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                                       title="Must be at least 8 characters with one uppercase letter and one number"
                                        autocomplete="new-password">
                             </div>
                         </div>
@@ -376,9 +384,22 @@
         }
     }
 
-    // Password match validation
+    // Password validation
     const newPasswordInput = document.getElementById('new_password');
     const confirmPasswordInput = document.getElementById('confirm_password');
+
+    function validatePasswordStrength(password) {
+        if (password.length < 8) {
+            return 'Password must be at least 8 characters long';
+        }
+        if (!/[A-Z]/.test(password)) {
+            return 'Password must contain at least one uppercase letter (A-Z)';
+        }
+        if (!/[0-9]/.test(password)) {
+            return 'Password must contain at least one number (0-9)';
+        }
+        return '';
+    }
 
     function validatePasswordMatch() {
         if (confirmPasswordInput.value && newPasswordInput.value !== confirmPasswordInput.value) {
@@ -389,7 +410,11 @@
     }
 
     if (newPasswordInput && confirmPasswordInput) {
-        newPasswordInput.addEventListener('input', validatePasswordMatch);
+        newPasswordInput.addEventListener('input', function() {
+            const error = validatePasswordStrength(this.value);
+            this.setCustomValidity(error);
+            validatePasswordMatch();
+        });
         confirmPasswordInput.addEventListener('input', validatePasswordMatch);
     }
     </script>

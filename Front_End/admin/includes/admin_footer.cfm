@@ -6,12 +6,15 @@
 * Author:      Rastislav Toscak
 *
 * Purpose:     Admin panel footer include
-*              Contains session heartbeat JavaScript
+*              Contains mobile menu JavaScript and session heartbeat
 *              Include this before </body> tag on all admin pages
 *
 * Project:     PASC Region J Conference 2026 Website
 *******************************************************************************
 --->
+
+<!--- Mobile Menu JavaScript --->
+<script src="/assets/js/admin.js"></script>
 
 <!--- Session Heartbeat Script --->
 <script>
