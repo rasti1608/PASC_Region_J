@@ -372,7 +372,7 @@
         
         <cfif qAnnouncements.recordCount GT 0>
             <div class="announcements-grid">
-                <cfoutput query="qAnnouncements" maxrows="3">
+                <cfoutput query="qAnnouncements">
                     <div class="announcement-card <cfif is_featured>featured</cfif>">
                         <cfif is_featured>
                             <span class="featured-badge">⭐ Featured</span>
