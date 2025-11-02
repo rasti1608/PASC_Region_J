@@ -356,27 +356,7 @@
         <div class="hero-text">
             <h1 class="hero-title" id="heroTitle">PASC REGION J CONFERENCE 2026</h1>
             <p class="hero-subtitle" id="heroSubtitle">Lead Beyond Limits - February 13, 2026</p>
-            
-            <!--- Mobile-Only Anthem Player (ABOVE buttons) --->
-            <div class="anthem-player-mobile">
-                <div class="anthem-icon-mobile">&#127925;</div>
-                <div class="anthem-info-mobile">
-                    <div class="anthem-title-mobile">"One Orbit"</div>
-                    <div class="anthem-credit-mobile">Conference Anthem by IronRUST</div>
-                    <div class="anthem-progress-container-mobile">
-                        <div class="anthem-progress-bar-mobile" onclick="seekIndexAnthem(event)">
-                            <div class="anthem-progress-fill-mobile" id="anthemProgressFillIndexMobile"></div>
-                        </div>
-                        <div class="anthem-time-display-mobile">
-                            <span id="anthemCurrentTimeIndexMobile">0:00</span> / <span id="anthemTotalTimeIndexMobile">0:00</span>
-                        </div>
-                    </div>
-                </div>
-                <button class="anthem-btn-mobile" onclick="toggleAnthem()">
-                    <span class="play-icon-mobile">&#9654;</span>
-                </button>
-            </div>
-            
+
             <div class="hero-buttons">
                 <a href="workshops.cfm" class="btn btn-primary">Register Now</a>
                 <a href="about.cfm" class="btn btn-secondary">Learn More</a>
@@ -529,16 +509,28 @@
         function skipIntro() {
             const intro = document.getElementById('intro-splash');
             const mainSite = document.getElementById('main-site');
-            
+
             // Mute intro videos when skipping
             const desktopVideo = document.getElementById('introVideoDesktop');
             const mobileVideo = document.getElementById('introVideoMobile');
             if (desktopVideo) desktopVideo.muted = true;
             if (mobileVideo) mobileVideo.muted = true;
-            
+
             intro.classList.add('fade-out');
             mainSite.classList.add('visible');
-            
+
+            // AUTO-START BACKGROUND MUSIC
+            const globalAudio = document.getElementById('globalAnthemAudio');
+            if (globalAudio && globalAudio.paused) {
+                globalAudio.play().then(() => {
+                    sessionStorage.setItem('anthemPlaying', 'true');
+                    // Trigger animations if not muted
+                    if (typeof updateAllAnimations === 'function' && !globalAudio.muted) {
+                        updateAllAnimations(true);
+                    }
+                }).catch(err => console.log('Auto-play prevented:', err));
+            }
+
             setTimeout(() => {
                 intro.style.display = 'none';
             }, 800);

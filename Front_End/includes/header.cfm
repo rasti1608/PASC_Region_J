@@ -65,36 +65,14 @@
                 <li><a href="resources.cfm" class="<cfif listLast(cgi.script_name, '/') eq 'resources.cfm'>active</cfif>">Resources</a></li>
             </ul>
             
-            <!--- Shared Anthem Player --->
-            <div class="anthem-player-header">
-                <!--- Animated Equalizer (left side) --->
-                <div class="equalizer-bars" id="equalizerLeft" style="display: none;">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-                
-                <div class="anthem-info-header">
-                    <div class="anthem-title-header">&#127925; "One Orbit"</div>
-                    <div class="anthem-credit-header">by IronRUST</div>
-                    <div class="anthem-progress-header" id="anthemProgressHeader" onclick="seekHeaderAnthem(event)">
-                        <div class="anthem-progress-fill-header" id="anthemProgressFillHeader"></div>
-                    </div>
-                </div>
-                <button class="anthem-btn-header" id="anthemBtnHeader" onclick="toggleGlobalAnthem()" title="Play Conference Anthem">
-                    <span class="anthem-play-icon-header">&#9654;</span>
-                </button>
-                
-                <!--- Animated Equalizer (right side) --->
-                <div class="equalizer-bars" id="equalizerRight" style="display: none;">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-            </div>
+            <!--- Mute Toggle Button --->
+            <button class="mute-toggle-btn" id="muteToggleBtn" onclick="toggleMute()" title="Mute/Unmute">
+                <span class="mute-icon" id="muteIcon">&#128266;</span>
+                <span class="mute-label" id="muteLabel">UNMUTE</span>
+            </button>
             
             <!--- Global Audio Element (shared by all players) --->
-            <audio id="globalAnthemAudio" preload="metadata">
+            <audio id="globalAnthemAudio" preload="metadata" loop>
                 <source src="/assets/audio/one-orbit-anthem.mp3" type="audio/mpeg">
                 <source src="/assets/audio/one-orbit-anthem.wav" type="audio/wav">
             </audio>
@@ -107,216 +85,186 @@
             </button>
         </div>
     </nav>
-    
-    <!--- Mobile Anthem Player (Fixed at Bottom) --->
-    <div class="anthem-player-mobile-fixed">
-        <div class="anthem-mobile-icon">&#127925;</div>
-        
-        <div class="equalizer-mobile" id="equalizerMobile" style="display: none;">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-        
-        <div class="anthem-mobile-info">
-            <div class="anthem-mobile-title">"One Orbit"</div>
-            <div class="anthem-mobile-credit">by IronRUST</div>
-            <div class="anthem-progress-mobile-fixed" onclick="seekMobileFixed(event)">
-                <div class="anthem-progress-fill-mobile-fixed" id="anthemProgressFillMobileFixed"></div>
-            </div>
-        </div>
-        
-        <button class="anthem-btn-mobile" id="anthemBtnMobile" onclick="toggleGlobalAnthem()">
-            <span class="anthem-play-icon-mobile">&#9654;</span>
-        </button>
-    </div>
-    
-    <!--- Global Anthem Player JavaScript --->
+
+    <!--- Background Music Controller JavaScript --->
     <script>
-        // Global anthem player (shared across all pages)
+        // Global background music (shared across all pages)
         let globalAudio = null;
-        let headerBtn = null;
-        let headerIcon = null;
-        let mobileBtn = null;
-        let mobileIcon = null;
-        let equalizerLeft = null;
-        let equalizerRight = null;
-        let equalizerMobile = null;
-        
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             globalAudio = document.getElementById('globalAnthemAudio');
-            headerBtn = document.getElementById('anthemBtnHeader');
-            headerIcon = headerBtn ? headerBtn.querySelector('.anthem-play-icon-header') : null;
-            mobileBtn = document.getElementById('anthemBtnMobile');
-            mobileIcon = mobileBtn ? mobileBtn.querySelector('.anthem-play-icon-mobile') : null;
-            equalizerLeft = document.getElementById('equalizerLeft');
-            equalizerRight = document.getElementById('equalizerRight');
-            equalizerMobile = document.getElementById('equalizerMobile');
-            
-            if (!globalAudio) return;
-            
+
+            if (!globalAudio) {
+                console.error('Audio element not found on page load');
+                return;
+            }
+
             // Check previous state
             const wasPlaying = sessionStorage.getItem('anthemPlaying') === 'true';
             const savedPosition = parseFloat(sessionStorage.getItem('anthemPosition') || 0);
-            
+
             // Restore position
             if (savedPosition > 0) {
                 globalAudio.currentTime = savedPosition;
             }
-            
+
+            // Set initial button state
+            updateMuteButton(!globalAudio.paused);  // Invert: if NOT paused (playing), pass true
+
             // Resume if was playing
             if (wasPlaying) {
                 setTimeout(() => {
                     globalAudio.play().then(() => {
-                        updateAllPlayers(true);
+                        // Event listener will handle button state and animations
                     }).catch(err => {
+                        console.error('Auto-resume prevented:', err);
                         sessionStorage.setItem('anthemPlaying', 'false');
                     });
                 }, 100);
             }
-            
+
             // Save position while playing
             globalAudio.addEventListener('timeupdate', function() {
                 if (!globalAudio.paused) {
                     sessionStorage.setItem('anthemPosition', globalAudio.currentTime);
-                    // Update progress bar
-                    updateProgressBar();
                 }
             });
-            
-            // Reset when ends
+
+            // Loop when ends
             globalAudio.addEventListener('ended', function() {
-                updateAllPlayers(false);
-                sessionStorage.setItem('anthemPlaying', 'false');
-                sessionStorage.setItem('anthemPosition', '0');
+                globalAudio.currentTime = 0;
+                globalAudio.play();
             });
-            
+
+            // Sync button state when audio starts playing
+            globalAudio.addEventListener('play', function() {
+                updateMuteButton(true);    // true = IS playing
+                updateAllAnimations(true);
+                sessionStorage.setItem('anthemPlaying', 'true');
+            });
+
+            // Sync button state when audio pauses
+            globalAudio.addEventListener('pause', function() {
+                updateMuteButton(false);   // false = NOT playing
+                updateAllAnimations(false);
+                sessionStorage.setItem('anthemPlaying', 'false');
+            });
+
             // Keep-alive: Check every 2 seconds if audio should be playing (helps in-app browsers)
             setInterval(function() {
                 if (!globalAudio) return;
-                
+
                 const shouldBePlaying = sessionStorage.getItem('anthemPlaying') === 'true';
-                
+
                 // If it should be playing but got paused (e.g., by browser), try to resume
                 if (shouldBePlaying && globalAudio.paused && !document.hidden) {
                     const savedPosition = parseFloat(sessionStorage.getItem('anthemPosition') || 0);
                     if (savedPosition > 0 && Math.abs(globalAudio.currentTime - savedPosition) > 2) {
                         globalAudio.currentTime = savedPosition;
                     }
-                    
+
                     globalAudio.play().catch(err => {
                         // Silently fail if browser blocks (user needs to interact)
                     });
                 }
             }, 2000);
-            
+
             // Save state before unload
             window.addEventListener('beforeunload', function() {
                 sessionStorage.setItem('anthemPlaying', !globalAudio.paused ? 'true' : 'false');
+                sessionStorage.setItem('musicMuted', globalAudio.muted ? 'true' : 'false');
                 if (!globalAudio.paused) {
                     sessionStorage.setItem('anthemPosition', globalAudio.currentTime);
                 }
             });
-            
+
             // Handle page visibility changes (tab switching)
             document.addEventListener('visibilitychange', function() {
                 if (!globalAudio) return;
-                
+
                 const wasPlaying = sessionStorage.getItem('anthemPlaying') === 'true';
-                
+
                 if (document.hidden) {
                     // Page is hidden (tab switched away)
                     if (!globalAudio.paused) {
-                        // Save that it was playing
                         sessionStorage.setItem('anthemPlaying', 'true');
                         sessionStorage.setItem('anthemPosition', globalAudio.currentTime);
                     }
                 } else {
                     // Page is visible again (tab switched back)
                     if (wasPlaying && globalAudio.paused) {
-                        // Try to resume if it was playing before
                         const savedPosition = parseFloat(sessionStorage.getItem('anthemPosition') || 0);
                         if (savedPosition > 0) {
                             globalAudio.currentTime = savedPosition;
                         }
-                        
+
                         // Attempt to resume playback
                         globalAudio.play().then(() => {
-                            updateAllPlayers(true);
+                            const isMuted = globalAudio.muted;
+                            updateAllAnimations(!isMuted);
                         }).catch(err => {
                             console.log('Auto-resume prevented by browser:', err);
-                            // Browser blocked auto-resume, user needs to click play again
                         });
                     }
                 }
             });
         });
         
-        // Update all player buttons
-        function updateAllPlayers(isPlaying) {
+        // Update mute button icons and labels
+        function updateMuteButton(isPlaying) {
+            const muteBtn = document.getElementById('muteToggleBtn');
+            const muteIcon = document.getElementById('muteIcon');
+            const muteLabel = document.getElementById('muteLabel');
+
+            if (!muteBtn || !muteIcon || !muteLabel) return;
+
+            if (isPlaying) {
+                // MUSIC IS PLAYING RIGHT NOW
+                muteIcon.innerHTML = '&#128266;';  // 🔊 speaker with sound waves
+                muteLabel.textContent = 'MUTE';       // Show MUTE when playing
+                muteBtn.classList.remove('muted');
+                muteBtn.classList.add('playing');
+            } else {
+                // MUSIC IS STOPPED/MUTED
+                muteIcon.innerHTML = '&#128263;';  // 🔇 muted speaker with X
+                muteLabel.textContent = 'UNMUTE';     // Show UNMUTE when stopped
+                muteBtn.classList.remove('playing');
+                muteBtn.classList.add('muted');
+            }
+        }
+
+        // Update all animations based on audio state
+        function updateAllAnimations(shouldAnimate) {
             // Get nav logo
             const navLogo = document.getElementById('navLogo');
             // Get About page logo
             const aboutLogo = document.querySelector('.large-logo');
 
-            // Update header button
-            if (headerBtn && headerIcon) {
-                if (isPlaying) {
-                    headerBtn.classList.add('playing');
-                    headerIcon.textContent = '| |'; // Simple pipes with space
-                    // Show equalizers
-                    if (equalizerLeft) equalizerLeft.style.display = 'flex';
-                    if (equalizerRight) equalizerRight.style.display = 'flex';
-                    // Rotate logos
-                    if (navLogo) navLogo.classList.add('rotating');
-                    if (aboutLogo) aboutLogo.classList.add('rotating');
+            // Rotate logos
+            if (navLogo) {
+                if (shouldAnimate) {
+                    navLogo.classList.add('rotating');
                 } else {
-                    headerBtn.classList.remove('playing');
-                    headerIcon.innerHTML = '&#9654;'; // Play icon
-                    // Hide equalizers
-                    if (equalizerLeft) equalizerLeft.style.display = 'none';
-                    if (equalizerRight) equalizerRight.style.display = 'none';
-                    // Stop logo rotations
-                    if (navLogo) navLogo.classList.remove('rotating');
-                    if (aboutLogo) aboutLogo.classList.remove('rotating');
+                    navLogo.classList.remove('rotating');
                 }
             }
-            
-            // Update index page button if it exists
-            const indexBtn = document.getElementById('anthemPlayBtn');
-            const indexIcon = indexBtn ? indexBtn.querySelector('.play-icon') : null;
-            if (indexBtn && indexIcon) {
-                if (isPlaying) {
-                    indexBtn.classList.add('playing');
-                    indexIcon.textContent = '| |'; // Simple pipes with space
+            if (aboutLogo) {
+                if (shouldAnimate) {
+                    aboutLogo.classList.add('rotating');
                 } else {
-                    indexBtn.classList.remove('playing');
-                    indexIcon.innerHTML = '&#9654;'; // Play icon
+                    aboutLogo.classList.remove('rotating');
                 }
             }
-            
-            // Update mobile button
-            if (mobileBtn && mobileIcon) {
-                if (isPlaying) {
-                    mobileBtn.classList.add('playing');
-                    mobileIcon.textContent = '| |';
-                    if (equalizerMobile) equalizerMobile.style.display = 'flex';
-                } else {
-                    mobileBtn.classList.remove('playing');
-                    mobileIcon.innerHTML = '&#9654;';
-                    if (equalizerMobile) equalizerMobile.style.display = 'none';
-                }
-            }
-            
+
             // INDEX PAGE - Animate hero titles and videos
             const heroTitle = document.getElementById('heroTitle');
             const heroSubtitle = document.getElementById('heroSubtitle');
             const heroVideo = document.getElementById('heroVideo');
             const heroVideoMobile = document.getElementById('heroVideoMobile');
-            
+
             if (heroTitle && heroSubtitle) {
-                if (isPlaying) {
+                if (shouldAnimate) {
                     heroTitle.classList.add('dancing');
                     heroSubtitle.classList.add('dancing');
                     if (heroVideo) heroVideo.play().catch(err => console.log('Desktop video play prevented:', err));
@@ -328,15 +276,15 @@
                     if (heroVideoMobile) heroVideoMobile.pause();
                 }
             }
-            
+
             // ABOUT PAGE
             const aboutTitle = document.getElementById('aboutTitle');
             const aboutSubtitle = document.getElementById('aboutSubtitle');
             const aboutVideo = document.getElementById('aboutVideo');
             const aboutVideoMobile = document.getElementById('aboutVideoMobile');
-            
+
             if (aboutTitle && aboutSubtitle) {
-                if (isPlaying) {
+                if (shouldAnimate) {
                     aboutTitle.classList.add('dancing');
                     aboutSubtitle.classList.add('dancing');
                     if (aboutVideo) aboutVideo.play().catch(err => console.log('About video play prevented:', err));
@@ -348,15 +296,15 @@
                     if (aboutVideoMobile) aboutVideoMobile.pause();
                 }
             }
-            
+
             // CONTACT PAGE
             const contactTitle = document.getElementById('contactTitle');
             const contactSubtitle = document.getElementById('contactSubtitle');
             const contactVideo = document.getElementById('contactVideo');
             const contactVideoMobile = document.getElementById('contactVideoMobile');
-            
+
             if (contactTitle && contactSubtitle) {
-                if (isPlaying) {
+                if (shouldAnimate) {
                     contactTitle.classList.add('dancing');
                     contactSubtitle.classList.add('dancing');
                     if (contactVideo) contactVideo.play().catch(err => console.log('Contact video play prevented:', err));
@@ -368,15 +316,15 @@
                     if (contactVideoMobile) contactVideoMobile.pause();
                 }
             }
-            
+
             // GALLERY PAGE
             const galleryTitle = document.getElementById('galleryTitle');
             const gallerySubtitle = document.getElementById('gallerySubtitle');
             const galleryVideo = document.getElementById('galleryVideo');
             const galleryVideoMobile = document.getElementById('galleryVideoMobile');
-            
+
             if (galleryTitle && gallerySubtitle) {
-                if (isPlaying) {
+                if (shouldAnimate) {
                     galleryTitle.classList.add('dancing');
                     gallerySubtitle.classList.add('dancing');
                     if (galleryVideo) galleryVideo.play().catch(err => console.log('Gallery video play prevented:', err));
@@ -388,15 +336,15 @@
                     if (galleryVideoMobile) galleryVideoMobile.pause();
                 }
             }
-            
+
             // REGISTER PAGE
             const registerTitle = document.getElementById('registerTitle');
             const registerSubtitle = document.getElementById('registerSubtitle');
             const registerVideo = document.getElementById('registerVideo');
             const registerVideoMobile = document.getElementById('registerVideoMobile');
-            
+
             if (registerTitle && registerSubtitle) {
-                if (isPlaying) {
+                if (shouldAnimate) {
                     registerTitle.classList.add('dancing');
                     registerSubtitle.classList.add('dancing');
                     if (registerVideo) registerVideo.play().catch(err => console.log('Register video play prevented:', err));
@@ -408,15 +356,15 @@
                     if (registerVideoMobile) registerVideoMobile.pause();
                 }
             }
-            
+
             // RESOURCES PAGE
             const resourcesTitle = document.getElementById('resourcesTitle');
             const resourcesSubtitle = document.getElementById('resourcesSubtitle');
             const resourcesVideo = document.getElementById('resourcesVideo');
             const resourcesVideoMobile = document.getElementById('resourcesVideoMobile');
-            
+
             if (resourcesTitle && resourcesSubtitle) {
-                if (isPlaying) {
+                if (shouldAnimate) {
                     resourcesTitle.classList.add('dancing');
                     resourcesSubtitle.classList.add('dancing');
                     if (resourcesVideo) resourcesVideo.play().catch(err => console.log('Resources video play prevented:', err));
@@ -428,15 +376,15 @@
                     if (resourcesVideoMobile) resourcesVideoMobile.pause();
                 }
             }
-            
+
             // WORKSHOPS PAGE
             const workshopsTitle = document.getElementById('workshopsTitle');
             const workshopsSubtitle = document.getElementById('workshopsSubtitle');
             const workshopsVideo = document.getElementById('workshopsVideo');
             const workshopsVideoMobile = document.getElementById('workshopsVideoMobile');
-            
+
             if (workshopsTitle && workshopsSubtitle) {
-                if (isPlaying) {
+                if (shouldAnimate) {
                     workshopsTitle.classList.add('dancing');
                     workshopsSubtitle.classList.add('dancing');
                     if (workshopsVideo) workshopsVideo.play().catch(err => console.log('Workshops video play prevented:', err));
@@ -450,72 +398,38 @@
             }
         }
         
-        // Toggle anthem (called from header)
-        function toggleGlobalAnthem() {
-            if (!globalAudio) return;
-            
+        // Toggle play/pause (main function called by button)
+        function toggleMute() {
+            if (!globalAudio) {
+                globalAudio = document.getElementById('globalAnthemAudio');
+            }
+
+            if (!globalAudio) {
+                console.error('Audio element not found');
+                return;
+            }
+
             if (globalAudio.paused) {
-                // Unlock audio context on first interaction (helps in-app browsers)
-                if (globalAudio.currentTime === 0) {
-                    globalAudio.load();
-                }
-                
-                globalAudio.play().then(() => {
-                    updateAllPlayers(true);
-                    sessionStorage.setItem('anthemPlaying', 'true');
-                }).catch(err => {
-                    console.error('Playback failed:', err);
-                });
+                // Start playback
+                globalAudio.play()
+                    .then(() => {
+                        console.log('Audio started');
+                        // Event listener will handle updateMuteButton(true) and animations
+                    })
+                    .catch(err => {
+                        console.error('Failed to play audio:', err);
+                        alert('Could not start audio. Please try clicking again.');
+                    });
             } else {
+                // Pause playback
                 globalAudio.pause();
-                updateAllPlayers(false);
-                sessionStorage.setItem('anthemPlaying', 'false');
+                // Event listener will handle updateMuteButton(false) and animations
             }
         }
-        
-        // Toggle anthem (called from index page)
+
+        // Legacy function for backward compatibility
         function toggleAnthem() {
-            toggleGlobalAnthem();
-        }
-        
-        // Update progress bar
-        function updateProgressBar() {
-            if (!globalAudio) return;
-            const progress = (globalAudio.currentTime / globalAudio.duration) * 100;
-            
-            // Update header progress bar
-            const progressFill = document.getElementById('anthemProgressFillHeader');
-            if (progressFill && !isNaN(progress)) {
-                progressFill.style.width = progress + '%';
-            }
-            
-            // Update mobile fixed player progress bar
-            const progressFillMobile = document.getElementById('anthemProgressFillMobileFixed');
-            if (progressFillMobile && !isNaN(progress)) {
-                progressFillMobile.style.width = progress + '%';
-            }
-        }
-        
-        // Seek functionality for header player
-        function seekHeaderAnthem(event) {
-            if (!globalAudio) return;
-            const progressBar = event.currentTarget;
-            const clickX = event.offsetX;
-            const width = progressBar.offsetWidth;
-            const seekTime = (clickX / width) * globalAudio.duration;
-            globalAudio.currentTime = seekTime;
-            updateProgressBar();
-        }
-        
-        // Seek functionality for mobile fixed player
-        function seekMobileFixed(event) {
-            if (!globalAudio) return;
-            const progressBar = event.currentTarget;
-            const clickX = event.offsetX;
-            const width = progressBar.offsetWidth;
-            const seekTime = (clickX / width) * globalAudio.duration;
-            globalAudio.currentTime = seekTime;
-            updateProgressBar();
+            toggleMute();
         }
     </script>
     

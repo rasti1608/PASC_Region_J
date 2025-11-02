@@ -580,3 +580,216 @@ audio {
         font-size: 1.3rem;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════ */
+/* MUTE TOGGLE BUTTON (Single Professional Button in Header)            */
+/* ═══════════════════════════════════════════════════════════════════ */
+
+/* Mute Toggle Button - PERFECTLY CIRCULAR - 90px to match logo */
+.mute-toggle-btn {
+    width: 90px;
+    height: 90px;
+    min-width: 90px;
+    min-height: 90px;
+    max-width: 90px;
+    max-height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5b4b8a 0%, #7c6ba8 100%);
+    border: 3px solid #8a7bb8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 20px;
+    box-shadow: 0 4px 12px rgba(91, 75, 138, 0.4);
+    position: relative;
+    flex-shrink: 0;
+    aspect-ratio: 1/1;
+}
+
+.mute-toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(91, 75, 138, 0.6);
+}
+
+.mute-icon {
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 3px;
+}
+
+.mute-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* PLAYING STATE - MASSIVE purple glow that you can't miss */
+.mute-toggle-btn.playing {
+    animation: boomPulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 40px rgba(124, 107, 168, 0.8),
+                0 0 80px rgba(124, 107, 168, 0.6);
+}
+
+/* Inner glow - close and bright */
+.mute-toggle-btn.playing::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(124, 107, 168, 0.9) 0%,
+        rgba(91, 75, 138, 0.6) 40%,
+        transparent 70%
+    );
+    animation: innerGlow 1.5s ease-in-out infinite;
+    z-index: -1;
+}
+
+/* Outer massive blurry haze - VERY visible */
+.mute-toggle-btn.playing::after {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(124, 107, 168, 0.7) 0%,
+        rgba(91, 75, 138, 0.5) 30%,
+        rgba(79, 195, 247, 0.3) 50%,
+        transparent 70%
+    );
+    filter: blur(25px);
+    animation: outerAura 2s ease-in-out infinite;
+    z-index: -2;
+}
+
+@keyframes boomPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes innerGlow {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+@keyframes outerAura {
+    0%, 100% {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 0.9;
+        transform: scale(1.4);
+    }
+}
+
+/* MUTED STATE - Static, gray, no animation */
+.mute-toggle-btn.muted {
+    background: linear-gradient(135deg, #4a4a4a 0%, #666666 100%);
+    border-color: #888888;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.mute-toggle-btn.muted::before,
+.mute-toggle-btn.muted::after {
+    display: none;
+}
+
+/* Mobile - smaller but still perfectly circular with proportional glows */
+@media (max-width: 768px) {
+    .mute-toggle-btn {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        min-height: 70px;
+        max-width: 70px;
+        max-height: 70px;
+        margin-left: 12px;
+    }
+
+    .mute-icon {
+        font-size: 28px;
+        margin-bottom: 2px;
+    }
+
+    .mute-label {
+        font-size: 9px;
+        letter-spacing: 0.6px;
+    }
+
+    /* Proportionally larger glows for tablet */
+    .mute-toggle-btn.playing::before {
+        top: -15px;
+        left: -15px;
+        right: -15px;
+        bottom: -15px;
+    }
+
+    .mute-toggle-btn.playing::after {
+        top: -40px;
+        left: -40px;
+        right: -40px;
+        bottom: -40px;
+        filter: blur(20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .mute-toggle-btn {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        min-height: 60px;
+        max-width: 60px;
+        max-height: 60px;
+        margin-left: 10px;
+    }
+
+    .mute-icon {
+        font-size: 24px;
+    }
+
+    .mute-label {
+        font-size: 8px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Proportional glows for small mobile */
+    .mute-toggle-btn.playing::before {
+        top: -12px;
+        left: -12px;
+        right: -12px;
+        bottom: -12px;
+    }
+
+    .mute-toggle-btn.playing::after {
+        top: -35px;
+        left: -35px;
+        right: -35px;
+        bottom: -35px;
+        filter: blur(18px);
+    }
+}
