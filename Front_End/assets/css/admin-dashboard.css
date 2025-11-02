@@ -440,6 +440,11 @@ body {
     max-width: 800px;
 }
 
+/* Full-width forms for profile page */
+.admin-form.profile-form {
+    max-width: 100%;
+}
+
 .form-group {
     margin-bottom: 25px;
 }

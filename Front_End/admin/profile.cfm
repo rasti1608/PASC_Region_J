@@ -355,7 +355,7 @@
             <div class="section">
                 <h2>Personal Information</h2>
 
-                <form method="post" class="admin-form">
+                <form method="post" class="admin-form profile-form">
                     <div class="form-group">
                         <label for="full_name">Full Name *</label>
                         <cfif NOT structKeyExists(form, "update_info")>
@@ -404,7 +404,7 @@
                     </div>
                 </cfif>
 
-                <form method="post" enctype="multipart/form-data" class="admin-form">
+                <form method="post" enctype="multipart/form-data" class="admin-form profile-form">
                     <!--- Display Current Picture --->
                     <div style="text-align: center; margin-bottom: 30px;">
                         <cfoutput>
@@ -458,7 +458,7 @@
                     </div>
                 </cfif>
 
-                <form method="post" class="admin-form">
+                <form method="post" class="admin-form profile-form">
                     <div class="form-group">
                         <label for="current_password">Current Password *</label>
                         <div class="password-input-wrapper">
@@ -519,7 +519,7 @@
             <div class="section">
                 <h2>Account Information</h2>
 
-                <div class="admin-form">
+                <div class="admin-form profile-form">
                     <div class="info-row">
                         <span class="info-label">Username:</span>
                         <span class="info-value">
