@@ -1148,3 +1148,260 @@ body {
 body.mobile-menu-open {
     overflow: hidden;
 }
+
+/* ========================================
+   MOBILE RESPONSIVE - TABLE SECTIONS FIX
+   ======================================== */
+
+@media (max-width: 1024px) {
+    /* Adjust content for mobile */
+    .admin-content {
+        margin-left: 0;
+        padding: 20px 15px;
+        padding-top: 80px;
+        max-width: 100%;
+    }
+
+    /* Content sections */
+    .section {
+        margin-bottom: 30px;
+    }
+
+    /* Make stat cards single column */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    /* Make forms full width */
+    .admin-form {
+        max-width: 100%;
+        padding: 20px 15px;
+    }
+
+    /* Stack action buttons vertically */
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-actions button,
+    .form-actions a,
+    .form-actions .btn {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Search and filter bars stack */
+    .search-filter-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-filter-bar input,
+    .search-filter-bar select {
+        width: 100%;
+    }
+
+    /* TABLE RESPONSIVE FIXES - CRITICAL */
+    .data-table {
+        font-size: 0.85rem;
+        min-width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .data-table thead {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .data-table tbody {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 8px 6px;
+        font-size: 0.8rem;
+    }
+
+    /* Narrower columns on mobile */
+    .data-table th:first-child,
+    .data-table td:first-child {
+        width: 50px !important;
+    }
+
+    .col-status {
+        width: 80px !important;
+    }
+
+    .actions,
+    .col-actions {
+        width: 100px !important;
+    }
+
+    /* Action icons smaller */
+    .actions a,
+    .btn-sm {
+        font-size: 1rem;
+    }
+
+    /* Pagination */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: center;
+    }
+
+    .pagination a,
+    .pagination span {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+        min-width: 35px;
+    }
+
+    /* Alerts */
+    .alert {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+
+    /* Headers */
+    .content-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .section h2 {
+        font-size: 1.25rem;
+    }
+
+    /* Tab navigation scroll */
+    .tab-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-nav a {
+        flex: 0 0 auto;
+        min-width: 120px;
+    }
+
+    /* System info cards */
+    .info-row {
+        flex-direction: column;
+        gap: 5px;
+        padding: 12px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        margin-bottom: 3px;
+    }
+
+    /* Quick actions */
+    .action-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .action-card {
+        padding: 15px;
+    }
+
+    .action-icon {
+        font-size: 2rem;
+    }
+
+    /* Badges */
+    .badge {
+        padding: 3px 8px;
+        font-size: 0.75rem;
+    }
+
+    /* Gallery thumbnails */
+    .gallery-thumbnail {
+        max-width: 80px;
+        max-height: 80px;
+    }
+
+    /* Section header */
+    .section-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .section-header h2 {
+        margin: 0;
+    }
+}
+
+/* Extra small - phones */
+@media (max-width: 480px) {
+    .admin-content {
+        padding: 15px 10px;
+        padding-top: 75px;
+    }
+
+    .content-header h1 {
+        font-size: 1.25rem;
+    }
+
+    .section h2 {
+        font-size: 1.1rem;
+    }
+
+    /* Single column actions */
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Compact tables */
+    .data-table th,
+    .data-table td {
+        padding: 6px 4px;
+        font-size: 0.75rem;
+    }
+
+    /* Smaller buttons */
+    .btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    /* Form inputs */
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+    }
+
+    /* Hide ORDER column on tiny screens */
+    .data-table th:first-child,
+    .data-table td:first-child {
+        display: none;
+    }
+
+    /* Make stat cards more compact */
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-info h3 {
+        font-size: 1.5rem;
+    }
+
+    .stat-info p {
+        font-size: 0.85rem;
+    }
+}
