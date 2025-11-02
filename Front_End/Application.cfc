@@ -152,8 +152,11 @@ Version: 1.0
         </cfif>
         
         <!--- Admin area protection - require login for /admin/ pages --->
-        <cfif findNoCase("/admin/", arguments.targetPage) AND NOT findNoCase("/admin/login.cfm", arguments.targetPage)>
-            
+        <cfif findNoCase("/admin/", arguments.targetPage)
+            AND NOT findNoCase("/admin/login.cfm", arguments.targetPage)
+            AND NOT findNoCase("/admin/forgot-password.cfm", arguments.targetPage)
+            AND NOT findNoCase("/admin/reset-password.cfm", arguments.targetPage)>
+
             <!--- Check if admin is logged in --->
             <cfif NOT structKeyExists(session, "admin_logged_in") OR NOT session.admin_logged_in>
                 <cflocation url="/admin/login.cfm" addtoken="false">

@@ -104,6 +104,7 @@
                         u.last_login,
                         u.created_at,
                         u.password_changed_at,
+                        u.profile_picture,
                         r.role_name
                     FROM dbo.admin_users u
                     LEFT JOIN dbo.roles r ON u.role_id = r.id
@@ -260,13 +261,15 @@
         <cfset variables.passwordError = "Password must contain at least one uppercase letter (A-Z).">
     <cfelseif NOT REFind("[0-9]", trim(form.new_password))>
         <cfset variables.passwordError = "Password must contain at least one number (0-9).">
+    <cfelseif NOT REFind("[^a-zA-Z0-9]", trim(form.new_password))>
+        <cfset variables.passwordError = "Password must contain at least one special character (e.g., !@##$%^&*).">
     <cfelseif form.new_password NEQ form.confirm_new_password>
         <cfset variables.passwordError = "New passwords do not match.">
     <cfelseif trim(form.current_password) EQ trim(form.new_password)>
         <cfset variables.passwordError = "New password must be different from current password.">
     <cfelse>
         <!--- Verify current password --->
-        <cfif trim(form.current_password) NEQ getUserProfile.password_hash>
+        <cfif hash(trim(form.current_password), "SHA-256") NEQ getUserProfile.password_hash>
             <cfset variables.passwordError = "Current password is incorrect.">
         <cfelse>
             <!--- Update password --->
@@ -274,7 +277,7 @@
                 <cfquery datasource="#application.datasource#">
                     UPDATE dbo.admin_users
                     SET
-                        password_hash = <cfqueryparam value="#trim(form.new_password)#" cfsqltype="cf_sql_varchar">,
+                        password_hash = <cfqueryparam value="#hash(trim(form.new_password), 'SHA-256')#" cfsqltype="cf_sql_varchar">,
                         must_change_password = 0,
                         password_changed_at = GETDATE(),
                         updated_at = GETDATE()
@@ -296,6 +299,7 @@
                         u.last_login,
                         u.created_at,
                         u.password_changed_at,
+                        u.profile_picture,
                         r.role_name
                     FROM dbo.admin_users u
                     LEFT JOIN dbo.roles r ON u.role_id = r.id
@@ -457,37 +461,52 @@
                 <form method="post" class="admin-form">
                     <div class="form-group">
                         <label for="current_password">Current Password *</label>
-                        <input type="password"
-                               id="current_password"
-                               name="current_password"
-                               required
-                               autocomplete="current-password">
+                        <div class="password-input-wrapper">
+                            <input type="password"
+                                   id="current_password"
+                                   name="current_password"
+                                   required
+                                   autocomplete="current-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('current_password')" aria-label="Toggle password visibility">
+                                <span class="toggle-icon">👁️</span>
+                            </button>
+                        </div>
                         <small>Enter your current password for security verification.</small>
                     </div>
 
                     <div class="form-group">
                         <label for="new_password">New Password *</label>
-                        <input type="password"
-                               id="new_password"
-                               name="new_password"
-                               required
-                               minlength="8"
-                               pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-                               title="Must be at least 8 characters with one uppercase letter and one number"
-                               autocomplete="new-password">
-                        <small>Must be at least 8 characters with one uppercase letter (A-Z) and one number (0-9).</small>
+                        <div class="password-input-wrapper">
+                            <input type="password"
+                                   id="new_password"
+                                   name="new_password"
+                                   required
+                                   minlength="8"
+                                   pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
+                                   title="Must be at least 8 characters with one uppercase letter, one number, and one special character"
+                                   autocomplete="new-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('new_password')" aria-label="Toggle password visibility">
+                                <span class="toggle-icon">👁️</span>
+                            </button>
+                        </div>
+                        <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@##$%^&*).</small>
                     </div>
 
                     <div class="form-group">
                         <label for="confirm_new_password">Confirm New Password *</label>
-                        <input type="password"
-                               id="confirm_new_password"
-                               name="confirm_new_password"
-                               required
-                               minlength="8"
-                               pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-                               title="Must be at least 8 characters with one uppercase letter and one number"
-                               autocomplete="new-password">
+                        <div class="password-input-wrapper">
+                            <input type="password"
+                                   id="confirm_new_password"
+                                   name="confirm_new_password"
+                                   required
+                                   minlength="8"
+                                   pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
+                                   title="Must be at least 8 characters with one uppercase letter, one number, and one special character"
+                                   autocomplete="new-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirm_new_password')" aria-label="Toggle password visibility">
+                                <span class="toggle-icon">👁️</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -579,6 +598,9 @@
         }
         if (!/[0-9]/.test(password)) {
             return 'Password must contain at least one number (0-9)';
+        }
+        if (!/[^a-zA-Z0-9]/.test(password)) {
+            return 'Password must contain at least one special character (e.g., !@#$%^&*)';
         }
         return '';
     }

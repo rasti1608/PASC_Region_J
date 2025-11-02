@@ -44,6 +44,8 @@
         <cfset variables.errorMessage = "Password must contain at least one uppercase letter (A-Z).">
     <cfelseif NOT REFind("[0-9]", trim(form.password))>
         <cfset variables.errorMessage = "Password must contain at least one number (0-9).">
+    <cfelseif NOT REFind("[^a-zA-Z0-9]", trim(form.password))>
+        <cfset variables.errorMessage = "Password must contain at least one special character (e.g., !@##$%^&*).">
     <cfelseif form.password NEQ form.confirm_password>
         <cfset variables.errorMessage = "Passwords do not match.">
     <cfelseif NOT len(trim(form.full_name))>
@@ -90,7 +92,7 @@
                             updated_at
                         ) VALUES (
                             <cfqueryparam value="#trim(form.username)#" cfsqltype="cf_sql_varchar">,
-                            <cfqueryparam value="#trim(form.password)#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#hash(trim(form.password), 'SHA-256')#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#trim(form.full_name)#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#trim(form.email)#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#form.role_id#" cfsqltype="cf_sql_integer">,
@@ -189,27 +191,37 @@
 
                         <div class="form-group">
                             <label for="password">Password *</label>
-                            <input type="password"
-                                   id="password"
-                                   name="password"
-                                   required
-                                   minlength="8"
-                                   pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-                                   title="Must be at least 8 characters with one uppercase letter and one number"
-                                   autocomplete="new-password">
-                            <small>Must be at least 8 characters with one uppercase letter (A-Z) and one number (0-9). User will be required to change this on first login.</small>
+                            <div class="password-input-wrapper">
+                                <input type="password"
+                                       id="password"
+                                       name="password"
+                                       required
+                                       minlength="8"
+                                       pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
+                                       title="Must be at least 8 characters with one uppercase letter, one number, and one special character"
+                                       autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Toggle password visibility">
+                                    <span class="toggle-icon">👁️</span>
+                                </button>
+                            </div>
+                            <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@##$%^&*). User will be required to change this on first login.</small>
                         </div>
 
                         <div class="form-group">
                             <label for="confirm_password">Confirm Password *</label>
-                            <input type="password"
-                                   id="confirm_password"
-                                   name="confirm_password"
-                                   required
-                                   minlength="8"
-                                   pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-                                   title="Must be at least 8 characters with one uppercase letter and one number"
-                                   autocomplete="new-password">
+                            <div class="password-input-wrapper">
+                                <input type="password"
+                                       id="confirm_password"
+                                       name="confirm_password"
+                                       required
+                                       minlength="8"
+                                       pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
+                                       title="Must be at least 8 characters with one uppercase letter, one number, and one special character"
+                                       autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')" aria-label="Toggle password visibility">
+                                    <span class="toggle-icon">👁️</span>
+                                </button>
+                            </div>
                             <small>Re-enter the password to confirm.</small>
                         </div>
 
@@ -288,6 +300,9 @@
         if (!/[0-9]/.test(password)) {
             return 'Password must contain at least one number (0-9)';
         }
+        if (!/[^a-zA-Z0-9]/.test(password)) {
+            return 'Password must contain at least one special character (e.g., !@#$%^&*)';
+        }
         return '';
     }
 
@@ -306,6 +321,21 @@
             validatePasswordMatch();
         });
         confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+    }
+
+    // Password visibility toggle
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const toggle = field.parentElement.querySelector('.password-toggle');
+        const icon = toggle.querySelector('.toggle-icon');
+
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.textContent = '🙈';
+        } else {
+            field.type = 'password';
+            icon.textContent = '👁️';
+        }
     }
     </script>
 

@@ -68,3 +68,26 @@
         });
     });
 })();
+
+/**
+ * Password Visibility Toggle
+ * Global function to toggle password field visibility
+ */
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+
+    const toggle = field.parentElement.querySelector('.password-toggle');
+    if (!toggle) return;
+
+    const icon = toggle.querySelector('.toggle-icon');
+    if (!icon) return;
+
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.textContent = '🙈';
+    } else {
+        field.type = 'password';
+        icon.textContent = '👁️';
+    }
+}

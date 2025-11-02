@@ -75,6 +75,8 @@
         <cfset variables.errorMessage = "Password must contain at least one uppercase letter (A-Z).">
     <cfelseif NOT REFind("[0-9]", trim(form.new_password))>
         <cfset variables.errorMessage = "Password must contain at least one number (0-9).">
+    <cfelseif NOT REFind("[^a-zA-Z0-9]", trim(form.new_password))>
+        <cfset variables.errorMessage = "Password must contain at least one special character (e.g., !@##$%^&*).">
     <cfelseif form.new_password NEQ form.confirm_password>
         <cfset variables.errorMessage = "Passwords do not match.">
     <cfelse>
@@ -83,7 +85,7 @@
             <cfquery datasource="#application.datasource#">
                 UPDATE dbo.admin_users
                 SET
-                    password_hash = <cfqueryparam value="#trim(form.new_password)#" cfsqltype="cf_sql_varchar">,
+                    password_hash = <cfqueryparam value="#hash(trim(form.new_password), 'SHA-256')#" cfsqltype="cf_sql_varchar">,
                     must_change_password = 0,
                     password_changed_at = GETDATE(),
                     updated_at = GETDATE()
@@ -188,29 +190,39 @@
             <form method="post" class="login-form">
                 <div class="form-group">
                     <label for="new_password">New Password *</label>
-                    <input type="password"
-                           id="new_password"
-                           name="new_password"
-                           required
-                           minlength="8"
-                           pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-                           title="Must be at least 8 characters with one uppercase letter and one number"
-                           autocomplete="new-password"
-                           oninput="checkPasswordStrength()">
+                    <div class="password-input-wrapper">
+                        <input type="password"
+                               id="new_password"
+                               name="new_password"
+                               required
+                               minlength="8"
+                               pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
+                               title="Must be at least 8 characters with one uppercase letter, one number, and one special character"
+                               autocomplete="new-password"
+                               oninput="checkPasswordStrength()">
+                        <button type="button" class="password-toggle" onclick="togglePassword('new_password')" aria-label="Toggle password visibility">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
 
                     <div id="passwordStrength" class="password-strength"></div>
                 </div>
 
                 <div class="form-group">
                     <label for="confirm_password">Confirm New Password *</label>
-                    <input type="password"
-                           id="confirm_password"
-                           name="confirm_password"
-                           required
-                           minlength="8"
-                           pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-                           title="Must be at least 8 characters with one uppercase letter and one number"
-                           autocomplete="new-password">
+                    <div class="password-input-wrapper">
+                        <input type="password"
+                               id="confirm_password"
+                               name="confirm_password"
+                               required
+                               minlength="8"
+                               pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
+                               title="Must be at least 8 characters with one uppercase letter, one number, and one special character"
+                               autocomplete="new-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')" aria-label="Toggle password visibility">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="requirements">
@@ -219,7 +231,8 @@
                         <li>Minimum 8 characters</li>
                         <li><strong>At least one uppercase letter (A-Z)</strong></li>
                         <li><strong>At least one number (0-9)</strong></li>
-                        <li>Recommended: Mix of symbols and avoid common words</li>
+                        <li><strong>At least one special character (e.g., !@##$%^&*)</strong></li>
+                        <li>Recommended: Avoid common words and use a mix of characters</li>
                     </ul>
                 </div>
 
@@ -258,6 +271,8 @@
                 newPasswordInput.setCustomValidity('Password must contain at least one uppercase letter (A-Z)');
             } else if (!/[0-9]/.test(password)) {
                 newPasswordInput.setCustomValidity('Password must contain at least one number (0-9)');
+            } else if (!/[^a-zA-Z0-9]/.test(password)) {
+                newPasswordInput.setCustomValidity('Password must contain at least one special character (e.g., !@#$%^&*)');
             } else {
                 newPasswordInput.setCustomValidity('');
             }
@@ -302,6 +317,21 @@
     if (newPasswordInput && confirmPasswordInput) {
         newPasswordInput.addEventListener('input', validatePasswordMatch);
         confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+    }
+
+    // Password visibility toggle
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const toggle = field.parentElement.querySelector('.password-toggle');
+        const icon = toggle.querySelector('.toggle-icon');
+
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.textContent = '🙈';
+        } else {
+            field.type = 'password';
+            icon.textContent = '👁️';
+        }
     }
     </script>
 

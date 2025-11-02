@@ -59,9 +59,8 @@
             <cfelseif NOT qUser.is_active>
                 <cfset errorMessage = "This account has been deactivated. Please contact the administrator.">
             <cfelse>
-                <!--- Check password --->
-                <!--- Supports both plain text (for initial testing) and SHA-256 hashed passwords --->
-                <cfif form.password EQ qUser.password_hash OR hash(form.password, "SHA-256") EQ qUser.password_hash>
+                <!--- Check password (SHA-256 hashed) --->
+                <cfif hash(form.password, "SHA-256") EQ qUser.password_hash>
                     <!--- Password correct - update last login --->
                     <cfquery datasource="#application.datasource#">
                         UPDATE dbo.admin_users
@@ -139,24 +138,51 @@
                 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        required
-                        autocomplete="current-password">
+                    <div class="password-input-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            autocomplete="current-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Toggle password visibility">
+                            <span class="toggle-icon">👁️</span>
+                        </button>
+                    </div>
                 </div>
-                
+
                 <button type="submit" name="submit" class="btn btn-login">
                     Sign In
                 </button>
             </form>
-            
+
+            <div style="text-align: center; padding: 20px 30px;">
+                <a href="forgot-password.cfm" style="color: #4fc3f7; text-decoration: none; font-size: 0.9rem;">
+                    Forgot Password?
+                </a>
+            </div>
+
             <div class="login-footer">
-                <p><small>Default credentials: admin / Admin123!</small></p>
+                <p><small>Default credentials: devadmin / Wellcome01!</small></p>
                 <p><small>Please change default password after first login</small></p>
             </div>
         </div>
     </div>
+
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const toggle = field.parentElement.querySelector('.password-toggle');
+            const icon = toggle.querySelector('.toggle-icon');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.textContent = '🙈';
+            } else {
+                field.type = 'password';
+                icon.textContent = '👁️';
+            }
+        }
+    </script>
 </body>
 </html>

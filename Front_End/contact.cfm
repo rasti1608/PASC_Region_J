@@ -121,7 +121,7 @@
 
                     <cfmail
                         to="#recipientList#"
-                        from="noreply@pascregionj.com"
+                        from="info@pascregionj.com"
                         subject="New Contact Form Submission: #trim(form.contactSubject)#"
                         type="html">
                         <html>
