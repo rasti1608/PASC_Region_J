@@ -216,64 +216,66 @@
 
                 <!--- Users Table --->
                 <cfif qUsers.recordCount GT 0>
-                    <table class="data-table" id="users-table">
-                        <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th class="col-status">Status</th>
-                                <th class="actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <cfoutput query="qUsers">
-                            <tr data-search="#lCase(htmlEditFormat(username))# #lCase(htmlEditFormat(full_name))# #lCase(htmlEditFormat(email))#">
-                                <td>
-                                    <strong>#htmlEditFormat(username)#</strong>
-                                    <cfif id EQ session.admin_user_id>
-                                        <span style="font-size: 0.75rem; color: ##4fc3f7; margin-left: 5px;">(You)</span>
-                                    </cfif>
-                                </td>
-                                <td>#htmlEditFormat(full_name)#</td>
-                                <td>
-                                    <a href="mailto:#htmlEditFormat(email)#" style="color: ##4fc3f7; text-decoration: none;">
-                                        #htmlEditFormat(email)#
-                                    </a>
-                                </td>
-                                <td>
-                                    <cfif len(role_name)>
-                                        <span style="font-weight: 600; color: ##2d3561;">#htmlEditFormat(role_name)#</span>
-                                    <cfelse>
-                                        <span style="color: ##999;">No Role</span>
-                                    </cfif>
-                                </td>
-                                <td class="col-status">
-                                    <cfif is_active>
-                                        <span class="badge badge-success">✓ Active</span>
-                                    <cfelse>
-                                        <span class="badge badge-inactive">Inactive</span>
-                                    </cfif>
-                                </td>
-                                <td class="actions">
-                                    <cfif username EQ "admin">
-                                        <!--- Master Admin - Cannot be modified --->
-                                        <span title="Master Admin - Cannot be modified" style="color: ##999; font-size: 1.2rem; cursor: not-allowed;">🔒</span>
-                                    <cfelse>
-                                        <a href="edit.cfm?id=#id#" class="btn btn-sm btn-edit" title="Edit User">✏️</a>
-                                        <a href="index.cfm?toggle=#id#"
-                                           class="btn btn-sm btn-toggle"
-                                           title="Toggle Active/Inactive">
-                                            <cfif is_active>👁️<cfelse>🚫</cfif>
+                    <div class="table-container">
+                        <table class="data-table" id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <cfoutput query="qUsers">
+                                <tr data-search="#lCase(htmlEditFormat(username))# #lCase(htmlEditFormat(full_name))# #lCase(htmlEditFormat(email))#">
+                                    <td data-label="USERNAME">
+                                        <strong>#htmlEditFormat(username)#</strong>
+                                        <cfif id EQ session.admin_user_id>
+                                            <span style="font-size: 0.75rem; color: ##4fc3f7; margin-left: 5px;">(You)</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="FULL NAME">#htmlEditFormat(full_name)#</td>
+                                    <td data-label="EMAIL">
+                                        <a href="mailto:#htmlEditFormat(email)#" style="color: ##4fc3f7; text-decoration: none;">
+                                            #htmlEditFormat(email)#
                                         </a>
-                                        <a href="delete.cfm?id=#id#" class="btn btn-sm btn-delete" title="Delete User">🗑️</a>
-                                    </cfif>
-                                </td>
-                            </tr>
-                            </cfoutput>
-                        </tbody>
-                    </table>
+                                    </td>
+                                    <td data-label="ROLE">
+                                        <cfif len(role_name)>
+                                            <span style="font-weight: 600; color: ##2d3561;">#htmlEditFormat(role_name)#</span>
+                                        <cfelse>
+                                            <span style="color: ##999;">No Role</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="STATUS" class="col-status">
+                                        <cfif is_active>
+                                            <span class="badge badge-success">✓ Active</span>
+                                        <cfelse>
+                                            <span class="badge badge-inactive">Inactive</span>
+                                        </cfif>
+                                    </td>
+                                    <td data-label="ACTIONS" class="actions">
+                                        <cfif username EQ "admin">
+                                            <!--- Master Admin - Cannot be modified --->
+                                            <span title="Master Admin - Cannot be modified" style="color: ##999; font-size: 1.2rem; cursor: not-allowed;">🔒</span>
+                                        <cfelse>
+                                            <a href="edit.cfm?id=#id#" class="btn btn-sm btn-edit" title="Edit User">✏️</a>
+                                            <a href="index.cfm?toggle=#id#"
+                                               class="btn btn-sm btn-toggle"
+                                               title="Toggle Active/Inactive">
+                                                <cfif is_active>👁️<cfelse>🚫</cfif>
+                                            </a>
+                                            <a href="delete.cfm?id=#id#" class="btn btn-sm btn-delete" title="Delete User">🗑️</a>
+                                        </cfif>
+                                    </td>
+                                </tr>
+                                </cfoutput>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!--- Pagination Controls (Bottom) --->
                     <div id="paginationBottom" style="margin-top: 20px;"></div>
@@ -382,6 +384,23 @@
         searchInput.addEventListener('input', performSearch);
         displayPage();
     }
+    </script>
+
+    <!--- Scroll Position Preservation --->
+    <script>
+    // Save scroll position before page unload
+    window.addEventListener('beforeunload', function() {
+        sessionStorage.setItem('scrollPos', window.scrollY);
+    });
+
+    // Restore scroll position after page load
+    window.addEventListener('DOMContentLoaded', function() {
+        const scrollPos = sessionStorage.getItem('scrollPos');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos));
+            sessionStorage.removeItem('scrollPos');
+        }
+    });
     </script>
 
     <!--- Session Heartbeat --->

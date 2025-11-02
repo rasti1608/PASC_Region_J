@@ -277,68 +277,70 @@
                         <a href="add.cfm" class="btn btn-primary">Create Your First Announcement</a>
                     </div>
                 <cfelse>
-                    <table class="data-table" id="announcements-table">
-                        <thead>
-                            <tr>
-                                <th>Order</th>
-                                <th>Title</th>
-                                <th class="col-status">Status</th>
-                                <th>Publish Date</th>
-                                <th class="actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <cfoutput query="qAnnouncements">
-                                <tr data-search="#lCase(htmlEditFormat(title))# #lCase(htmlEditFormat(content))#" data-status="#lCase(computed_status)#">
-                                    <td class="text-center">
-                                        <form method="post" action="index.cfm" style="margin: 0;">
-                                            <input type="hidden" name="announcement_id" value="#id#">
-                                            <select name="new_order" onchange="this.form.submit()">
-                                                <cfloop from="1" to="#totalCount#" index="loopIndex">
-                                                    <option value="#loopIndex#" <cfif display_order EQ loopIndex>selected</cfif>>#loopIndex#</option>
-                                                </cfloop>
-                                            </select>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <strong>#htmlEditFormat(title)#</strong>
-                                        <cfif is_featured>
-                                            <span class="badge" style="background: ##fff9c4; color: ##f57f17; font-size: 0.75rem;">⭐ Featured</span>
-                                        </cfif>
-                                        <cfif len(content) GT 100>
-                                            <br><small class="text-muted">#left(htmlEditFormat(content), 100)#...</small>
-                                        <cfelse>
-                                            <br><small class="text-muted">#htmlEditFormat(content)#</small>
-                                        </cfif>
-                                    </td>
-                                    <td class="col-status">
-                                        <cfif computed_status EQ "inactive">
-                                            <span class="badge badge-inactive">Inactive</span>
-                                        <cfelseif computed_status EQ "expired">
-                                            <span class="badge" style="background: ##ffebee; color: ##c62828;">Expired</span>
-                                        <cfelseif computed_status EQ "future">
-                                            <span class="badge" style="background: ##e3f2fd; color: ##1565c0;">📅 Future</span>
-                                        <cfelse>
-                                            <span class="badge badge-success">✓ Live</span>
-                                        </cfif>
-                                    </td>
-                                    <td>
-                                        #dateFormat(publish_start, "mmm d, yyyy")#
-                                        <cfif isDate(publish_end)>
-                                            <br><small class="text-muted">to #dateFormat(publish_end, "mmm d, yyyy")#</small>
-                                        </cfif>
-                                    </td>
-                                    <td class="actions">
-                                        <a href="edit.cfm?id=#id#" class="btn btn-sm btn-edit" title="Edit">✏️</a>
-                                        <a href="index.cfm?toggle=#id#" class="btn btn-sm btn-toggle" title="Toggle Active/Inactive">
-                                            <cfif is_active>👁️<cfelse>🚫</cfif>
-                                        </a>
-                                        <a href="delete.cfm?id=#id#" class="btn btn-sm btn-delete" title="Delete">🗑️</a>
-                                    </td>
+                    <div class="table-container">
+                        <table class="data-table" id="announcements-table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Title</th>
+                                    <th class="col-status">Status</th>
+                                    <th>Publish Date</th>
+                                    <th class="actions">Actions</th>
                                 </tr>
-                            </cfoutput>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody id="tableBody">
+                                <cfoutput query="qAnnouncements">
+                                    <tr data-search="#lCase(htmlEditFormat(title))# #lCase(htmlEditFormat(content))#" data-status="#lCase(computed_status)#">
+                                        <td data-label="ORDER" class="text-center">
+                                            <form method="post" action="index.cfm" style="margin: 0;">
+                                                <input type="hidden" name="announcement_id" value="#id#">
+                                                <select name="new_order" onchange="this.form.submit()">
+                                                    <cfloop from="1" to="#totalCount#" index="loopIndex">
+                                                        <option value="#loopIndex#" <cfif display_order EQ loopIndex>selected</cfif>>#loopIndex#</option>
+                                                    </cfloop>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td data-label="TITLE">
+                                            <strong>#htmlEditFormat(title)#</strong>
+                                            <cfif is_featured>
+                                                <span class="badge" style="background: ##fff9c4; color: ##f57f17; font-size: 0.75rem;">⭐ Featured</span>
+                                            </cfif>
+                                            <cfif len(content) GT 100>
+                                                <br><small class="text-muted">#left(htmlEditFormat(content), 100)#...</small>
+                                            <cfelse>
+                                                <br><small class="text-muted">#htmlEditFormat(content)#</small>
+                                            </cfif>
+                                        </td>
+                                        <td data-label="STATUS" class="col-status">
+                                            <cfif computed_status EQ "inactive">
+                                                <span class="badge badge-inactive">Inactive</span>
+                                            <cfelseif computed_status EQ "expired">
+                                                <span class="badge" style="background: ##ffebee; color: ##c62828;">Expired</span>
+                                            <cfelseif computed_status EQ "future">
+                                                <span class="badge" style="background: ##e3f2fd; color: ##1565c0;">📅 Future</span>
+                                            <cfelse>
+                                                <span class="badge badge-success">✓ Live</span>
+                                            </cfif>
+                                        </td>
+                                        <td data-label="PUBLISH DATE">
+                                            #dateFormat(publish_start, "mmm d, yyyy")#
+                                            <cfif isDate(publish_end)>
+                                                <br><small class="text-muted">to #dateFormat(publish_end, "mmm d, yyyy")#</small>
+                                            </cfif>
+                                        </td>
+                                        <td data-label="ACTIONS" class="actions">
+                                            <a href="edit.cfm?id=#id#" class="btn btn-sm btn-edit" title="Edit">✏️</a>
+                                            <a href="index.cfm?toggle=#id#" class="btn btn-sm btn-toggle" title="Toggle Active/Inactive">
+                                                <cfif is_active>👁️<cfelse>🚫</cfif>
+                                            </a>
+                                            <a href="delete.cfm?id=#id#" class="btn btn-sm btn-delete" title="Delete">🗑️</a>
+                                        </td>
+                                    </tr>
+                                </cfoutput>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!--- Pagination --->
                     <div class="pagination-container" id="paginationContainer">
@@ -531,6 +533,23 @@
     // Initialize pagination on page load
     window.addEventListener('DOMContentLoaded', () => {
         filterTable();
+    });
+    </script>
+
+    <!--- Scroll Position Preservation --->
+    <script>
+    // Save scroll position before page unload
+    window.addEventListener('beforeunload', function() {
+        sessionStorage.setItem('scrollPos', window.scrollY);
+    });
+
+    // Restore scroll position after page load
+    window.addEventListener('DOMContentLoaded', function() {
+        const scrollPos = sessionStorage.getItem('scrollPos');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos));
+            sessionStorage.removeItem('scrollPos');
+        }
     });
     </script>
 

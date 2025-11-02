@@ -444,43 +444,45 @@
                         <p>No contact form submissions yet.</p>
                     </div>
                 <cfelse>
-                    <table class="data-table" id="contacts-table">
-                        <thead>
-                            <tr>
-                                <th class="col-status">Status</th>
-                                <th>Date & Time</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Subject</th>
-                                <th>Preview</th>
-                                <th class="actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <cfoutput query="qSubmissions">
-                            <tr data-search="#lCase(htmlEditFormat(name))# #lCase(htmlEditFormat(email))# #lCase(htmlEditFormat(subject))# #lCase(htmlEditFormat(message))#" data-status="#lCase(status)#">
-                                <td class="col-status">
-                                    <span class="badge badge-#lCase(status)#">#uCase(status)#</span>
-                                </td>
-                                <td>
-                                    #dateFormat(submitted_at, 'mm/dd/yyyy')#<br>
-                                    <small class="text-muted">#timeFormat(submitted_at, 'h:mm tt')#</small>
-                                </td>
-                                <td>#htmlEditFormat(name)#</td>
-                                <td>
-                                    <a href="mailto:#htmlEditFormat(email)#" style="color: ##4a90e2;">#htmlEditFormat(email)#</a>
-                                </td>
-                                <td>#htmlEditFormat(subject)#</td>
-                                <td>
-                                    <small class="text-muted">#htmlEditFormat(message_preview)#<cfif len(message) gt 100>...</cfif></small>
-                                </td>
-                                <td class="actions">
-                                    <button class="btn btn-sm btn-edit" title="Edit Details" onclick="openSubmissionModal(#id#)">✏️</button>
-                                </td>
-                            </tr>
-                            </cfoutput>
-                        </tbody>
-                    </table>
+                    <div class="table-container">
+                        <table class="data-table" id="contacts-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-status">Status</th>
+                                    <th>Date & Time</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Subject</th>
+                                    <th>Preview</th>
+                                    <th class="actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <cfoutput query="qSubmissions">
+                                <tr data-search="#lCase(htmlEditFormat(name))# #lCase(htmlEditFormat(email))# #lCase(htmlEditFormat(subject))# #lCase(htmlEditFormat(message))#" data-status="#lCase(status)#">
+                                    <td data-label="STATUS" class="col-status">
+                                        <span class="badge badge-#lCase(status)#">#uCase(status)#</span>
+                                    </td>
+                                    <td data-label="DATE">
+                                        #dateFormat(submitted_at, 'mm/dd/yyyy')#<br>
+                                        <small class="text-muted">#timeFormat(submitted_at, 'h:mm tt')#</small>
+                                    </td>
+                                    <td data-label="NAME">#htmlEditFormat(name)#</td>
+                                    <td data-label="EMAIL">
+                                        <a href="mailto:#htmlEditFormat(email)#" style="color: ##4a90e2;">#htmlEditFormat(email)#</a>
+                                    </td>
+                                    <td data-label="SUBJECT">#htmlEditFormat(subject)#</td>
+                                    <td data-label="PREVIEW">
+                                        <small class="text-muted">#htmlEditFormat(message_preview)#<cfif len(message) gt 100>...</cfif></small>
+                                    </td>
+                                    <td data-label="ACTIONS" class="actions">
+                                        <button class="btn btn-sm btn-edit" title="Edit Details" onclick="openSubmissionModal(#id#)">✏️</button>
+                                    </td>
+                                </tr>
+                                </cfoutput>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!--- Pagination --->
                     <div class="pagination-container" id="paginationContainer">
@@ -780,6 +782,23 @@
     // Initialize pagination on page load
     window.addEventListener('DOMContentLoaded', () => {
         filterTable();
+    });
+    </script>
+
+    <!--- Scroll Position Preservation --->
+    <script>
+    // Save scroll position before page unload
+    window.addEventListener('beforeunload', function() {
+        sessionStorage.setItem('scrollPos', window.scrollY);
+    });
+
+    // Restore scroll position after page load
+    window.addEventListener('DOMContentLoaded', function() {
+        const scrollPos = sessionStorage.getItem('scrollPos');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos));
+            sessionStorage.removeItem('scrollPos');
+        }
     });
     </script>
 

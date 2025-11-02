@@ -341,56 +341,58 @@
                         </cfoutput>
                     </div>
                 <cfelse>
-                    <table class="data-table" id="forms-table">
-                        <thead>
-                            <tr>
-                                <th>Order</th>
-                                <th>Form Details</th>
-                                <th class="col-status">Status</th>
-                                <th class="actions">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <cfoutput query="qForms">
-                                <tr data-search="#lCase(htmlEditFormat(form_name))# #lCase(htmlEditFormat(form_description))#" data-status="#is_active ? 'active' : 'inactive'#">
-                                    <td class="text-center">
-                                        <form method="post" action="index.cfm?location=#url.location#" style="margin: 0;">
-                                            <input type="hidden" name="form_id" value="#id#">
-                                            <select name="new_order" onchange="this.form.submit()">
-                                                <cfloop from="1" to="#totalCount#" index="loopIndex">
-                                                    <option value="#loopIndex#" <cfif display_order EQ loopIndex>selected</cfif>>#loopIndex#</option>
-                                                </cfloop>
-                                            </select>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <strong>#htmlEditFormat(form_name)#</strong>
-                                        <cfif len(form_description) GT 0>
-                                            <cfif len(form_description) GT 100>
-                                                <br><small class="text-muted">#left(htmlEditFormat(form_description), 100)#...</small>
-                                            <cfelse>
-                                                <br><small class="text-muted">#htmlEditFormat(form_description)#</small>
-                                            </cfif>
-                                        </cfif>
-                                    </td>
-                                    <td class="col-status">
-                                        <cfif is_active>
-                                            <span class="badge badge-success">✓ Active</span>
-                                        <cfelse>
-                                            <span class="badge badge-inactive">Inactive</span>
-                                        </cfif>
-                                    </td>
-                                    <td class="actions">
-                                        <a href="edit.cfm?id=#id#&location=#url.location#" class="btn btn-sm btn-edit" title="Edit">✏️</a>
-                                        <a href="index.cfm?location=#url.location#&toggle=#id#" class="btn btn-sm btn-toggle" title="Toggle Active/Inactive">
-                                            <cfif is_active>👁️<cfelse>🚫</cfif>
-                                        </a>
-                                        <a href="delete.cfm?id=#id#&location=#url.location#" class="btn btn-sm btn-delete" title="Delete">🗑️</a>
-                                    </td>
+                    <div class="table-container">
+                        <table class="data-table" id="forms-table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Form Details</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="actions">Actions</th>
                                 </tr>
-                            </cfoutput>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody id="tableBody">
+                                <cfoutput query="qForms">
+                                    <tr data-search="#lCase(htmlEditFormat(form_name))# #lCase(htmlEditFormat(form_description))#" data-status="#is_active ? 'active' : 'inactive'#">
+                                        <td data-label="ORDER" class="text-center">
+                                            <form method="post" action="index.cfm?location=#url.location#" style="margin: 0;">
+                                                <input type="hidden" name="form_id" value="#id#">
+                                                <select name="new_order" onchange="this.form.submit()">
+                                                    <cfloop from="1" to="#totalCount#" index="loopIndex">
+                                                        <option value="#loopIndex#" <cfif display_order EQ loopIndex>selected</cfif>>#loopIndex#</option>
+                                                    </cfloop>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td data-label="FORM NAME">
+                                            <strong>#htmlEditFormat(form_name)#</strong>
+                                            <cfif len(form_description) GT 0>
+                                                <cfif len(form_description) GT 100>
+                                                    <br><small class="text-muted">#left(htmlEditFormat(form_description), 100)#...</small>
+                                                <cfelse>
+                                                    <br><small class="text-muted">#htmlEditFormat(form_description)#</small>
+                                                </cfif>
+                                            </cfif>
+                                        </td>
+                                        <td data-label="STATUS" class="col-status">
+                                            <cfif is_active>
+                                                <span class="badge badge-success">✓ Active</span>
+                                            <cfelse>
+                                                <span class="badge badge-inactive">Inactive</span>
+                                            </cfif>
+                                        </td>
+                                        <td data-label="ACTIONS" class="actions">
+                                            <a href="edit.cfm?id=#id#&location=#url.location#" class="btn btn-sm btn-edit" title="Edit">✏️</a>
+                                            <a href="index.cfm?location=#url.location#&toggle=#id#" class="btn btn-sm btn-toggle" title="Toggle Active/Inactive">
+                                                <cfif is_active>👁️<cfelse>🚫</cfif>
+                                            </a>
+                                            <a href="delete.cfm?id=#id#&location=#url.location#" class="btn btn-sm btn-delete" title="Delete">🗑️</a>
+                                        </td>
+                                    </tr>
+                                </cfoutput>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!--- Pagination --->
                     <div class="pagination-container" id="paginationContainer">
@@ -583,6 +585,23 @@
     // Initialize pagination on page load
     window.addEventListener('DOMContentLoaded', () => {
         filterTable();
+    });
+    </script>
+
+    <!--- Scroll Position Preservation --->
+    <script>
+    // Save scroll position before page unload
+    window.addEventListener('beforeunload', function() {
+        sessionStorage.setItem('scrollPos', window.scrollY);
+    });
+
+    // Restore scroll position after page load
+    window.addEventListener('DOMContentLoaded', function() {
+        const scrollPos = sessionStorage.getItem('scrollPos');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos));
+            sessionStorage.removeItem('scrollPos');
+        }
     });
     </script>
 
