@@ -117,7 +117,7 @@
 
             <!--- Download Button --->
             <div class="anthem-download">
-                <a href="/assets/audio/one-orbit-anthem.mp3" download="one-orbit-anthem.mp3" class="btn btn-download">
+                <a href="/assets/audio/one-orbit-anthem-full.mp3" download="one-orbit-anthem-full.mp3" class="btn btn-download">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                         <polyline points="7 10 12 15 17 10"/>
