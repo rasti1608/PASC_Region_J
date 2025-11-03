@@ -85,7 +85,7 @@
 
             <!--- Audio Player --->
             <div class="custom-audio-player">
-                <audio id="anthemAudio" preload="metadata">
+                <audio id="anthemAudio" preload="metadata" loop>
                     <source src="/assets/audio/one-orbit-anthem.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
