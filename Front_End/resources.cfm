@@ -62,6 +62,11 @@
 
 <!--- Conference Anthem Section --->
 <section class="anthem-section">
+    <!--- Section Background Video --->
+    <video id="anthemSectionVideo" class="anthem-section-video" muted loop playsinline>
+        <source src="/assets/video/resources-background.mp4" type="video/mp4">
+    </video>
+
     <div class="container">
         <div class="anthem-featured">
             <div class="anthem-header">
@@ -79,6 +84,11 @@
                     <source src="/assets/audio/one-orbit-anthem.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+
+                <!--- Player Background Video --->
+                <video id="anthemPlayerVideo" class="anthem-player-video" muted loop playsinline>
+                    <source src="/assets/video/conference-anthem-background.mp4" type="video/mp4">
+                </video>
 
                 <div class="player-controls">
                     <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause">
@@ -195,9 +205,27 @@
        ANTHEM SECTION STYLES
        ======================================== */
     .anthem-section {
+        position: relative;
+        overflow: hidden;
         background: linear-gradient(135deg, rgba(91, 75, 138, 0.1) 0%, rgba(26, 35, 50, 0.3) 100%);
         padding: 60px 0;
         border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+    }
+
+    .anthem-section-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        opacity: 0.5;
+    }
+
+    .anthem-section .container {
+        position: relative;
+        z-index: 1;
     }
 
     .anthem-featured {
@@ -250,13 +278,29 @@
 
     /* Custom Audio Player */
     .custom-audio-player {
+        position: relative;
+        overflow: hidden;
         background: rgba(0, 0, 0, 0.3);
         border-radius: 15px;
         padding: 20px;
         margin: 20px 0;
     }
 
+    .anthem-player-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        border-radius: 15px;
+        opacity: 0.4;
+    }
+
     .player-controls {
+        position: relative;
+        z-index: 1;
         display: flex;
         align-items: center;
         gap: 15px;
@@ -557,6 +601,10 @@
         const currentTimeEl = document.getElementById('currentTime');
         const durationEl = document.getElementById('duration');
 
+        // Get video elements for sync
+        const sectionVideo = document.getElementById('anthemSectionVideo');
+        const playerVideo = document.getElementById('anthemPlayerVideo');
+
         // Format time helper (seconds to M:SS)
         function formatTime(seconds) {
             if (isNaN(seconds)) return '0:00';
@@ -603,6 +651,21 @@
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
             progressFill.style.width = '0%';
+        });
+
+        // Sync videos with audio playback
+        audio.addEventListener('play', function() {
+            if (sectionVideo) {
+                sectionVideo.play().catch(err => console.log('Section video play failed:', err));
+            }
+            if (playerVideo) {
+                playerVideo.play().catch(err => console.log('Player video play failed:', err));
+            }
+        });
+
+        audio.addEventListener('pause', function() {
+            if (sectionVideo) sectionVideo.pause();
+            if (playerVideo) playerVideo.pause();
         });
 
         // Pause global background music when anthem starts playing
