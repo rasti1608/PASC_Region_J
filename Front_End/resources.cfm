@@ -671,6 +671,11 @@
 
         // Sync videos with audio playback
         audio.addEventListener('play', function() {
+            // Update button UI to show pause icon
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+
+            // Sync videos
             if (sectionVideo) {
                 sectionVideo.play().catch(err => console.log('Section video play failed:', err));
             }
@@ -680,6 +685,11 @@
         });
 
         audio.addEventListener('pause', function() {
+            // Update button UI to show play icon
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+
+            // Sync videos
             if (sectionVideo) sectionVideo.pause();
             if (playerVideo) playerVideo.pause();
         });
