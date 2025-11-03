@@ -15,7 +15,7 @@
 *              3. Main site content
 *
 * Project:     PASC Region J Conference 2026 Website
-*              Lead Beyond Limits - February 13, 2026
+*              Reach for the stars, lead beyond limits - February 13, 2026
 *******************************************************************************
 --->
 
@@ -46,7 +46,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PASC Region J Conference 2026 - Lead Beyond Limits</title>
+    <title>PASC Region J Conference 2026 - Reach for the Stars, Lead Beyond Limits</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/mobile-menu.css">
@@ -277,7 +277,7 @@
             <img src="/assets/img/logo.png" alt="PASC Region J" class="pre-intro-logo">
             <h1 class="pre-intro-title">PASC REGION <span class="special-j">J</span></h1>
             <p class="pre-intro-subtitle">Leadership Conference 2026</p>
-            <p class="pre-intro-date">Lead Beyond Limits &middot; February 13, 2026</p>
+            <p class="pre-intro-date">Reach for the Stars, Lead Beyond Limits &middot; February 13, 2026</p>
             
             <button class="launch-button" onclick="launchSite()">
                 <span class="rocket-icon">🚀</span>
@@ -325,7 +325,7 @@
         
         <div class="intro-text">
             <h1 class="intro-title">PASC REGION <span class="special-j">J</span></h1>
-            <p class="intro-subtitle">Lead Beyond Limits</p>
+            <p class="intro-subtitle">Reach for the Stars, Lead Beyond Limits</p>
             <p class="intro-date">February 13, 2026</p>
         </div>
         
@@ -355,7 +355,7 @@
         <div class="stars-background"></div>
         <div class="hero-text">
             <h1 class="hero-title" id="heroTitle">PASC REGION J CONFERENCE 2026</h1>
-            <p class="hero-subtitle" id="heroSubtitle">Lead Beyond Limits - February 13, 2026</p>
+            <p class="hero-subtitle" id="heroSubtitle">Reach for the Stars, Lead Beyond Limits - February 13, 2026</p>
 
             <div class="hero-buttons">
                 <a href="workshops.cfm" class="btn btn-primary">Register Now</a>
@@ -423,7 +423,7 @@
 <!--- Call to Action Section --->
 <section class="cta-section">
     <div class="container">
-        <h2>Ready to Lead Beyond Limits?</h2>
+        <h2>Ready to Reach for the Stars, Lead Beyond Limits?</h2>
         <p>Join us for an inspiring day of leadership, workshops, and networking!</p>
         <div class="cta-buttons">
             <a href="workshops.cfm" class="btn btn-large btn-primary">Register for the Conference</a>

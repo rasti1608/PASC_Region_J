@@ -79,7 +79,7 @@
                 <div class="anthem-info">
                     <h3 class="song-title">One Orbit</h3>
                     <p class="song-artist">by IronRUST</p>
-                    <p class="song-description">Official theme song for PASC Region J Conference 2026: Lead Beyond Limits</p>
+                    <p class="song-description">Official theme song for PASC Region J Conference 2026: Reach for the stars, lead beyond limits!</p>
                 </div>
             </div>
 

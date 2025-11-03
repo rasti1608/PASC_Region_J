@@ -16,7 +16,7 @@
 * Database:    Tables: dbo.contact_submissions, dbo.contact_email_recipients
 *
 * Project:     PASC Region J Conference 2026 Website
-*              Lead Beyond Limits - February 13, 2026
+*              Reach for the stars, lead beyond limits - February 13, 2026
 *******************************************************************************
 --->
 
@@ -219,7 +219,7 @@
                                 <p><strong>Conference Details:</strong><br>
                                 Date: February 13, 2026<br>
                                 Location: Neshaminy High School, Langhorne, PA<br>
-                                Theme: Lead Beyond Limits</p>
+                                Theme: Reach for the Stars, Lead Beyond Limits</p>
 
                                 <div class="footer">
                                     <p>This is an automated message confirming receipt of your contact form submission.</p>

@@ -18,7 +18,7 @@
 *              6. Call-to-action
 *
 * Project:     PASC Region J Conference 2026 Website
-*              Lead Beyond Limits - February 13, 2026
+*              Reach for the stars, lead beyond limits - February 13, 2026
 *******************************************************************************
 --->
 
@@ -206,7 +206,7 @@
 <!--- CTA Section --->
 <section class="cta-section">
     <div class="container">
-        <h2>Ready to Lead Beyond Limits?</h2>
+        <h2>Ready to Reach for the Stars, Lead Beyond Limits?</h2>
         <p>Join us for an inspiring day of leadership, workshops, and networking!</p>
         <div class="cta-buttons">
             <a href="workshops.cfm" class="btn btn-primary">View Workshops</a>
