@@ -17,7 +17,7 @@
 *              without touching this page code
 *
 * Project:     PASC Region J Conference 2026 Website
-*              Lead Beyond Limits - February 13, 2026
+*              Reach for the stars, lead beyond limits - February 13, 2026
 *******************************************************************************
 --->
 

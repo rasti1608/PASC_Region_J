@@ -10,7 +10,7 @@
 *              Temporary page until registration system is built
 *
 * Project:     PASC Region J Conference 2026 Website
-*              Lead Beyond Limits - February 13, 2026
+*              Reach for the stars, lead beyond limits - February 13, 2026
 *******************************************************************************
 --->
 </cfsilent>
@@ -72,7 +72,7 @@
                 
                 <div class="detail-item">
                     <h3>Theme</h3>
-                    <p>Lead Beyond Limits</p>
+                    <p>Reach for the Stars, Lead Beyond Limits</p>
                 </div>
             </div>
             

@@ -161,7 +161,7 @@
                     </div>
                     <div class="info-row">
                         <span class="info-label">Conference Theme:</span>
-                        <span class="info-value">Lead Beyond Limits</span>
+                        <span class="info-value">Reach for the Stars, Lead Beyond Limits</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Website Version:</span>

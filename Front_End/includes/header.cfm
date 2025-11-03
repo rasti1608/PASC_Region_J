@@ -14,7 +14,7 @@
 * Usage:       <cfinclude template="includes/header.cfm">
 *
 * Project:     PASC Region J Conference 2026 Website
-*              Lead Beyond Limits - February 13, 2026
+*              Reach for the stars, lead beyond limits - February 13, 2026
 *******************************************************************************
 --->
 <!DOCTYPE html>
@@ -22,10 +22,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PASC Region J Conference 2026 - Lead Beyond Limits - February 13, 2026">
+    <meta name="description" content="PASC Region J Conference 2026 - Reach for the Stars, Lead Beyond Limits - February 13, 2026">
     <meta name="keywords" content="PASC, Region J, Student Council, Leadership, Conference, Pennsylvania">
     <meta name="author" content="Rastislav Toscak">
-    <title>PASC Region J Conference 2026 - Lead Beyond Limits</title>
+    <title>PASC Region J Conference 2026 - Reach for the Stars, Lead Beyond Limits</title>
     
     <!--- Bootstrap 5 CSS (Local) --->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">

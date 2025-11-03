@@ -12,7 +12,7 @@
 * Usage:       <cfinclude template="includes/footer.cfm">
 *
 * Project:     PASC Region J Conference 2026 Website
-*              Lead Beyond Limits - February 13, 2026
+*              Reach for the stars, lead beyond limits - February 13, 2026
 *******************************************************************************
 --->
 
@@ -23,7 +23,7 @@
                 <div class="footer-section">
                     <h3>PASC Region J</h3>
                     <p>Pennsylvania Association of Student Councils - Region J</p>
-                    <p>Lead Beyond Limits</p>
+                    <p>Reach for the Stars, Lead Beyond Limits</p>
                 </div>
                 
                 <div class="footer-section">
@@ -42,7 +42,7 @@
                     <h3>Conference Info</h3>
                     <p><strong>Date:</strong> February 13, 2026</p>
                     <p><strong>Location:</strong> Neshaminy High School</p>
-                    <p><strong>Theme:</strong> Lead Beyond Limits</p>
+                    <p><strong>Theme:</strong> Reach for the Stars, Lead Beyond Limits</p>
                 </div>
                 
                 <div class="footer-section">
