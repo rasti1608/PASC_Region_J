@@ -604,6 +604,14 @@
             pauseIcon.style.display = 'none';
             progressFill.style.width = '0%';
         });
+
+        // Pause global background music when anthem starts playing
+        audio.addEventListener('play', function() {
+            const globalAudio = document.getElementById('globalAnthemAudio');
+            if (globalAudio && !globalAudio.paused) {
+                globalAudio.pause();  // Auto-updates mute button via its event listener
+            }
+        });
     });
 </script>
 

@@ -142,6 +142,12 @@
                 updateMuteButton(true);    // true = IS playing
                 updateAllAnimations(true);
                 sessionStorage.setItem('anthemPlaying', 'true');
+
+                // Pause resources page anthem if it's playing
+                const anthemAudio = document.getElementById('anthemAudio');
+                if (anthemAudio && !anthemAudio.paused) {
+                    anthemAudio.pause();
+                }
             });
 
             // Sync button state when audio pauses
