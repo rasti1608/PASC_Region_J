@@ -170,7 +170,13 @@
                                 <option value="about_page" #url.location EQ 'about_page' ? 'selected' : ''#>About Page</option>
                                 <option value="gallery" #url.location EQ 'gallery' ? 'selected' : ''#>Gallery</option>
                             </select>
-                            <small class="form-help">Where should this image appear on the website?</small>
+                            <small class="form-help">
+                                <strong>Gallery:</strong> Appears in the main Gallery page. |
+                                <strong>About Page:</strong> Used in the About page "What We Do" section.
+                                <span style="color: ##e74c3c; font-weight: bold;">
+                                    About page needs exactly 3 images (Display Order 1, 2, 3 = Conferences, Leadership, Networking).
+                                </span>
+                            </small>
                         </div>
                         
                         <div class="form-group">

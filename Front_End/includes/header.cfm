@@ -73,7 +73,7 @@
             
             <!--- Global Audio Element (shared by all players) --->
             <audio id="globalAnthemAudio" preload="metadata" loop>
-                <source src="/assets/audio/one-orbit-anthem.mp3" type="audio/mpeg">
+                <source src="/assets/audio/instrumental_background.mp3" type="audio/mpeg">
                 <source src="/assets/audio/one-orbit-anthem.wav" type="audio/wav">
             </audio>
             

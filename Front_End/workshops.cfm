@@ -96,8 +96,8 @@
     <div class="container">
         <cfif qWorkshopForm.recordCount gt 0>
             <div class="form-intro">
-                <h2>Application Form</h2>
-                <p class="form-description">Apply to present a workshop at the PASC Region J Conference 2026. Lead Beyond Limits - February 13, 2026.</p>
+                <h2>Conference Forms</h2>
+                <p class="form-description">Select a form below to begin your submission.</p>
             </div>
             
             <!--- Bootstrap Accordion for Multiple Forms --->
@@ -105,19 +105,19 @@
                 <cfoutput query="qWorkshopForm">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading#id#">
-                            <button 
-                                class="accordion-button <cfif currentRow neq 1>collapsed</cfif>" 
-                                type="button" 
-                                data-target="##collapse#id#" 
-                                aria-expanded="<cfif currentRow eq 1>true<cfelse>false</cfif>" 
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-target="##collapse#id#"
+                                aria-expanded="false"
                                 aria-controls="collapse#id#">
                                 #form_name#
                             </button>
                         </h2>
-                        <div 
-                            id="collapse#id#" 
-                            class="accordion-collapse collapse <cfif currentRow eq 1>show</cfif>" 
-                            aria-labelledby="heading#id#" 
+                        <div
+                            id="collapse#id#"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="heading#id#"
                             data-bs-parent="##workshopFormsAccordion">
                             <div class="accordion-body">
                                 <div class="form-container">

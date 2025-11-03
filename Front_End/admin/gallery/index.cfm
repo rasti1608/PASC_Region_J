@@ -16,8 +16,8 @@
 <!--- Check authentication --->
 <cfinclude template="../../includes/auth_check.cfm">
 
-<!--- Get page location from URL (default to About Page) --->
-<cfparam name="url.location" default="about_page">
+<!--- Get page location from URL (default to Gallery) --->
+<cfparam name="url.location" default="gallery">
 
 <!--- Handle status filter form submission --->
 <cfif structKeyExists(form, "statusFilter")>
@@ -128,6 +128,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Gallery - PASC Region J Admin</title>
     <link rel="stylesheet" href="/assets/css/admin-dashboard.css">
+    <link rel="stylesheet" href="/assets/css/gallery-grid.css">
     <style>
         /* Tab Navigation */
         .tabs {
@@ -286,6 +287,97 @@
             color: #ffffff;
             border-color: #4a90e2;
         }
+
+        /* ═══════════════════════════════════════════════════════════════
+           ADMIN MODAL OVERRIDES - Fix Centering & Close Button Position
+           ═══════════════════════════════════════════════════════════════ */
+
+        /* Override modal to use flexbox centering (admin only) */
+        #imageModal.modal {
+            /* display property controlled by JavaScript */
+            justify-content: center;            /* Center horizontally */
+            align-items: center;                /* Center vertically */
+        }
+
+        /* Wrapper to contain image and close button together */
+        #imageModal .modal-wrapper {
+            position: relative;                 /* Create positioning context for close button */
+            display: inline-block;              /* Wrap to content size */
+        }
+
+        /* Override modal-content positioning */
+        #imageModal .modal-content {
+            position: static;                   /* Remove absolute positioning */
+            display: block;                     /* Block display for proper sizing */
+            margin: 0;                          /* Remove auto margin */
+            top: auto;                          /* Remove top positioning */
+            transform: none;                    /* Remove transform */
+        }
+
+        /* Bootstrap-style close button with circular background */
+        #imageModal .close {
+            position: absolute;                 /* Position relative to .modal-wrapper */
+            top: 10px;                          /* 10px from top of image */
+            right: 10px;                        /* 10px from right of image */
+            z-index: 10003;                     /* Above everything */
+
+            /* Size and spacing */
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 28px;
+            text-align: center;
+            padding: 0;
+
+            /* Visual styling */
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.6);     /* Semi-transparent dark background */
+            border-radius: 50%;                        /* Circular shape */
+
+            /* Depth and separation */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+            border: 2px solid rgba(255, 255, 255, 0.3); /* Light border for definition */
+
+            /* Interaction */
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+
+            /* Prevent text selection */
+            user-select: none;
+        }
+
+        #imageModal .close:hover {
+            background-color: rgba(220, 53, 69, 0.9);  /* Bootstrap danger red */
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);                      /* Slight grow effect */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Enhanced shadow */
+        }
+
+        #imageModal .close:active {
+            transform: scale(0.95);                     /* Press effect */
+        }
+
+        /* Mobile adjustments for close button */
+        @media (max-width: 768px) {
+            #imageModal .close {
+                top: 5px;                       /* Closer to edge on mobile */
+                right: 5px;
+                width: 36px;
+                height: 36px;
+                line-height: 36px;
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #imageModal .close {
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -302,17 +394,33 @@
                 <h1>Gallery Management</h1>
                 <p>Manage images for About page and event gallery</p>
             </div>
-            
+
+            <!--- About Page Instructions (shown only when on About Page tab) --->
+            <cfif url.location EQ "about_page">
+                <div class="alert alert-info" style="margin-bottom: 20px;">
+                    <h4 style="margin-top: 0;">📸 About Page Image Requirements</h4>
+                    <p><strong>The About page requires exactly 3 active images in a specific order:</strong></p>
+                    <ol style="margin-bottom: 10px;">
+                        <li><strong>Display Order 1</strong> → Conferences & Events section</li>
+                        <li><strong>Display Order 2</strong> → Leadership Development section</li>
+                        <li><strong>Display Order 3</strong> → Networking & Connection section</li>
+                    </ol>
+                    <p style="margin-bottom: 0;">
+                        ⚠️ <strong>Important:</strong> Only the first 3 active images will be used. Make sure they are in the correct order!
+                    </p>
+                </div>
+            </cfif>
+
             <!--- Tabs Navigation --->
             <div class="tabs">
                 <cfoutput>
-                    <a href="index.cfm?location=about_page" class="tab #url.location EQ 'about_page' ? 'active' : ''#">
-                        📄 About Page
-                        <span class="tab-badge">#qAboutCount.image_count#</span>
-                    </a>
                     <a href="index.cfm?location=gallery" class="tab #url.location EQ 'gallery' ? 'active' : ''#">
                         🖼️ Gallery
                         <span class="tab-badge">#qGalleryCount.image_count#</span>
+                    </a>
+                    <a href="index.cfm?location=about_page" class="tab #url.location EQ 'about_page' ? 'active' : ''#">
+                        📄 About Page
+                        <span class="tab-badge">#qAboutCount.image_count#</span>
                     </a>
                 </cfoutput>
             </div>
@@ -382,7 +490,12 @@
                                             </form>
                                         </td>
                                         <td data-label="THUMBNAIL">
-                                            <img src="/assets/img/gallery/#filename#" alt="#htmlEditFormat(title)#" class="img-thumbnail">
+                                            <img src="/assets/img/gallery/#filename#"
+                                                 alt="#htmlEditFormat(title)#"
+                                                 class="img-thumbnail"
+                                                 onclick="openModal('/assets/img/gallery/#filename#')"
+                                                 style="cursor: pointer;"
+                                                 title="Click to view full size">
                                         </td>
                                         <td data-label="TITLE">
                                             <strong>#htmlEditFormat(title)#</strong>
@@ -601,6 +714,36 @@
     window.addEventListener('DOMContentLoaded', () => {
         filterTable();
     });
+
+    // ═══════════════════════════════════════════════════════════════
+    // LIGHTBOX MODAL FOR IMAGE PREVIEW
+    // ═══════════════════════════════════════════════════════════════
+
+    function openModal(imageSrc) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+
+        if (modal && modalImg) {
+            modal.style.display = 'flex';
+            modalImg.src = imageSrc;
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+    }
+
+    // Keyboard support: ESC to close
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
     </script>
 
     <!--- Scroll Position Preservation --->
@@ -619,6 +762,14 @@
         }
     });
     </script>
+
+    <!--- Lightbox Modal for Image Preview --->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <div class="modal-wrapper">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="modalImage" onclick="event.stopPropagation()">
+        </div>
+    </div>
 
     <!--- Session Heartbeat --->
     <cfinclude template="../includes/admin_footer.cfm">

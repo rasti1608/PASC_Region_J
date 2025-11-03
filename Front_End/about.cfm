@@ -1,10 +1,11 @@
 <cfprocessingdirective pageencoding="utf-8">
+<cfsilent>
 <!---
 *******************************************************************************
 * File:        /about.cfm
 * Created:     October 25, 2025
 * Author:      Rastislav Toscak
-* 
+*
 * Purpose:     About page for PASC Region J Conference 2026 website
 *              Provides information about PASC Region J organization
 *              Mission, vision, and what we offer to student leaders
@@ -21,7 +22,23 @@
 *******************************************************************************
 --->
 
-<!--- Include header --->
+<!--- Include database configuration --->
+<cfinclude template="includes/db_config.cfm">
+
+<!--- Fetch About Page images from gallery (TOP 3 ordered by display_order) --->
+<cfquery name="qAboutImages" datasource="#application.datasource#">
+    SELECT TOP 3
+        id,
+        title,
+        filename,
+        display_order
+    FROM dbo.gallery
+    WHERE page_location = 'about_page'
+        AND is_active = 1
+    ORDER BY display_order ASC
+</cfquery>
+
+</cfsilent><!--- Include header --->
 <cfinclude template="includes/header.cfm">
 
 <!--- Hero Section --->
@@ -84,23 +101,59 @@
         <p class="section-intro">PASC Region J provides year-round opportunities for students and advisors to develop and apply leadership skills in order to improve themselves, their schools, and their communities.</p>
         
         <div class="activities-grid">
-            <div class="activity-card">
-                <img src="/assets/img/gallery/f2.jpg" alt="Students holding PASC sign">
-                <h3>Conferences & Events</h3>
-                <p>We host regional conferences that bring together student leaders from across Districts 11 and 12. Our annual conference features inspiring keynote speakers, interactive workshops, and networking opportunities.</p>
-            </div>
-            
-            <div class="activity-card">
-                <img src="/assets/img/gallery/f3.jpg" alt="Students at registration">
-                <h3>Leadership Development</h3>
-                <p>Through workshops, training sessions, and hands-on activities, we help students develop essential leadership skills including communication, collaboration, problem-solving, and civic engagement.</p>
-            </div>
-            
-            <div class="activity-card">
-                <img src="/assets/img/gallery/f1.jpg" alt="Students collaborating">
-                <h3>Networking & Connection</h3>
-                <p>Connect with fellow student leaders, share ideas, and build lasting relationships. Our events provide forums and opportunities for students and advisors to collaborate and learn from one another.</p>
-            </div>
+            <!--- Card 1: Conferences & Events (Display Order 1) --->
+            <cfif qAboutImages.recordCount GTE 1>
+                <cfoutput query="qAboutImages" startrow="1" maxrows="1">
+                    <div class="activity-card">
+                        <img src="/assets/img/gallery/#filename#" alt="#htmlEditFormat(title)#">
+                        <h3>Conferences & Events</h3>
+                        <p>We host regional conferences that bring together student leaders from across Districts 11 and 12. Our annual conference features inspiring keynote speakers, interactive workshops, and networking opportunities.</p>
+                    </div>
+                </cfoutput>
+            <cfelse>
+                <!--- Fallback if no database image --->
+                <div class="activity-card">
+                    <img src="/assets/img/gallery/f2.jpg" alt="Students holding PASC sign">
+                    <h3>Conferences & Events</h3>
+                    <p>We host regional conferences that bring together student leaders from across Districts 11 and 12. Our annual conference features inspiring keynote speakers, interactive workshops, and networking opportunities.</p>
+                </div>
+            </cfif>
+
+            <!--- Card 2: Leadership Development (Display Order 2) --->
+            <cfif qAboutImages.recordCount GTE 2>
+                <cfoutput query="qAboutImages" startrow="2" maxrows="1">
+                    <div class="activity-card">
+                        <img src="/assets/img/gallery/#filename#" alt="#htmlEditFormat(title)#">
+                        <h3>Leadership Development</h3>
+                        <p>Through workshops, training sessions, and hands-on activities, we help students develop essential leadership skills including communication, collaboration, problem-solving, and civic engagement.</p>
+                    </div>
+                </cfoutput>
+            <cfelse>
+                <!--- Fallback if no database image --->
+                <div class="activity-card">
+                    <img src="/assets/img/gallery/f3.jpg" alt="Students at registration">
+                    <h3>Leadership Development</h3>
+                    <p>Through workshops, training sessions, and hands-on activities, we help students develop essential leadership skills including communication, collaboration, problem-solving, and civic engagement.</p>
+                </div>
+            </cfif>
+
+            <!--- Card 3: Networking & Connection (Display Order 3) --->
+            <cfif qAboutImages.recordCount GTE 3>
+                <cfoutput query="qAboutImages" startrow="3" maxrows="1">
+                    <div class="activity-card">
+                        <img src="/assets/img/gallery/#filename#" alt="#htmlEditFormat(title)#">
+                        <h3>Networking & Connection</h3>
+                        <p>Connect with fellow student leaders, share ideas, and build lasting relationships. Our events provide forums and opportunities for students and advisors to collaborate and learn from one another.</p>
+                    </div>
+                </cfoutput>
+            <cfelse>
+                <!--- Fallback if no database image --->
+                <div class="activity-card">
+                    <img src="/assets/img/gallery/f1.jpg" alt="Students collaborating">
+                    <h3>Networking & Connection</h3>
+                    <p>Connect with fellow student leaders, share ideas, and build lasting relationships. Our events provide forums and opportunities for students and advisors to collaborate and learn from one another.</p>
+                </div>
+            </cfif>
         </div>
     </div>
 </section>
