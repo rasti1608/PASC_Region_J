@@ -69,6 +69,11 @@
 
     <div class="container">
         <div class="anthem-featured">
+            <!--- Singer Background Video - Covers Entire Section --->
+            <video id="anthemPlayerVideo" class="anthem-player-video" muted loop playsinline>
+                <source src="/assets/video/conference-anthem-background.mp4" type="video/mp4">
+            </video>
+
             <div class="anthem-header">
                 <h2>Conference Anthem</h2>
                 <div class="anthem-info">
@@ -84,11 +89,6 @@
                     <source src="/assets/audio/one-orbit-anthem.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
-
-                <!--- Player Background Video --->
-                <video id="anthemPlayerVideo" class="anthem-player-video" muted loop playsinline>
-                    <source src="/assets/video/conference-anthem-background.mp4" type="video/mp4">
-                </video>
 
                 <div class="player-controls">
                     <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause">
@@ -229,6 +229,8 @@
     }
 
     .anthem-featured {
+        position: relative;
+        overflow: hidden;
         max-width: 800px;
         margin: 0 auto;
         background: rgba(138, 43, 226, 0.15);
@@ -240,6 +242,8 @@
     }
 
     .anthem-header {
+        position: relative;
+        z-index: 1;
         text-align: center;
         margin-bottom: 30px;
     }
@@ -276,9 +280,19 @@
         line-height: 1.5;
     }
 
+    /* Text shadows for readability over video background */
+    .anthem-header h2,
+    .song-title,
+    .song-artist,
+    .song-description {
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8),
+                     0 0 20px rgba(0, 0, 0, 0.6);
+    }
+
     /* Custom Audio Player */
     .custom-audio-player {
         position: relative;
+        z-index: 1;
         overflow: hidden;
         background: rgba(0, 0, 0, 0.3);
         border-radius: 15px;
@@ -294,7 +308,7 @@
         height: 100%;
         object-fit: cover;
         z-index: 0;
-        border-radius: 15px;
+        border-radius: 20px;
         opacity: 0.4;
     }
 
@@ -375,6 +389,8 @@
 
     /* Download Button */
     .anthem-download {
+        position: relative;
+        z-index: 1;
         text-align: center;
         margin-top: 20px;
     }
