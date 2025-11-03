@@ -260,7 +260,7 @@
     }
 
     .song-title {
-        color: #ffd700;
+        color: var(--color-accent);
         font-size: 1.5rem;
         margin: 10px 0 5px;
         font-weight: 600;
