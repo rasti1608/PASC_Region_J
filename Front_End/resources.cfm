@@ -424,11 +424,29 @@
        DOCUMENTS SECTION STYLES
        ======================================== */
     .documents-section {
+        position: relative;
         padding: 60px 0 80px;
         background: linear-gradient(180deg, rgba(10, 14, 39, 0.5) 0%, rgba(26, 35, 50, 0.7) 100%);
     }
 
+    .documents-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('/assets/img/space-nebula.png');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.25;
+        z-index: 0;
+        pointer-events: none;
+    }
+
     .section-header {
+        position: relative;
+        z-index: 1;
         text-align: center;
         margin-bottom: 40px;
     }
@@ -447,6 +465,8 @@
 
     /* Documents Grid */
     .documents-grid {
+        position: relative;
+        z-index: 1;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 2rem;
@@ -543,6 +563,8 @@
 
     /* No Documents State */
     .no-documents {
+        position: relative;
+        z-index: 1;
         text-align: center;
         padding: 60px 20px;
         color: #b0b8d4;
