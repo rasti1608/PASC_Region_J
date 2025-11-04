@@ -136,6 +136,14 @@
                     </svg>
                     Download MP3
                 </a>
+                <a href="/assets/audio/instrumental_background.mp3" download="instrumental_background.mp3" class="btn btn-download btn-secondary-download">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download Background Music (Instrumental)
+                </a>
             </div>
         </div>
             </div> <!--- End cinema-screen-frame --->
@@ -400,12 +408,16 @@
         color: #8a8a8a;
     }
 
-    /* Download Button */
+    /* Download Buttons */
     .anthem-download {
         position: relative;
         z-index: 1;
         text-align: center;
         margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
     }
 
     .btn-download {
@@ -431,6 +443,16 @@
     .btn-download svg {
         width: 20px;
         height: 20px;
+    }
+
+    /* Secondary Download Button (Instrumental) */
+    .btn-secondary-download {
+        font-size: 0.9rem;
+        opacity: 0.85;
+    }
+
+    .btn-secondary-download:hover {
+        opacity: 1;
     }
 
     /* ========================================
