@@ -60,7 +60,16 @@
     </div>
 </section>
 
-<!--- Conference Anthem Section --->
+<!--- Conference Anthem Section with Cinema Effect --->
+<div class="cinema-theater-wrapper">
+    <!--- Static Space Background (Theater Ambiance) --->
+    <video class="cinema-space-bg" muted loop playsinline autoplay>
+        <source src="/assets/video/intro-space-background.mp4" type="video/mp4">
+    </video>
+
+    <!--- Dark Vignette (Theater Edges) --->
+    <div class="cinema-vignette"></div>
+
 <section class="anthem-section">
     <!--- Section Background Video --->
     <video id="anthemSectionVideo" class="anthem-section-video" muted loop playsinline>
@@ -68,6 +77,8 @@
     </video>
 
     <div class="container">
+            <!--- Cinema Screen Frame --->
+            <div class="cinema-screen-frame">
         <div class="anthem-featured">
             <!--- Singer Background Video - Covers Entire Section --->
             <video id="anthemPlayerVideo" class="anthem-player-video" muted loop playsinline>
@@ -127,9 +138,11 @@
                 </a>
             </div>
         </div>
+            </div> <!--- End cinema-screen-frame --->
     </div>
 </section>
 
+</div> <!--- End cinema-theater-wrapper --->
 <!--- Document Library Section --->
 <section class="documents-section">
     <div class="container">
@@ -625,6 +638,82 @@
             padding: 1.5rem;
         }
     }
+
+    /* ===========================
+       CINEMA THEATER EFFECT
+       =========================== */
+    
+    /* Outer theater wrapper with static space background */
+    .cinema-theater-wrapper {
+        position: relative;
+        background: #000;
+        padding: 80px 0;
+        overflow: hidden;
+    }
+    
+    /* Static space background - never moves */
+    .cinema-space-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.4;
+        z-index: 0;
+    }
+    
+    /* Dark vignette creating theater edge effect */
+    .cinema-vignette {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
+        z-index: 1;
+        pointer-events: none;
+    }
+    
+    /* Cinema screen frame wrapper */
+    .cinema-screen-frame {
+        position: relative;
+        z-index: 2;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px;
+        background: radial-gradient(ellipse at top, rgba(79, 195, 247, 0.05), transparent);
+        border-radius: 12px;
+        box-shadow: 
+            0 0 60px rgba(138, 43, 226, 0.4),
+            inset 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Enhance anthem-featured for cinema effect */
+    .cinema-theater-wrapper .anthem-featured {
+        border: 2px solid rgba(138, 43, 226, 0.6);
+        box-shadow: 
+            0 8px 32px rgba(138, 43, 226, 0.5),
+            0 0 80px rgba(138, 43, 226, 0.3),
+            inset 0 0 20px rgba(79, 195, 247, 0.1);
+    }
+    
+    /* Mobile responsive adjustments for cinema */
+    @media (max-width: 768px) {
+        .cinema-theater-wrapper {
+            padding: 40px 0;
+        }
+        
+        .cinema-screen-frame {
+            padding: 20px;
+            max-width: 100%;
+        }
+        
+        .cinema-vignette {
+            background: radial-gradient(ellipse at center, transparent 20%, rgba(0, 0, 0, 0.9) 100%);
+        }
+    }
+
 </style>
 
 <!--- JavaScript for Audio Player --->
