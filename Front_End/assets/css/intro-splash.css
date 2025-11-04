@@ -127,6 +127,7 @@ body { overflow-x: hidden; }
 
 /* Planets */
 .planet {
+    animation: introPulse 1s ease-in-out infinite;
     position: absolute;
     top: 0;
     left: 50%;
@@ -176,9 +177,10 @@ body { overflow-x: hidden; }
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 50%;
-    box-shadow: 0 0 80px rgba(255, 140, 66, 0.6);
-    animation: pulse 2s ease-in-out infinite, rotate360 20s linear infinite;
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+    animation: pulse 2s ease-in-out infinite, rotate360 20s linear infinite, introPulse 2s ease-in-out infinite;
 }
+
 
 @keyframes rotate360 {
     from { transform: translate(-50%, -50%) rotate(0deg); }
@@ -187,12 +189,12 @@ body { overflow-x: hidden; }
 
 @keyframes pulse {
     0%, 100% {
-        box-shadow: 0 0 80px rgba(255, 140, 66, 0.6);
+        box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
         filter: brightness(1);
     }
     50% {
-        box-shadow: 0 0 120px rgba(255, 140, 66, 0.9);
-        filter: brightness(1.2);
+        box-shadow: 0 0 20px rgba(255, 152, 0, 0.5);
+        filter: brightness(1.15);
     }
 }
 
@@ -307,3 +309,10 @@ body { overflow-x: hidden; }
     .intro-date { font-size: 1rem; }
     .skip-btn { bottom: 20px; right: 20px; padding: 10px 20px; font-size: 0.9rem; }
 }
+
+/* Intro Pulse Animation - uses modern scale property to avoid transform conflicts */
+@keyframes introPulse {
+    0%, 100% { scale: 1; }
+    50% { scale: 1.1; }
+}
+
