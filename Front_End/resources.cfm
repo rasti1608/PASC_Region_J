@@ -228,7 +228,7 @@
     .anthem-section {
         position: relative;
         overflow: hidden;
-        background: linear-gradient(135deg, rgba(91, 75, 138, 0.1) 0%, rgba(26, 35, 50, 0.3) 100%);
+        background: transparent;
         padding: 60px 0;
         border-bottom: 1px solid rgba(79, 195, 247, 0.2);
     }
@@ -701,12 +701,12 @@
     .cinema-screen-frame {
         position: relative;
         z-index: 2;
-        max-width: 1000px;
+        max-width: 85%;
         margin: 0 auto;
         padding: 40px;
-        background: radial-gradient(ellipse at top, rgba(79, 195, 247, 0.05), transparent);
+        background: linear-gradient(135deg, rgba(91, 75, 138, 0.1) 0%, rgba(26, 35, 50, 0.3) 100%);
         border-radius: 12px;
-        box-shadow: 
+        box-shadow:
             0 0 60px rgba(138, 43, 226, 0.4),
             inset 0 0 40px rgba(0, 0, 0, 0.5);
     }
