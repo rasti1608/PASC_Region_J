@@ -317,13 +317,44 @@
     87.5% { transform: rotate(315deg) scale(1); }
     100% { transform: rotate(360deg) scale(1); }
 }
+@keyframes logoRotateFastBounce {
+    0% { transform: rotate(0deg) scale(1); }
+    3.75% { transform: rotate(13.5deg) scale(1.15); }
+    7.5% { transform: rotate(27deg) scale(1); }
+    11.25% { transform: rotate(40.5deg) scale(1.15); }
+    15% { transform: rotate(54deg) scale(1); }
+    18.75% { transform: rotate(67.5deg) scale(1.15); }
+    22.5% { transform: rotate(81deg) scale(1); }
+    26.25% { transform: rotate(94.5deg) scale(1.15); }
+    30% { transform: rotate(108deg) scale(1); }
+    33.75% { transform: rotate(121.5deg) scale(1.15); }
+    37.5% { transform: rotate(135deg) scale(1); }
+    41.25% { transform: rotate(148.5deg) scale(1.15); }
+    45% { transform: rotate(162deg) scale(1); }
+    48.75% { transform: rotate(175.5deg) scale(1.15); }
+    52.5% { transform: rotate(189deg) scale(1); }
+    56.25% { transform: rotate(202.5deg) scale(1.15); }
+    60% { transform: rotate(216deg) scale(1); }
+    63.75% { transform: rotate(229.5deg) scale(1.15); }
+    67.5% { transform: rotate(243deg) scale(1); }
+    71.25% { transform: rotate(256.5deg) scale(1.15); }
+    75% { transform: rotate(270deg) scale(1); }
+    78.75% { transform: rotate(283.5deg) scale(1.15); }
+    82.5% { transform: rotate(297deg) scale(1); }
+    86.25% { transform: rotate(310.5deg) scale(1.15); }
+    90% { transform: rotate(324deg) scale(1); }
+    93.75% { transform: rotate(337.5deg) scale(1.15); }
+    97.5% { transform: rotate(351deg) scale(1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
 
 
 /* Logo Orange Glow Animation (synced with music) */
 #navLogo.rotating,
 .large-logo.rotating {
     position: relative;
-    animation: navLogoRotate 20s linear infinite, boomPulse 1.5s ease-in-out infinite;
+    animation: logoRotateFastBounce 20s linear infinite;
     filter: drop-shadow(0 0 60px rgba(255, 152, 0, 1))
             drop-shadow(0 0 120px rgba(255, 152, 0, 0.9));
 }
