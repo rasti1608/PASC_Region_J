@@ -305,6 +305,78 @@
     to { transform: rotate(360deg); }
 }
 
+/* Combined rotation and pulse animation for logo */
+@keyframes logoRotateAndPulse {
+    0% { transform: rotate(0deg) scale(1); }
+    12.5% { transform: rotate(45deg) scale(1.05); }
+    25% { transform: rotate(90deg) scale(1.10); }
+    37.5% { transform: rotate(135deg) scale(1.15); }
+    50% { transform: rotate(180deg) scale(1.15); }
+    62.5% { transform: rotate(225deg) scale(1.10); }
+    75% { transform: rotate(270deg) scale(1.05); }
+    87.5% { transform: rotate(315deg) scale(1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Fast bounce animation for logo */
+@keyframes fastBounce {
+    0%, 100% { scale: 1; }
+    50% { scale: 1.15; }
+}
+
+/* Logo Orange Glow Animation (synced with music) */
+#navLogo.rotating,
+.large-logo.rotating {
+    position: relative;
+    animation: navLogoRotate 20s linear infinite, fastBounce 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 60px rgba(255, 152, 0, 1))
+            drop-shadow(0 0 120px rgba(255, 152, 0, 0.9));
+}
+
+/* Inner glow - close and bright */
+#navLogo.rotating::before,
+.large-logo.rotating::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 152, 0, 1) 0%,
+        rgba(255, 179, 0, 0.6) 40%,
+        transparent 70%
+    );
+    animation: innerGlow 1.5s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Outer massive blurry haze - VERY visible */
+#navLogo.rotating::after,
+.large-logo.rotating::after {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 152, 0, 0.9) 0%,
+        rgba(255, 179, 0, 0.5) 30%,
+        rgba(255, 152, 0, 0.3) 50%,
+        transparent 70%
+    );
+    filter: blur(40px);
+    animation: outerAura 2s ease-in-out infinite;
+    z-index: -2;
+    pointer-events: none;
+}
+
 /* INDEX PAGE - Anthem Player Styles (embedded in hero section) */
 .anthem-player {
     display: flex;
@@ -670,7 +742,7 @@ audio {
         rgba(79, 195, 247, 0.3) 50%,
         transparent 70%
     );
-    filter: blur(25px);
+    filter: blur(40px);
     animation: outerAura 2s ease-in-out infinite;
     z-index: -2;
 }
@@ -687,11 +759,11 @@ audio {
 @keyframes innerGlow {
     0%, 100% {
         opacity: 0.6;
-        transform: scale(0.9);
+        transform: scale(1.0);
     }
     50% {
         opacity: 1;
-        transform: scale(1.2);
+        transform: scale(1.5);
     }
 }
 
@@ -701,8 +773,8 @@ audio {
         transform: scale(0.8);
     }
     50% {
-        opacity: 0.9;
-        transform: scale(1.4);
+        opacity: 1;
+        transform: scale(1.6);
     }
 }
 
