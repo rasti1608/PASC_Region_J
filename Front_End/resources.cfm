@@ -57,6 +57,7 @@
     <div class="container">
         <h1 class="hero-title" id="resourcesTitle">Resources</h1>
         <p class="hero-subtitle" id="resourcesSubtitle">Conference Materials & Media</p>
+        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">Reach for the Stars, Lead Beyond Limits</p>
     </div>
 </section>
 

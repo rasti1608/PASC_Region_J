@@ -69,7 +69,9 @@
                 
                 <p>Since 1932, the Pennsylvania Association of Student Councils has been dedicated to developing, engaging, and celebrating leaders across our state. PASC helps students improve their lives while learning to lead through service, collaboration, and participation.</p>
                 
-                <p>Our region is part of a statewide network that empowers and equips students to develop and hone their leadership skills through conferences, events, recognition programs, and networking opportunities.</p>
+                <p>Our region is part of a statewide network that empowers and equips students to develop and strengthen their leadership skills through conferences, events, recognition programs, and networking opportunities.</p>
+                
+                <p><strong>This year, Neshaminy High School is proud to host the 2026 PASC Region J Leadership Conference!</strong> The Neshaminy student council has taken on the exciting challenge of bringing together student leaders from across southeastern Pennsylvania for a day of inspiration, workshops, and networking.</p>
             </div>
             <div class="about-logo">
                 <img src="/assets/img/logo.png" alt="PASC Region J Logo" class="large-logo">
@@ -161,7 +163,16 @@
 <!--- Why Join Section --->
 <section class="why-join">
     <div class="container">
-        <h2 class="section-title">Why Join PASC Region J?</h2>
+        <h2 class="section-title">About PASC Region J</h2>
+        
+        
+        <div class="section-intro">
+            <p>PASC Region J serves student councils across <strong>Districts 11 and 12</strong>, covering Philadelphia, Delaware, Bucks, Montgomery, and Chester Counties in southeastern Pennsylvania. Each year, a different school within our region has the honor of hosting the annual Regional Leadership Conference.</p>
+            
+            <p><strong>This year, we are proud to announce that Neshaminy High School is hosting the 2026 PASC Region J Leadership Conference!</strong> The Neshaminy student council has taken on the exciting challenge of bringing together student leaders from across our region for a day of inspiration, learning, and growth.</p>
+            
+            <p>As a member school in Region J, your student council automatically has access to all the benefits and opportunities below:</p>
+        </div>
         
         <div class="benefits-grid">
             <div class="benefit-item">

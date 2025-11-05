@@ -43,6 +43,7 @@
                     <p><strong>Date:</strong> February 13, 2026</p>
                     <p><strong>Location:</strong> Neshaminy High School</p>
                     <p><strong>Theme:</strong> Reach for the Stars, Lead Beyond Limits</p>
+                    <p><strong>Slogan:</strong> Reach for the Stars, Lead Beyond Limits</p>
                 </div>
                 
                 <div class="footer-section">
@@ -54,6 +55,7 @@
             
             <div class="footer-bottom">
                 <p>&copy; <cfoutput>#year(now())#</cfoutput> PASC Region J Conference. All rights reserved.</p>
+                <p style="color: #FFB300; font-weight: 600;">2026 Conference presented by Neshaminy High School Student Council</p>
                 <p>Reach for the Stars</p>
                 <p>Created by Rastislav & Oliver Toscak <a href="/admin" style="color: #888; text-decoration: none; font-size: 0.8rem;"> [admin]</a></p>
             </div>

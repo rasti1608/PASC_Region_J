@@ -327,6 +327,7 @@
             <h1 class="intro-title">PASC REGION <span class="special-j">J</span></h1>
             <p class="intro-subtitle">Reach for the Stars, Lead Beyond Limits</p>
             <p class="intro-date">February 13, 2026</p>
+            <p class="intro-date" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">Hosted by Neshaminy High School</p>
         </div>
         
         <button class="skip-btn" onclick="skipIntro()">Skip Intro →</button>
@@ -408,13 +409,13 @@
             <div class="info-card">
                 <div class="info-icon">🚀</div>
                 <h3>Theme</h3>
-                <p>Space & Solar System</p>
+                <p>Stellar Leadership Odyssey</p>
             </div>
             
             <div class="info-card">
                 <div class="info-icon">📋</div>
                 <h3>Registration</h3>
-                <p>Opens January 5, 2026</p>
+                <p>January 5-23, 2026</p>
             </div>
         </div>
     </div>

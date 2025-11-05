@@ -479,15 +479,17 @@ a:hover {
 
 .featured-badge {
     position: absolute;
-    top: var(--spacing-sm);
-    right: var(--spacing-sm);
+    top: -24px;
+    right: 15px;
     background: var(--color-accent);
     color: var(--color-space-dark);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
+    padding: 3px 12px;
+    border-radius: 4px 4px 0 0;
+    font-size: 0.7rem;
     font-weight: bold;
     text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }
 
 .no-announcements {
@@ -1352,6 +1354,13 @@ a:hover {
     
     .announcements-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .featured-badge {
+        top: -18.5px;
+        right: 10px;
+        font-size: 0.65rem;
+        padding: 2px 8px;
     }
 }
 

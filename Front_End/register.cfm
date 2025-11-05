@@ -52,7 +52,7 @@
             <h2>Registration Coming Soon</h2>
             
             <p class="coming-soon-text">
-                Conference registration will open on <strong>January 5, 2026</strong>. We're excited to welcome student council members, leaders, and advisors to the PASC Region J Conference 2026!
+                Conference registration: <strong>January 5-23, 2026</strong>. We're excited to welcome student council members, leaders, and advisors to the PASC Region J Conference 2026!
             </p>
             
             <p class="coming-soon-subtext">
@@ -67,7 +67,7 @@
                 
                 <div class="detail-item">
                     <h3>Registration Opens</h3>
-                    <p>January 5, 2026</p>
+                    <p>January 5-23, 2026</p>
                 </div>
                 
                 <div class="detail-item">

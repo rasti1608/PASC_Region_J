@@ -219,7 +219,8 @@
                                 <p><strong>Conference Details:</strong><br>
                                 Date: February 13, 2026<br>
                                 Location: Neshaminy High School, Langhorne, PA<br>
-                                Theme: Reach for the Stars, Lead Beyond Limits</p>
+                                Theme: Stellar Leadership Odyssey<br>
+                                Slogan: Reach for the Stars, Lead Beyond Limits</p>
 
                                 <div class="footer">
                                     <p>This is an automated message confirming receipt of your contact form submission.</p>
@@ -371,8 +372,6 @@
                                     <option value="Conference Registration" <cfif form.contactSubject eq "Conference Registration">selected</cfif>>Conference Registration</option>
                                     <option value="Workshop Application" <cfif form.contactSubject eq "Workshop Application">selected</cfif>>Workshop Application</option>
                                     <option value="Sponsorship Opportunities" <cfif form.contactSubject eq "Sponsorship Opportunities">selected</cfif>>Sponsorship Opportunities</option>
-                                    <option value="Volunteer Information" <cfif form.contactSubject eq "Volunteer Information">selected</cfif>>Volunteer Information</option>
-                                    <option value="Media & Press" <cfif form.contactSubject eq "Media & Press">selected</cfif>>Media & Press</option>
                                     <option value="Technical Support" <cfif form.contactSubject eq "Technical Support">selected</cfif>>Technical Support</option>
                                     <option value="Other" <cfif form.contactSubject eq "Other">selected</cfif>>Other</option>
                                 </select>

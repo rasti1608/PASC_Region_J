@@ -58,6 +58,7 @@
     <div class="container">
         <h1 class="hero-title" id="workshopsTitle">Workshop Application</h1>
         <p class="hero-subtitle" id="workshopsSubtitle">Share Your Leadership Expertise</p>
+        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">Reach for the Stars, Lead Beyond Limits</p>
     </div>
 </section>
 
@@ -153,7 +154,7 @@
             
             <div class="guideline-card">
                 <h3>⏱️ Session Length</h3>
-                <p>Workshops can be 30, 45, or 60 minutes. Choose the format that best fits your content and teaching style.</p>
+                <p>Workshops are 30 minutes. Plan your content to fit within this time frame for maximum engagement.</p>
             </div>
             
             <div class="guideline-card">
