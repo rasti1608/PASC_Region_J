@@ -96,6 +96,11 @@
                 <span class="nav-icon">🌐</span>
                 <span class="nav-text">View Website</span>
             </a>
+ 
+				<a href="https://analytics.google.com/analytics/web/##/a359275293p511744022/reports/intelligenthome" class="nav-item" target="_blank">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Analytics</span>
+            </a>
             
             <a href="/admin/logout.cfm" class="nav-item nav-logout">
                 <span class="nav-icon">🚪</span>

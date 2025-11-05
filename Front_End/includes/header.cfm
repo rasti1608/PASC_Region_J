@@ -26,6 +26,15 @@
     <meta name="keywords" content="PASC, Region J, Student Council, Leadership, Conference, Pennsylvania">
     <meta name="author" content="Rastislav Toscak">
     <title>PASC Region J Conference 2026 - Reach for the Stars, Lead Beyond Limits</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W534NWYEVS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-W534NWYEVS');
+    </script>
     
     <!--- Bootstrap 5 CSS (Local) --->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
