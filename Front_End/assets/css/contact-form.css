@@ -273,8 +273,9 @@
 
 .info-item {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 15px;
+    text-align: center;
     margin-bottom: 25px;
     padding-bottom: 25px;
     border-bottom: 1px solid rgba(79, 195, 247, 0.2);
@@ -292,7 +293,7 @@
 }
 
 .info-content h4 {
-    color: #4fc3f7;
+    color: #FFB300;
     font-size: 1.1rem;
     margin: 0 0 8px 0;
     font-weight: 600;

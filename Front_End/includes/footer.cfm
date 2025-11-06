@@ -54,8 +54,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; <cfoutput>#year(now())#</cfoutput> PASC Region J Conference. All rights reserved.</p>
-                <p style="color: #FFB300; font-weight: 600;">2026 Conference presented by Neshaminy High School Student Council</p>
+                <p>&copy; Region J Conference present by Neshaminy High School Student Council</p>
                 <p>Reach for the Stars</p>
                 <p>Created by Rastislav & Oliver Toscak <a href="/admin" style="color: #888; text-decoration: none; font-size: 0.8rem;"> [admin]</a></p>
             </div>

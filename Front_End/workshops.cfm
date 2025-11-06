@@ -58,7 +58,6 @@
     <div class="container">
         <h1 class="hero-title" id="workshopsTitle">Workshop Application</h1>
         <p class="hero-subtitle" id="workshopsSubtitle">Share Your Leadership Expertise</p>
-        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">Reach for the Stars, Lead Beyond Limits</p>
     </div>
 </section>
 

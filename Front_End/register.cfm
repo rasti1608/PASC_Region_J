@@ -55,9 +55,6 @@
                 Conference registration: <strong>January 5-23, 2026</strong>. We're excited to welcome student council members, leaders, and advisors to the PASC Region J Conference 2026!
             </p>
             
-            <p class="coming-soon-subtext">
-                Registration will include options for students, advisors, and workshop presenters. Early bird pricing will be available for those who register in January.
-            </p>
             
             <div class="coming-soon-details">
                 <div class="detail-item">

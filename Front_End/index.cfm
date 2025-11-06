@@ -403,13 +403,13 @@
             <div class="info-card">
                 <div class="info-icon">🎓</div>
                 <h3>Who Can Attend</h3>
-                <p>Student Council Members & Leaders</p>
+                <p>Student Council Members within Region J</p>
             </div>
             
             <div class="info-card">
                 <div class="info-icon">🚀</div>
                 <h3>Theme</h3>
-                <p>Stellar Leadership Odyssey</p>
+                <p>Navigating the Stars</p>
             </div>
             
             <div class="info-card">

@@ -71,7 +71,6 @@
                 
                 <p>Our region is part of a statewide network that empowers and equips students to develop and strengthen their leadership skills through conferences, events, recognition programs, and networking opportunities.</p>
                 
-                <p><strong>This year, Neshaminy High School is proud to host the 2026 PASC Region J Leadership Conference!</strong> The Neshaminy student council has taken on the exciting challenge of bringing together student leaders from across southeastern Pennsylvania for a day of inspiration, workshops, and networking.</p>
             </div>
             <div class="about-logo">
                 <img src="/assets/img/logo.png" alt="PASC Region J Logo" class="large-logo">
@@ -168,8 +167,6 @@
         
         <div class="section-intro">
             <p>PASC Region J serves student councils across <strong>Districts 11 and 12</strong>, covering Philadelphia, Delaware, Bucks, Montgomery, and Chester Counties in southeastern Pennsylvania. Each year, a different school within our region has the honor of hosting the annual Regional Leadership Conference.</p>
-            
-            <p><strong>This year, we are proud to announce that Neshaminy High School is hosting the 2026 PASC Region J Leadership Conference!</strong> The Neshaminy student council has taken on the exciting challenge of bringing together student leaders from across our region for a day of inspiration, learning, and growth.</p>
             
             <p>As a member school in Region J, your student council automatically has access to all the benefits and opportunities below:</p>
         </div>
