@@ -42,7 +42,7 @@
                     <h3>Conference Info</h3>
                     <p><strong>Date:</strong> February 13, 2026</p>
                     <p><strong>Location:</strong> Neshaminy High School</p>
-                    <p><strong>Theme:</strong> Reach for the Stars, Lead Beyond Limits</p>
+                    <p><strong>Theme:</strong> Navigating the Stars</p>
                     <p><strong>Slogan:</strong> Reach for the Stars, Lead Beyond Limits</p>
                 </div>
                 

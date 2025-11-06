@@ -219,7 +219,7 @@
                                 <p><strong>Conference Details:</strong><br>
                                 Date: February 13, 2026<br>
                                 Location: Neshaminy High School, Langhorne, PA<br>
-                                Theme: Stellar Leadership Odyssey<br>
+                                Theme: Navigating the Stars<br>
                                 Slogan: Reach for the Stars, Lead Beyond Limits</p>
 
                                 <div class="footer">
