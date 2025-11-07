@@ -224,7 +224,7 @@ body { overflow-x: hidden; }
 
 .intro-date {
     font-size: 1.2rem;
-    color: #00d4ff;
+    color: #FFB300;
     margin-top: 10px;
     opacity: 0;
     animation: fadeInUp 1s ease-out 2s forwards;

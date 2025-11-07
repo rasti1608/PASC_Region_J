@@ -58,6 +58,7 @@
     <div class="container">
         <h1 class="hero-title" id="workshopsTitle">Workshop Application</h1>
         <p class="hero-subtitle" id="workshopsSubtitle">Share Your Leadership Expertise</p>
+        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
     </div>
 </section>
 
@@ -161,10 +162,10 @@
                 <p>Workshops can be designed for students, advisors, or all attendees. We encourage interactive and engaging sessions.</p>
             </div>
             
-            <div class="guideline-card">
+            <!---<div class="guideline-card">
                 <h3>📅 Important Dates</h3>
                 <p>Applications are reviewed on a rolling basis. Early submission is encouraged. Conference date: February 13, 2026.</p>
-            </div>
+            </div>--->
         </div>
     </div>
 </section>

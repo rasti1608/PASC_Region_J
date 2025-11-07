@@ -33,6 +33,7 @@
     <div class="container">
         <h1 class="hero-title" id="registerTitle">Conference Registration</h1>
         <p class="hero-subtitle" id="registerSubtitle">Coming Soon!</p>
+        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
     </div>
 </section>
 
@@ -69,7 +70,7 @@
                 
                 <div class="detail-item">
                     <h3>Theme</h3>
-                    <p>Reach for the Stars, Lead Beyond Limits</p>
+                    <p>Navigating the Stars</p>
                 </div>
             </div>
             

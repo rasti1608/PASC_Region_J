@@ -160,7 +160,7 @@
         
         .pre-intro-subtitle {
             font-size: 1.5rem;
-            color: #4fc3f7;
+            color: #FF9800;
             margin-bottom: 10px;
             font-weight: 300;
         }
