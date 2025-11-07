@@ -372,8 +372,6 @@
                                     <option value="General Inquiry" <cfif form.contactSubject eq "General Inquiry">selected</cfif>>General Inquiry</option>
                                     <option value="Conference Registration" <cfif form.contactSubject eq "Conference Registration">selected</cfif>>Conference Registration</option>
                                     <option value="Workshop Application" <cfif form.contactSubject eq "Workshop Application">selected</cfif>>Workshop Application</option>
-                                    <option value="Sponsorship Opportunities" <cfif form.contactSubject eq "Sponsorship Opportunities">selected</cfif>>Sponsorship Opportunities</option>
-                                    <option value="Technical Support" <cfif form.contactSubject eq "Technical Support">selected</cfif>>Technical Support</option>
                                     <option value="Other" <cfif form.contactSubject eq "Other">selected</cfif>>Other</option>
                                 </select>
                             </div>
