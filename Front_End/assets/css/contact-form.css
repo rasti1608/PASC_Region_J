@@ -258,6 +258,7 @@
     padding: 30px;
     backdrop-filter: blur(10px);
     margin-bottom: 30px;
+    text-align: left;
 }
 
 .info-card h3 {
@@ -265,6 +266,7 @@
     font-size: 1.5rem;
     margin-bottom: 25px;
     font-weight: 600;
+    text-align: left;
 }
 
 /* ========================================
@@ -275,7 +277,6 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    text-align: center;
     margin-bottom: 25px;
     padding-bottom: 25px;
     border-bottom: 1px solid rgba(79, 195, 247, 0.2);
@@ -297,6 +298,7 @@
     font-size: 1.1rem;
     margin: 0 0 8px 0;
     font-weight: 600;
+    text-align: left;
 }
 
 .info-content p {
@@ -304,6 +306,7 @@
     font-size: 1rem;
     margin: 0;
     line-height: 1.6;
+    text-align: left;
 }
 
 .info-content a {
@@ -325,10 +328,12 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    text-align: left;
 }
 
 .quick-links li {
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .quick-links li:last-child {
@@ -452,7 +457,6 @@
     .info-item {
         flex-direction: column;
         align-items: center;
-        text-align: center;
         gap: 10px;
     }
 
