@@ -1,7 +1,13 @@
-/**
- * Admin Panel Mobile Navigation
- * Handles hamburger menu toggle for mobile responsive sidebar
- */
+/*******************************************************************************
+* File:        /assets/js/admin.js
+* Created:     November 1, 2025
+* Author:      Rastislav Toscak
+*
+* Purpose:     Admin Panel Mobile Navigation
+*              Handles hamburger menu toggle for mobile responsive sidebar
+*
+* Project:     PASC Region J Conference 2026 Website
+*******************************************************************************/
 (function() {
     'use strict';
 
