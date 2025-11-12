@@ -14,7 +14,7 @@ Version: 1.0
     <!--- GET ANNOUNCEMENTS --->
     <!--- Returns all active announcements filtered by publish dates --->
     <!--- ================================================================== --->
-    <cffunction name="getAnnouncements" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getAnnouncements" access="remote" returntype="String" output="false" returnformat="json">
 
         <cfset var result = {}>
         <cfset var qAnnouncements = "">
@@ -73,7 +73,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 </cfcomponent>

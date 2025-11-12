@@ -1,100 +1,120 @@
 <!-- Hero Section -->
 <section class="page-hero">
-  <video class="hero-video hero-video-desktop" muted loop playsinline autoplay>
-    <source src="/assets/video/space-background.mp4" type="video/mp4">
-  </video>
+    <!-- Video Background - Desktop -->
+    <video #heroVideoDesktop id="galleryVideo" class="hero-video hero-video-desktop" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
 
-  <video class="hero-video hero-video-mobile" muted loop playsinline autoplay>
-    <source src="/assets/video/space-background.mp4" type="video/mp4">
-  </video>
+    <!-- Video Background - Mobile -->
+    <video #heroVideoMobile id="galleryVideoMobile" class="hero-video hero-video-mobile" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
 
-  <div class="container">
-    <h1 class="hero-title">Gallery</h1>
-    <p class="hero-subtitle">Memories from Past Conferences</p>
-  </div>
+    <div class="container">
+        <h1 class="hero-title" id="galleryTitle">Photo Gallery</h1>
+        <p class="hero-subtitle" id="gallerySubtitle">Conference Memories & Highlights</p>
+        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
+    </div>
 </section>
 
 <!-- Gallery Section -->
 <section class="gallery-section">
-  <div class="container">
-    @if (loading()) {
-      <div class="loading-spinner">
-        <div class="spinner"></div>
-        <p>Loading gallery...</p>
-      </div>
-    }
-
-    @if (error()) {
-      <div class="alert alert-error">
-        <p>{{ error() }}</p>
-      </div>
-    }
-
-    @if (!loading() && !error() && images().length === 0) {
-      <div class="no-images">
-        <p>No images available at this time.</p>
-      </div>
-    }
-
-    @if (!loading() && images().length > 0) {
-      <div class="gallery-grid">
-        @for (image of images(); track image.id; let i = $index) {
-          <div class="gallery-item" (click)="openLightbox(image, i)">
-            <img [src]="image.fullPath" [alt]="image.title" loading="lazy">
-            <div class="gallery-overlay">
-              <div class="gallery-title">{{ image.title }}</div>
+    <div class="container">
+        @if (loading()) {
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading gallery...</p>
             </div>
-          </div>
         }
-      </div>
 
-      <!-- Pagination -->
-      @if (getTotalPages() > 1) {
-        <div class="pagination">
-          <button
-            class="btn-page"
-            (click)="goToPage(currentPage() - 1)"
-            [disabled]="currentPage() === 1">
-            &laquo; Previous
-          </button>
+        @if (error()) {
+            <div class="alert alert-error">
+                <p>{{ error() }}</p>
+            </div>
+        }
 
-          @for (page of [].constructor(getTotalPages()); track page; let i = $index) {
-            <button
-              class="btn-page"
-              [class.active]="currentPage() === i + 1"
-              (click)="goToPage(i + 1)">
-              {{ i + 1 }}
-            </button>
-          }
+        @if (!loading() && !error() && images().length === 0) {
+            <!-- Empty Gallery State -->
+            <div class="gallery-empty">
+                <div class="gallery-empty-icon">📸</div>
+                <h2>No Photos Yet</h2>
+                <p>Gallery photos will be added soon. Check back later!</p>
+                <a routerLink="/home" class="btn btn-primary">Return Home</a>
+            </div>
+        }
 
-          <button
-            class="btn-page"
-            (click)="goToPage(currentPage() + 1)"
-            [disabled]="currentPage() === getTotalPages()">
-            Next &raquo;
-          </button>
-        </div>
-      }
-    }
-  </div>
+        @if (!loading() && images().length > 0) {
+            <!-- TOP PAGINATION CONTROLS -->
+            <div class="controls">
+                <div class="page-info">
+                    Page <span id="currentPage">{{ currentPage() }}</span> of <span id="totalPages">{{ getTotalPages() }}</span>
+                    (Photos <span id="startPhoto">{{ getStartPhoto() }}</span>-<span id="endPhoto">{{ getEndPhoto() }}</span> of <span id="totalPhotos">{{ totalImages() }}</span>)
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-button" id="firstButton" (click)="goToPage(1)" [disabled]="currentPage() === 1">⏮ First</button>
+                    <button class="nav-button" id="prevButton" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">◀ Previous</button>
+                    <input type="number"
+                           class="page-input"
+                           id="pageInput"
+                           [min]="1"
+                           [max]="getTotalPages()"
+                           [value]="currentPage()"
+                           (change)="handlePageInput($event)">
+                    <button class="nav-button" id="nextButton" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === getTotalPages()">Next ▶</button>
+                    <button class="nav-button" id="lastButton" (click)="goToPage(getTotalPages())" [disabled]="currentPage() === getTotalPages()">Last ⏭</button>
+                </div>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid">
+                @for (image of images(); track image.id; let i = $index) {
+                    <div class="gallery-item">
+                        <img [src]="image.fullPath"
+                             [alt]="image.title"
+                             (click)="openModal(i)"
+                             loading="lazy">
+                        <div class="info">
+                            <div class="date">{{ image.title }}</div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- BOTTOM PAGINATION CONTROLS (IDENTICAL TO TOP) -->
+            <div class="controls">
+                <div class="page-info">
+                    Page <span id="currentPageBottom">{{ currentPage() }}</span> of <span id="totalPagesBottom">{{ getTotalPages() }}</span>
+                    (Photos <span id="startPhotoBottom">{{ getStartPhoto() }}</span>-<span id="endPhotoBottom">{{ getEndPhoto() }}</span> of <span id="totalPhotosBottom">{{ totalImages() }}</span>)
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-button" id="firstButtonBottom" (click)="goToPage(1)" [disabled]="currentPage() === 1">⏮ First</button>
+                    <button class="nav-button" id="prevButtonBottom" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">◀ Previous</button>
+                    <input type="number"
+                           class="page-input"
+                           id="pageInputBottom"
+                           [min]="1"
+                           [max]="getTotalPages()"
+                           [value]="currentPage()"
+                           (change)="handlePageInput($event)">
+                    <button class="nav-button" id="nextButtonBottom" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === getTotalPages()">Next ▶</button>
+                    <button class="nav-button" id="lastButtonBottom" (click)="goToPage(getTotalPages())" [disabled]="currentPage() === getTotalPages()">Last ⏭</button>
+                </div>
+            </div>
+        }
+    </div>
 </section>
 
 <!-- Lightbox Modal -->
-@if (lightboxOpen() && lightboxImage()) {
-  <div class="lightbox-overlay" (click)="closeLightbox()">
-    <div class="lightbox-container" (click)="$event.stopPropagation()">
-      <button class="lightbox-close" (click)="closeLightbox()">&times;</button>
+@if (modalOpen()) {
+    <div id="imageModal" class="modal" (click)="closeModal()">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage" [src]="images()[modalIndex()]?.fullPath" (click)="$event.stopPropagation()">
 
-      @if (lightboxIndex() > 0) {
-        <button class="lightbox-prev" (click)="prevImage()">&lsaquo;</button>
-      }
+        <div class="modal-arrows">
+            <button class="arrow-left" id="prevModalBtn" (click)="previousModalImage($event)" [disabled]="modalIndex() === 0">◀</button>
+            <button class="arrow-right" id="nextModalBtn" (click)="nextModalImage($event)" [disabled]="modalIndex() === images().length - 1">▶</button>
+        </div>
 
-      @if (lightboxIndex() < images().length - 1) {
-        <button class="lightbox-next" (click)="nextImage()">&rsaquo;</button>
-      }
-
-      <img [src]="lightboxImage()?.fullPath" [alt]="lightboxImage()?.title">
-      <div class="lightbox-caption">{{ lightboxImage()?.title }}</div>
+        <div class="modal-info" id="modalInfo">Photo {{ modalIndex() + 1 }} of {{ images().length }}</div>
     </div>
-  </div>
 }

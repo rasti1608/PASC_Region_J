@@ -14,7 +14,8 @@ Version: 1.0
     <!--- GET CONFERENCE INFO --->
     <!--- Returns conference details from Application.cfc --->
     <!--- ================================================================== --->
-    <cffunction name="getConferenceInfo" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getConferenceInfo" access="remote" returntype="string" output="false">
+        <cfcontent type="application/json" reset="true">
 
         <cfset var result = {}>
 
@@ -51,7 +52,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 
@@ -62,7 +63,7 @@ Version: 1.0
          - pageName: name of the page (about, resources, etc.)
     --->
     <!--- ================================================================== --->
-    <cffunction name="getContent" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getContent" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="pageName" type="string" required="false" default="about">
 
         <cfset var result = {}>
@@ -163,7 +164,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 </cfcomponent>

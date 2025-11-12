@@ -17,7 +17,7 @@ Version: 1.0
          - location: page location filter (default: 'Workshops')
     --->
     <!--- ================================================================== --->
-    <cffunction name="getForms" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getForms" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="location" type="string" default="Workshops" required="false">
 
         <cfset var result = {}>
@@ -73,7 +73,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 </cfcomponent>

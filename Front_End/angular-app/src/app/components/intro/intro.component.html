@@ -1,0 +1,45 @@
+<div id="intro-splash">
+  <!-- Intro Video Backgrounds WITH AUDIO -->
+  <video #introVideoDesktop id="introVideoDesktop" class="intro-video intro-video-desktop" muted loop playsinline>
+    <source src="/assets/video/intro-space-background.mp4" type="video/mp4">
+  </video>
+
+  <video #introVideoMobile id="introVideoMobile" class="intro-video intro-video-mobile" muted loop playsinline>
+    <source src="/assets/video/intro-space-background_M.mp4" type="video/mp4">
+  </video>
+
+  <div class="stars" id="stars"></div>
+
+  <div class="planet-container">
+    <div class="orbit orbit-1">
+      <div class="planet planet-1">
+        <img src="/assets/img/orbit-planet-1.png" alt="Moon">
+      </div>
+    </div>
+    <div class="orbit orbit-2">
+      <div class="planet planet-2">
+        <img src="/assets/img/orbit-planet-2.png" alt="Earth">
+      </div>
+    </div>
+    <div class="orbit orbit-3">
+      <div class="planet planet-3">
+        <img src="/assets/img/orbit-planet-3.png" alt="Mars">
+      </div>
+    </div>
+    <div class="orbit orbit-4">
+      <div class="planet planet-4">
+        <img src="/assets/img/orbit-planet-4.png" alt="Saturn">
+      </div>
+    </div>
+    <div class="center-logo"></div>
+  </div>
+
+  <div class="intro-text">
+    <h1 class="intro-title">PASC REGION <span class="special-j">J</span></h1>
+    <p class="intro-subtitle">Reach for the Stars, Lead Beyond Limits</p>
+    <p class="intro-date">February 13, 2026</p>
+    <p class="intro-date" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">Hosted by Neshaminy High School</p>
+  </div>
+
+  <button class="skip-btn" (click)="onSkipClick()">Skip Intro →</button>
+</div>

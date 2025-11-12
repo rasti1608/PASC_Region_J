@@ -1,8 +1,10 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { ApiService } from '../../services/api.service';
+import { AudioService } from '../../services/audio.service';
 import { ContactSubmission } from '../../models/api-models';
 
 @Component({
@@ -12,8 +14,12 @@ import { ContactSubmission } from '../../models/api-models';
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.css'
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('heroVideoDesktop', { static: false }) heroVideoDesktop!: ElementRef<HTMLVideoElement>;
+  @ViewChild('heroVideoMobile', { static: false }) heroVideoMobile!: ElementRef<HTMLVideoElement>;
+
   private apiService = inject(ApiService);
+  private audioService = inject(AudioService);
   private fb = inject(FormBuilder);
 
   contactForm!: FormGroup;
@@ -29,8 +35,41 @@ export class ContactComponent implements OnInit {
     'Other'
   ];
 
+  private subscriptions: Subscription[] = [];
+
   ngOnInit() {
     this.initForm();
+    this.setupAudioSubscription();
+  }
+
+  ngAfterViewInit(): void {
+    this.controlVideoPlayback(this.audioService.isPlaying() && !this.audioService.isMuted());
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  private setupAudioSubscription(): void {
+    const playingSub = this.audioService.isPlaying$.subscribe(playing => {
+      this.controlVideoPlayback(playing && !this.audioService.isMuted());
+    });
+    const mutedSub = this.audioService.isMuted$.subscribe(muted => {
+      this.controlVideoPlayback(this.audioService.isPlaying() && !muted);
+    });
+    this.subscriptions.push(playingSub, mutedSub);
+  }
+
+  private controlVideoPlayback(shouldPlay: boolean): void {
+    [this.heroVideoDesktop, this.heroVideoMobile].forEach(videoRef => {
+      if (videoRef && videoRef.nativeElement) {
+        if (shouldPlay) {
+          videoRef.nativeElement.play().catch(() => {});
+        } else {
+          videoRef.nativeElement.pause();
+        }
+      }
+    });
   }
 
   private initForm() {

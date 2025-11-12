@@ -1,90 +1,149 @@
 <!-- Hero Section -->
 <section class="page-hero">
-  <video class="hero-video hero-video-desktop" muted loop playsinline autoplay>
-    <source src="/assets/video/space-background.mp4" type="video/mp4">
-  </video>
+    <!-- Video Background - Desktop -->
+    <video #heroVideoDesktop id="workshopsVideo" class="hero-video hero-video-desktop" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
 
-  <video class="hero-video hero-video-mobile" muted loop playsinline autoplay>
-    <source src="/assets/video/space-background.mp4" type="video/mp4">
-  </video>
+    <!-- Video Background - Mobile -->
+    <video #heroVideoMobile id="workshopsVideoMobile" class="hero-video hero-video-mobile" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
 
-  <div class="container">
-    <h1 class="hero-title">{{ pageContent()?.title || 'Workshop Applications' }}</h1>
-    <p class="hero-subtitle">{{ pageContent()?.subtitle || 'Apply to Lead a Workshop' }}</p>
-  </div>
+    <div class="container">
+        <h1 class="hero-title" id="workshopsTitle">Workshop Application</h1>
+        <p class="hero-subtitle" id="workshopsSubtitle">Share Your Leadership Expertise</p>
+        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
+    </div>
 </section>
 
-<!-- Workshops Content Section -->
-<section class="workshops-section">
-  <div class="container">
-    @if (pageContent()) {
-      <div class="workshops-intro">
-        <p class="lead">{{ pageContent()?.description }}</p>
+<!-- Workshop Info Section -->
+<section class="workshop-intro">
+    <div class="container">
+        <div class="intro-content">
+            <h2>Present at Our Conference</h2>
+            <p>We're looking for passionate leaders to share their knowledge and experience at the PASC Region J Conference 2026. Whether you're a student leader, advisor, or expert in student leadership, we want to hear from you!</p>
 
-        @if (pageContent()?.requirements && pageContent()?.requirements?.length) {
-          <div class="requirements-card">
-            <h3>Requirements</h3>
-            <ul>
-              @for (requirement of pageContent()?.requirements || []; track requirement) {
-                <li>{{ requirement }}</li>
-              }
-            </ul>
-          </div>
+            <div class="workshop-highlights">
+                <div class="highlight-item">
+                    <div class="highlight-icon">🎯</div>
+                    <h3>Share Your Expertise</h3>
+                    <p>Lead a workshop on topics that matter to student leaders and advisors.</p>
+                </div>
+
+                <div class="highlight-item">
+                    <div class="highlight-icon">🤝</div>
+                    <h3>Connect & Network</h3>
+                    <p>Meet fellow leaders and make lasting connections in the student council community.</p>
+                </div>
+
+                <div class="highlight-item">
+                    <div class="highlight-icon">🌟</div>
+                    <h3>Make an Impact</h3>
+                    <p>Help shape the next generation of student leaders across Region J.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Application Form Section -->
+<section class="form-section">
+    <div class="container">
+        @if (loading()) {
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading workshop forms...</p>
+            </div>
         }
-      </div>
-    }
 
-    @if (loading()) {
-      <div class="loading-spinner">
-        <div class="spinner"></div>
-        <p>Loading workshop forms...</p>
-      </div>
-    }
+        @if (error()) {
+            <div class="alert alert-error">
+                <p>{{ error() }}</p>
+            </div>
+        }
 
-    @if (error()) {
-      <div class="alert alert-error">
-        <p>{{ error() }}</p>
-      </div>
-    }
+        @if (!loading() && !error() && forms().length > 0) {
+            <div class="form-intro">
+                <h2>Conference Forms</h2>
+                <p class="form-description">Select a form below to begin your submission.</p>
+            </div>
 
-    @if (!loading() && !error() && forms().length === 0) {
-      <div class="no-forms">
-        <p>Workshop applications are not currently available. Please check back later!</p>
-      </div>
-    }
-
-    @if (!loading() && forms().length > 0) {
-      <div class="forms-accordion">
-        @for (form of forms(); track form.id; let i = $index) {
-          <div class="accordion-item">
-            <button
-              class="accordion-header"
-              [class.active]="activeFormIndex() === i"
-              (click)="toggleForm(i)">
-              <span>{{ form.formName }}</span>
-              <span class="accordion-icon">{{ activeFormIndex() === i ? '−' : '+' }}</span>
-            </button>
-
-            @if (activeFormIndex() === i) {
-              <div class="accordion-content">
-                @if (form.formDescription) {
-                  <p class="form-description">{{ form.formDescription }}</p>
+            <!-- Bootstrap Accordion for Multiple Forms -->
+            <div class="accordion" id="workshopFormsAccordion">
+                @for (form of forms(); track form.id; let i = $index) {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" [id]="'heading' + form.id">
+                            <button
+                                class="accordion-button"
+                                [class.collapsed]="activeFormIndex() !== i"
+                                type="button"
+                                [attr.data-target]="'#collapse' + form.id"
+                                [attr.aria-expanded]="activeFormIndex() === i"
+                                [attr.aria-controls]="'collapse' + form.id"
+                                (click)="toggleForm(i)">
+                                {{ form.formName }}
+                            </button>
+                        </h2>
+                        <div
+                            [id]="'collapse' + form.id"
+                            class="accordion-collapse collapse"
+                            [class.show]="activeFormIndex() === i"
+                            [attr.aria-labelledby]="'heading' + form.id"
+                            data-bs-parent="#workshopFormsAccordion">
+                            <div class="accordion-body">
+                                <div class="form-container" [innerHTML]="form.embedCode"></div>
+                            </div>
+                        </div>
+                    </div>
                 }
-                <div class="form-embed" [innerHTML]="form.embedCode"></div>
-              </div>
-            }
-          </div>
+            </div>
         }
-      </div>
-    }
-  </div>
+
+        @if (!loading() && !error() && forms().length === 0) {
+            <!-- Fallback if no form is active -->
+            <div class="no-form-message">
+                <div class="message-icon">📋</div>
+                <h2>Applications Opening Soon</h2>
+                <p>Workshop presenter applications are not currently open. Please check back soon or contact us for more information.</p>
+                <a routerLink="/home" class="btn btn-primary">Return Home</a>
+            </div>
+        }
+    </div>
 </section>
 
-<!-- Call to Action -->
+<!-- Workshop Guidelines Section -->
+<section class="guidelines-section">
+    <div class="container">
+        <h2>Workshop Guidelines</h2>
+
+        <div class="guidelines-grid">
+            <div class="guideline-card">
+                <h3>📚 Workshop Topics</h3>
+                <p>Leadership skills, team building, communication, civic engagement, project planning, creativity, and student council best practices.</p>
+            </div>
+
+            <div class="guideline-card">
+                <h3>⏱️ Session Length</h3>
+                <p>Workshops are 30 minutes. Plan your content to fit within this time frame for maximum engagement.</p>
+            </div>
+
+            <div class="guideline-card">
+                <h3>👥 Target Audience</h3>
+                <p>Workshops can be designed for students, advisors, or all attendees. We encourage interactive and engaging sessions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
 <section class="cta-section">
-  <div class="container">
-    <h2>Questions About Workshops?</h2>
-    <p>Contact us for more information</p>
-    <a routerLink="/contact" class="btn btn-primary">Contact Us</a>
-  </div>
+    <div class="container">
+        <h2>Questions About Presenting?</h2>
+        <p>We're here to help! Reach out if you have any questions about the application process.</p>
+        <div class="cta-buttons">
+            <a routerLink="/about" class="btn btn-primary">Learn More About PASC Region J</a>
+            <a routerLink="/home" class="btn btn-secondary">Return Home</a>
+        </div>
+    </div>
 </section>

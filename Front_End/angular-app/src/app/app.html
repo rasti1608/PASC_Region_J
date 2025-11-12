@@ -1,5 +1,11 @@
-<app-header></app-header>
-<main class="main-content">
+@if (showHeaderFooter()) {
+  <app-header></app-header>
+}
+
+<main class="main-content" [class.fullscreen]="!showHeaderFooter()">
   <router-outlet></router-outlet>
 </main>
-<app-footer></app-footer>
+
+@if (showHeaderFooter()) {
+  <app-footer></app-footer>
+}

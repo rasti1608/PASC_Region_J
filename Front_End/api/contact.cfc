@@ -22,7 +22,7 @@ Version: 1.0
          - website: honeypot field (must be empty)
     --->
     <!--- ================================================================== --->
-    <cffunction name="submitContact" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="submitContact" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="name" type="string" required="false" default="">
         <cfargument name="email" type="string" required="false" default="">
         <cfargument name="subject" type="string" required="false" default="">
@@ -40,7 +40,7 @@ Version: 1.0
                     "success" = true,
                     "message" = "Thank you for your message! We'll get back to you soon."
                 }>
-                <cfreturn result>
+                <cfreturn serializeJSON(result, false, false)>
             </cfif>
 
             <!--- SERVER-SIDE VALIDATION --->
@@ -92,7 +92,7 @@ Version: 1.0
                     "errors" = errors,
                     "message" = "Please correct the errors and try again."
                 }>
-                <cfreturn result>
+                <cfreturn serializeJSON(result, false, false)>
             </cfif>
 
             <!--- SAVE TO DATABASE --->
@@ -259,7 +259,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 
@@ -268,7 +268,8 @@ Version: 1.0
     <!--- Returns active email recipients for contact form notifications --->
     <!--- (Admin only - should be protected by authentication) --->
     <!--- ================================================================== --->
-    <cffunction name="getRecipients" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getRecipients" access="remote" returntype="string" output="false">
+        <cfcontent type="application/json" reset="true">
 
         <cfset var result = {}>
         <cfset var qRecipients = "">
@@ -317,7 +318,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 </cfcomponent>

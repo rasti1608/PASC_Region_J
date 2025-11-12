@@ -19,7 +19,7 @@ Version: 1.0
          - limit: images per page (default: 9)
     --->
     <!--- ================================================================== --->
-    <cffunction name="getImages" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getImages" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="location" type="string" default="gallery" required="false">
         <cfargument name="page" type="numeric" default="1" required="false">
         <cfargument name="limit" type="numeric" default="9" required="false">
@@ -85,7 +85,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 
@@ -97,7 +97,7 @@ Version: 1.0
          - location: 'gallery' or 'about_page' (default: 'gallery')
     --->
     <!--- ================================================================== --->
-    <cffunction name="getCount" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getCount" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="location" type="string" default="gallery" required="false">
 
         <cfset var result = {}>
@@ -131,7 +131,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 </cfcomponent>

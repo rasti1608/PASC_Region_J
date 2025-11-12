@@ -1,78 +1,187 @@
 <!-- Hero Section -->
 <section class="page-hero">
-  <video class="hero-video hero-video-desktop" muted loop playsinline autoplay>
-    <source src="/assets/video/resources-background.mp4" type="video/mp4">
-  </video>
+    <!-- Video Background - Desktop -->
+    <video #heroVideoDesktop id="resourcesVideo" class="hero-video hero-video-desktop" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
 
-  <video class="hero-video hero-video-mobile" muted loop playsinline autoplay>
-    <source src="/assets/video/resources-background.mp4" type="video/mp4">
-  </video>
+    <!-- Video Background - Mobile -->
+    <video #heroVideoMobile id="resourcesVideoMobile" class="hero-video hero-video-mobile" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
 
-  <div class="container">
-    <h1 class="hero-title">{{ pageContent()?.title || 'Resources' }}</h1>
-    <p class="hero-subtitle">{{ pageContent()?.subtitle || 'Downloads & Materials' }}</p>
-  </div>
-</section>
-
-<!-- Resources Content Section -->
-<section class="resources-section">
-  <div class="container">
-    @if (pageContent()) {
-      <div class="resources-intro">
-        <p class="lead">{{ pageContent()?.description }}</p>
-      </div>
-    }
-
-    @if (loading()) {
-      <div class="loading-spinner">
-        <div class="spinner"></div>
-        <p>Loading resources...</p>
-      </div>
-    }
-
-    @if (error()) {
-      <div class="alert alert-error">
-        <p>{{ error() }}</p>
-      </div>
-    }
-
-    @if (!loading() && !error() && documents().length === 0) {
-      <div class="no-documents">
-        <p>No resources available at this time. Check back soon!</p>
-      </div>
-    }
-
-    @if (!loading() && documents().length > 0) {
-      <div class="documents-grid">
-        @for (doc of documents(); track doc.id) {
-          <a [href]="doc.downloadPath" target="_blank" class="document-card" download>
-            <div class="document-icon">
-              {{ getFileIconClass(doc.fileIcon) }}
-            </div>
-            <div class="document-info">
-              <h3>{{ doc.title }}</h3>
-              <p class="document-description">{{ doc.description }}</p>
-              <div class="document-meta">
-                <span class="document-type">{{ doc.documentType || 'Document' }}</span>
-                <span class="document-size">{{ doc.fileSizeFormatted }}</span>
-              </div>
-            </div>
-            <div class="download-icon">⬇️</div>
-          </a>
-        }
-      </div>
-    }
-  </div>
-</section>
-
-<!-- Call to Action -->
-<section class="cta-section">
-  <div class="container">
-    <h2>Need More Information?</h2>
-    <p>Contact us if you have questions about the conference or resources</p>
-    <div class="cta-buttons">
-      <a routerLink="/contact" class="btn btn-primary">Contact Us</a>
-      <a routerLink="/about" class="btn btn-secondary">About PASC</a>
+    <div class="container">
+        <h1 class="hero-title" id="resourcesTitle">Resources</h1>
+        <p class="hero-subtitle" id="resourcesSubtitle">Conference Materials & Media</p>
+        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
     </div>
-  </div>
+</section>
+
+<!-- Conference Anthem Section with Cinema Effect -->
+<div class="cinema-theater-wrapper">
+    <!-- Static Space Background (Theater Ambiance) -->
+    <video class="cinema-space-bg" muted loop playsinline autoplay>
+        <source src="/assets/video/intro-space-background.mp4" type="video/mp4">
+    </video>
+
+    <!-- Dark Vignette (Theater Edges) -->
+    <div class="cinema-vignette"></div>
+
+    <section class="anthem-section">
+        <!-- Section Background Video -->
+        <video #anthemSectionVideo id="anthemSectionVideo" class="anthem-section-video" muted loop playsinline>
+            <source src="/assets/video/resources-background.mp4" type="video/mp4">
+        </video>
+
+        <div class="container">
+            <!-- Cinema Screen Frame -->
+            <div class="cinema-screen-frame">
+                <div class="anthem-featured">
+                    <!-- Singer Background Video - Covers Entire Section -->
+                    <video #anthemPlayerVideo id="anthemPlayerVideo" class="anthem-player-video" muted loop playsinline>
+                        <source src="/assets/video/conference-anthem-background.mp4" type="video/mp4">
+                    </video>
+
+                    <div class="anthem-header">
+                        <h2>Conference Anthem</h2>
+                        <div class="anthem-info">
+                            <h3 class="song-title">One Orbit</h3>
+                            <p class="song-artist">by IronRUST</p>
+                            <p class="song-description">Official theme song for PASC Region J Conference 2026: Reach for the stars, lead beyond limits!</p>
+                        </div>
+                    </div>
+
+                    <!-- Audio Player -->
+                    <div class="custom-audio-player">
+                        <audio #anthemAudio id="anthemAudio" preload="metadata" loop>
+                            <source src="/assets/audio/one-orbit-anthem.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+
+                        <div class="player-controls">
+                            <button #playPauseBtn id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause" (click)="toggleAnthemPlayback()">
+                                <svg class="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" [style.display]="isAnthemPlaying() ? 'none' : 'block'">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                                <svg class="pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" [style.display]="isAnthemPlaying() ? 'block' : 'none'">
+                                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                                </svg>
+                            </button>
+
+                            <div class="player-info">
+                                <div class="progress-container">
+                                    <div class="progress-bar" #progressBar id="progressBar" (click)="seekAnthemAudio($event)">
+                                        <div class="progress-fill" id="progressFill" [style.width.%]="anthemProgress()"></div>
+                                    </div>
+                                </div>
+                                <div class="time-display">
+                                    <span id="currentTime">{{ formatTime(anthemCurrentTime()) }}</span>
+                                    <span class="time-separator">/</span>
+                                    <span id="duration">{{ formatTime(anthemDuration()) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Download Button -->
+                    <div class="anthem-download">
+                        <a href="/assets/audio/one-orbit-anthem-full.mp3" download="one-orbit-anthem-full.mp3" class="btn btn-download">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download MP3
+                        </a>
+                        <a href="/assets/audio/instrumental_background.mp3" download="instrumental_background.mp3" class="btn btn-download btn-secondary-download">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download Background Music (Instrumental)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Document Library Section -->
+<section class="documents-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Resource Library</h2>
+            <p class="section-description">Browse and download conference materials, guides, and resources</p>
+        </div>
+
+        @if (loading()) {
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading resources...</p>
+            </div>
+        }
+
+        @if (error()) {
+            <div class="alert alert-error">
+                <p>{{ error() }}</p>
+            </div>
+        }
+
+        @if (!loading() && !error() && documents().length > 0) {
+            <div class="documents-grid">
+                @for (doc of documents(); track doc.id) {
+                    <div class="document-card">
+                        <!-- File Type Icon -->
+                        <div class="document-icon">
+                            @if (doc.fileExtension === '.pdf') {
+                                <span class="icon-pdf">📄</span>
+                            } @else if (doc.fileExtension === '.doc' || doc.fileExtension === '.docx') {
+                                <span class="icon-word">📘</span>
+                            } @else if (doc.fileExtension === '.xls' || doc.fileExtension === '.xlsx') {
+                                <span class="icon-excel">📊</span>
+                            } @else if (doc.fileExtension === '.ppt' || doc.fileExtension === '.pptx') {
+                                <span class="icon-powerpoint">📙</span>
+                            } @else {
+                                <span class="icon-generic">📃</span>
+                            }
+                        </div>
+
+                        <!-- Document Title -->
+                        <h3 class="document-title">{{ doc.title }}</h3>
+
+                        <!-- Description (if exists) -->
+                        @if (doc.description) {
+                            <p class="document-description">{{ doc.description }}</p>
+                        }
+
+                        <!-- Category Badge (if exists) -->
+                        @if (doc.documentType) {
+                            <span class="document-badge">{{ doc.documentType }}</span>
+                        }
+
+                        <!-- File Size -->
+                        <p class="document-size">{{ doc.fileSizeFormatted }}</p>
+
+                        <!-- Download Button -->
+                        <a [href]="doc.downloadPath" [download]="doc.originalFilename" class="btn btn-download-doc">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (!loading() && !error() && documents().length === 0) {
+            <div class="no-documents">
+                <p>No resources available yet. Check back soon!</p>
+            </div>
+        }
+    </div>
 </section>

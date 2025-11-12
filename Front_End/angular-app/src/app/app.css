@@ -1,0 +1,9 @@
+.main-content {
+  min-height: calc(100vh - 200px);
+}
+
+.main-content.fullscreen {
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}

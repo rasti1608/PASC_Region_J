@@ -1,8 +1,8 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api.service';
-import { PageContent, GalleryImage } from '../../models/api-models';
+import { Subscription } from 'rxjs';
+import { AudioService } from '../../services/audio.service';
 
 @Component({
   selector: 'app-about',
@@ -11,46 +11,68 @@ import { PageContent, GalleryImage } from '../../models/api-models';
   templateUrl: './about.component.html',
   styleUrl: './about.component.css'
 })
-export class AboutComponent implements OnInit {
-  private apiService = inject(ApiService);
+export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('heroVideoDesktop', { static: false }) heroVideoDesktop!: ElementRef<HTMLVideoElement>;
+  @ViewChild('heroVideoMobile', { static: false }) heroVideoMobile!: ElementRef<HTMLVideoElement>;
 
-  pageContent = signal<PageContent | null>(null);
-  galleryImages = signal<GalleryImage[]>([]);
-  loading = signal(true);
-  error = signal<string | null>(null);
+  private subscriptions: Subscription[] = [];
 
-  ngOnInit() {
-    this.loadPageContent();
-    this.loadGalleryImages();
+  constructor(private audioService: AudioService) {}
+
+  ngOnInit(): void {
+    this.setupAudioSubscription();
   }
 
-  private loadPageContent() {
-    this.apiService.getPageContent('about').subscribe({
-      next: (response) => {
-        if (response.success && response.data) {
-          this.pageContent.set(response.data);
-        }
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('Error loading page content:', err);
-        this.error.set('Failed to load page content');
-        this.loading.set(false);
-      }
-    });
+  ngAfterViewInit(): void {
+    // Initial video control based on current audio state
+    this.controlVideoPlayback(this.audioService.isPlaying() && !this.audioService.isMuted());
   }
 
-  private loadGalleryImages() {
-    // Load top 3 images for about page
-    this.apiService.getGalleryImages('about_page', 1, 3).subscribe({
-      next: (response) => {
-        if (response.success && response.data) {
-          this.galleryImages.set(response.data);
-        }
-      },
-      error: (err) => {
-        console.error('Error loading gallery images:', err);
-      }
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  /**
+   * Set up subscription to audio service to control video playback
+   */
+  private setupAudioSubscription(): void {
+    // Subscribe to both playing and muted states
+    const playingSub = this.audioService.isPlaying$.subscribe(playing => {
+      const isMuted = this.audioService.isMuted();
+      this.controlVideoPlayback(playing && !isMuted);
     });
+
+    const mutedSub = this.audioService.isMuted$.subscribe(muted => {
+      const isPlaying = this.audioService.isPlaying();
+      this.controlVideoPlayback(isPlaying && !muted);
+    });
+
+    this.subscriptions.push(playingSub, mutedSub);
+  }
+
+  /**
+   * Control hero video playback
+   */
+  private controlVideoPlayback(shouldPlay: boolean): void {
+    if (this.heroVideoDesktop && this.heroVideoDesktop.nativeElement) {
+      if (shouldPlay) {
+        this.heroVideoDesktop.nativeElement.play().catch(err => {
+          console.log('Video autoplay prevented:', err);
+        });
+      } else {
+        this.heroVideoDesktop.nativeElement.pause();
+      }
+    }
+
+    if (this.heroVideoMobile && this.heroVideoMobile.nativeElement) {
+      if (shouldPlay) {
+        this.heroVideoMobile.nativeElement.play().catch(err => {
+          console.log('Video autoplay prevented:', err);
+        });
+      } else {
+        this.heroVideoMobile.nativeElement.pause();
+      }
+    }
   }
 }

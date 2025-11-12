@@ -14,7 +14,7 @@ Version: 1.0
     <!--- GET DOCUMENTS --->
     <!--- Returns all active documents/resources --->
     <!--- ================================================================== --->
-    <cffunction name="getDocuments" access="remote" returnformat="json" returntype="any" output="false">
+    <cffunction name="getDocuments" access="remote" returntype="String" output="false" returnformat="json">
 
         <cfset var result = {}>
         <cfset var qDocuments = "">
@@ -106,7 +106,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn result>
+        <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
 </cfcomponent>
