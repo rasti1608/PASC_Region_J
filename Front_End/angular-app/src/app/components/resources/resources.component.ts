@@ -44,7 +44,7 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.controlVideoPlayback(this.audioService.isPlaying() && !this.audioService.isMuted());
+    this.controlVideoPlayback(this.audioService.isPlaying());
     this.setupAnthemPlayerListeners();
   }
 
@@ -58,12 +58,9 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setupAudioSubscription(): void {
     const playingSub = this.audioService.isPlaying$.subscribe(playing => {
-      this.controlVideoPlayback(playing && !this.audioService.isMuted());
+      this.controlVideoPlayback(playing);
     });
-    const mutedSub = this.audioService.isMuted$.subscribe(muted => {
-      this.controlVideoPlayback(this.audioService.isPlaying() && !muted);
-    });
-    this.subscriptions.push(playingSub, mutedSub);
+    this.subscriptions.push(playingSub);
   }
 
   private controlVideoPlayback(shouldPlay: boolean): void {

@@ -25,8 +25,11 @@
               }
             ],
             "styles": [
+              "src/assets/css/bootstrap.min.css",
               "src/styles.css",
               "src/assets/css/style.css",
+              "src/assets/css/mobile-menu.css",
+              "src/assets/css/workshops-accordion.css",
               "src/assets/css/animations.css",
               "src/assets/css/anthem-player.css",
               "src/assets/css/intro-splash.css",
@@ -92,8 +95,11 @@
               }
             ],
             "styles": [
+              "src/assets/css/bootstrap.min.css",
               "src/styles.css",
               "src/assets/css/style.css",
+              "src/assets/css/mobile-menu.css",
+              "src/assets/css/workshops-accordion.css",
               "src/assets/css/animations.css",
               "src/assets/css/anthem-player.css",
               "src/assets/css/intro-splash.css",

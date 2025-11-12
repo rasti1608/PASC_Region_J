@@ -25,7 +25,7 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     // Initial video control based on current audio state
-    this.controlVideoPlayback(this.audioService.isPlaying() && !this.audioService.isMuted());
+    this.controlVideoPlayback(this.audioService.isPlaying());
   }
 
   ngOnDestroy(): void {
@@ -37,18 +37,12 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
    * Set up subscription to audio service to control video playback
    */
   private setupAudioSubscription(): void {
-    // Subscribe to both playing and muted states
+    // Subscribe to playing state only (mute state doesn't affect video)
     const playingSub = this.audioService.isPlaying$.subscribe(playing => {
-      const isMuted = this.audioService.isMuted();
-      this.controlVideoPlayback(playing && !isMuted);
+      this.controlVideoPlayback(playing);
     });
 
-    const mutedSub = this.audioService.isMuted$.subscribe(muted => {
-      const isPlaying = this.audioService.isPlaying();
-      this.controlVideoPlayback(isPlaying && !muted);
-    });
-
-    this.subscriptions.push(playingSub, mutedSub);
+    this.subscriptions.push(playingSub);
   }
 
   /**

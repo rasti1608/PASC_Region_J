@@ -1,22 +1,25 @@
 <!-- Hero Section -->
-<section class="page-hero">
+<section class="hero">
   <!-- Video Background - Desktop -->
-  <video #heroVideoDesktop class="hero-video hero-video-desktop" muted loop playsinline>
-    <source src="/assets/video/intro-space-background.mp4" type="video/mp4">
+  <video #heroVideoDesktop id="heroVideo" class="hero-video hero-video-desktop" muted loop playsinline>
+    <source src="/assets/video/space-background.mp4" type="video/mp4">
   </video>
 
   <!-- Video Background - Mobile -->
-  <video #heroVideoMobile class="hero-video hero-video-mobile" muted loop playsinline>
-    <source src="/assets/video/intro-space-background_M.mp4" type="video/mp4">
+  <video #heroVideoMobile id="heroVideoMobile" class="hero-video hero-video-mobile" muted loop playsinline>
+    <source src="/assets/video/space-background_M.mp4" type="video/mp4">
   </video>
 
-  <div class="container">
-    <h1 class="hero-title">PASC Region J Conference 2026</h1>
-    <p class="hero-subtitle">Reach for the Stars</p>
-    <p class="hero-date">February 13, 2026 | Neshaminy High School</p>
-    <div class="hero-buttons">
-      <a routerLink="/workshops" class="btn btn-primary">Apply for Workshops</a>
-      <a routerLink="/about" class="btn btn-secondary">Learn More</a>
+  <div class="hero-content">
+    <div class="stars-background"></div>
+    <div class="hero-text">
+      <h1 class="hero-title" id="heroTitle">PASC REGION J CONFERENCE 2026</h1>
+      <p class="hero-subtitle" id="heroSubtitle">Reach for the Stars, Lead Beyond Limits - February 13, 2026</p>
+
+      <div class="hero-buttons">
+        <a routerLink="/workshops" class="btn btn-primary">Register Now</a>
+        <a routerLink="/about" class="btn btn-secondary">Learn More</a>
+      </div>
     </div>
   </div>
 </section>
@@ -40,9 +43,7 @@
     }
 
     @if (!loading() && !error() && announcements().length === 0) {
-      <div class="no-announcements">
-        <p>No announcements at this time. Check back soon!</p>
-      </div>
+      <p class="no-announcements">No announcements at this time. Check back soon!</p>
     }
 
     @if (!loading() && announcements().length > 0) {
@@ -50,13 +51,11 @@
         @for (announcement of announcements(); track announcement.id) {
           <div class="announcement-card" [class.featured]="announcement.isFeatured">
             @if (announcement.isFeatured) {
-              <div class="featured-badge">Featured</div>
+              <span class="featured-badge">⭐ Featured</span>
             }
             <h3>{{ announcement.title }}</h3>
-            <div class="announcement-content" [innerHTML]="announcement.content"></div>
-            <div class="announcement-date">
-              Posted: {{ announcement.publishStart }}
-            </div>
+            <p>{{ announcement.content }}</p>
+            <span class="announcement-date">{{ announcement.publishStart }}</span>
           </div>
         }
       </div>
@@ -64,36 +63,45 @@
   </div>
 </section>
 
-<!-- Quick Links Section -->
-<section class="quick-links-section">
+<!-- Quick Info Section -->
+<section class="quick-info">
   <div class="container">
-    <h2 class="section-title">Quick Links</h2>
-    <div class="quick-links-grid">
-      <a routerLink="/about" class="quick-link-card">
-        <div class="icon">📚</div>
-        <h3>About</h3>
-        <p>Learn about PASC Region J</p>
-      </a>
-      <a routerLink="/workshops" class="quick-link-card">
-        <div class="icon">🎓</div>
-        <h3>Workshops</h3>
-        <p>Apply to lead a workshop</p>
-      </a>
-      <a routerLink="/gallery" class="quick-link-card">
-        <div class="icon">📸</div>
-        <h3>Gallery</h3>
-        <p>View conference photos</p>
-      </a>
-      <a routerLink="/resources" class="quick-link-card">
-        <div class="icon">📥</div>
-        <h3>Resources</h3>
-        <p>Download materials</p>
-      </a>
-      <a routerLink="/contact" class="quick-link-card">
-        <div class="icon">📧</div>
-        <h3>Contact</h3>
-        <p>Get in touch with us</p>
-      </a>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">📆</div>
+        <h3>Event Date</h3>
+        <p>February 13, 2026</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">🎓</div>
+        <h3>Who Can Attend</h3>
+        <p>Student Council Members within Region J</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">🚀</div>
+        <h3>Theme</h3>
+        <p>Navigating the Stars</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">📋</div>
+        <h3>Registration</h3>
+        <p>January 5-23, 2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to Reach for the Stars, Lead Beyond Limits?</h2>
+    <p>Join us for an inspiring day of leadership, workshops, and networking!</p>
+    <div class="cta-buttons">
+      <a routerLink="/workshops" class="btn btn-large btn-primary">Register for the Conference</a>
+      <a routerLink="/workshops" class="btn btn-large btn-outline">Apply to Present a Workshop</a>
     </div>
   </div>
 </section>

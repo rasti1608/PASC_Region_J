@@ -33,16 +33,16 @@ import { Subscription } from 'rxjs';
           <li><a routerLink="/resources" routerLinkActive="active" (click)="closeMobileMenu()">Resources</a></li>
         </ul>
 
-        <!-- Mute Toggle Button -->
+        <!-- Play/Pause Toggle Button -->
         <button
           class="mute-toggle-btn"
           id="muteToggleBtn"
-          (click)="toggleMute()"
-          title="Mute/Unmute"
+          (click)="togglePlayback()"
+          title="Play/Pause Music"
           [class.playing]="isPlaying()"
-          [class.muted]="isMuted()">
-          <span class="mute-icon" id="muteIcon">{{ isMuted() ? '&#128263;' : '&#128266;' }}</span>
-          <span class="mute-label" id="muteLabel">{{ isPlaying() ? 'MUTE' : 'UNMUTE' }}</span>
+          [class.muted]="!isPlaying()">
+          <span class="mute-icon" id="muteIcon">{{ isPlaying() ? '&#128266;' : '&#128263;' }}</span>
+          <span class="mute-label" id="muteLabel">{{ isPlaying() ? 'PAUSE' : 'PLAY' }}</span>
         </button>
 
         <!-- Mobile menu toggle button -->
@@ -94,7 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.mobileMenuOpen.set(false);
   }
 
-  toggleMute() {
-    this.audioService.toggleMute();
+  togglePlayback() {
+    this.audioService.toggle();
   }
 }

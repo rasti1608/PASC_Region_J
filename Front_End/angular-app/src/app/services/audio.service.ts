@@ -50,10 +50,15 @@ export class AudioService {
     this.audio.muted = musicMuted;
     this.isMutedSubject.next(musicMuted);
 
-    // Restore playing state (but don't auto-play, wait for user interaction)
+    // Restore playing state and auto-resume playback
     if (anthemPlaying) {
-      // Mark as "should be playing" but actual play() will happen on user interaction
-      this.isPlayingSubject.next(true);
+      this.audio.play().then(() => {
+        this.isPlayingSubject.next(true);
+      }).catch(err => {
+        // Autoplay prevented - mark as should be playing but paused
+        console.log('Audio autoplay prevented:', err);
+        this.isPlayingSubject.next(false);
+      });
     }
   }
 
