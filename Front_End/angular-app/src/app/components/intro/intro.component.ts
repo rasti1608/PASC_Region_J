@@ -86,6 +86,19 @@ export class IntroComponent implements OnInit, AfterViewInit, OnDestroy {
       clearTimeout(this.introTimeout);
     }
 
+    // Stop intro video audio BEFORE navigating
+    const desktopVideo = this.introVideoDesktop?.nativeElement;
+    const mobileVideo = this.introVideoMobile?.nativeElement;
+
+    if (desktopVideo) {
+      desktopVideo.pause();
+      desktopVideo.muted = true;
+    }
+    if (mobileVideo) {
+      mobileVideo.pause();
+      mobileVideo.muted = true;
+    }
+
     // Mark intro as seen
     sessionStorage.setItem('introSeen', 'true');
 

@@ -33,16 +33,16 @@ import { Subscription } from 'rxjs';
           <li><a routerLink="/resources" routerLinkActive="active" (click)="closeMobileMenu()">Resources</a></li>
         </ul>
 
-        <!-- Play/Pause Toggle Button -->
+        <!-- Mute Toggle Button -->
         <button
           class="mute-toggle-btn"
           id="muteToggleBtn"
           (click)="togglePlayback()"
-          title="Play/Pause Music"
+          title="Mute/Unmute"
           [class.playing]="isPlaying()"
           [class.muted]="!isPlaying()">
           <span class="mute-icon" id="muteIcon">{{ isPlaying() ? '&#128266;' : '&#128263;' }}</span>
-          <span class="mute-label" id="muteLabel">{{ isPlaying() ? 'PAUSE' : 'PLAY' }}</span>
+          <span class="mute-label" id="muteLabel">{{ isPlaying() ? 'MUTE' : 'UNMUTE' }}</span>
         </button>
 
         <!-- Mobile menu toggle button -->
