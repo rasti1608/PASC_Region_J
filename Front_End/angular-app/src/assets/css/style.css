@@ -1402,3 +1402,94 @@ a:hover {
 .mb-lg { margin-bottom: var(--spacing-lg); }
 
 .hidden { display: none; }
+
+/* ===========================
+   REUSABLE COMPONENT CLASSES
+   (Consolidated from inline styles)
+   =========================== */
+
+/* Hero Subtitle Accent */
+.hero-subtitle-accent {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #FFB300;
+}
+
+/* Primary Links */
+.link-primary {
+    color: #4fc3f7;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.link-primary:hover {
+    color: #29b6f6;
+    text-decoration: underline;
+}
+
+/* Info Box Blue */
+.info-box-blue {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.info-box-blue h3 {
+    color: #1976d2;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.info-box-blue p {
+    color: #333;
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.info-box-blue ul {
+    color: #333;
+    margin-left: 20px;
+}
+
+/* Warning Card */
+.warning-card {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.warning-card h3 {
+    color: #ff6f00;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.warning-card p {
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+/* Success Box */
+.success-box {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    color: #155724;
+}
+
+/* Error Box */
+.error-box {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    color: #721c24;
+}
