@@ -1,0 +1,13 @@
+{
+  "/api": {
+    "target": "http://localhost",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/assets": {
+    "target": "http://localhost",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

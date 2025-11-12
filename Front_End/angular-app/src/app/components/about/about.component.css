@@ -1,0 +1,99 @@
+/* About Component Styles */
+
+.mission-statement {
+  text-align: center;
+  margin: 40px auto;
+  max-width: 800px;
+}
+
+.mission-statement .lead {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #e0e0e0;
+}
+
+.content-sections {
+  display: grid;
+  gap: 30px;
+  margin: 40px 0;
+}
+
+.content-card {
+  background: rgba(26, 31, 58, 0.6);
+  padding: 30px;
+  border-radius: 10px;
+  border-left: 4px solid #4fc3f7;
+}
+
+.content-card h2 {
+  color: #4fc3f7;
+  margin-bottom: 15px;
+}
+
+.about-gallery {
+  margin: 60px 0;
+}
+
+.about-gallery h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  color: #fff;
+  padding: 20px 15px 10px;
+  font-size: 0.9rem;
+}
+
+.cta-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(26, 31, 58, 0.8) 100%);
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #b0b0b0;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

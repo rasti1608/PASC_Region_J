@@ -1,0 +1,99 @@
+<!-- Hero Section -->
+<section class="page-hero">
+  <!-- Video Background - Desktop -->
+  <video class="hero-video hero-video-desktop" muted loop playsinline autoplay>
+    <source src="/assets/video/intro-space-background.mp4" type="video/mp4">
+  </video>
+
+  <!-- Video Background - Mobile -->
+  <video class="hero-video hero-video-mobile" muted loop playsinline autoplay>
+    <source src="/assets/video/intro-space-background_M.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <h1 class="hero-title">PASC Region J Conference 2026</h1>
+    <p class="hero-subtitle">Reach for the Stars</p>
+    <p class="hero-date">February 13, 2026 | Neshaminy High School</p>
+    <div class="hero-buttons">
+      <a routerLink="/workshops" class="btn btn-primary">Apply for Workshops</a>
+      <a routerLink="/about" class="btn btn-secondary">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- Announcements Section -->
+<section class="announcements-section">
+  <div class="container">
+    <h2 class="section-title">Latest Announcements</h2>
+
+    @if (loading()) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading announcements...</p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="alert alert-error">
+        <p>{{ error() }}</p>
+      </div>
+    }
+
+    @if (!loading() && !error() && announcements().length === 0) {
+      <div class="no-announcements">
+        <p>No announcements at this time. Check back soon!</p>
+      </div>
+    }
+
+    @if (!loading() && announcements().length > 0) {
+      <div class="announcements-grid">
+        @for (announcement of announcements(); track announcement.id) {
+          <div class="announcement-card" [class.featured]="announcement.isFeatured">
+            @if (announcement.isFeatured) {
+              <div class="featured-badge">Featured</div>
+            }
+            <h3>{{ announcement.title }}</h3>
+            <div class="announcement-content" [innerHTML]="announcement.content"></div>
+            <div class="announcement-date">
+              Posted: {{ announcement.publishStart }}
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="quick-links-section">
+  <div class="container">
+    <h2 class="section-title">Quick Links</h2>
+    <div class="quick-links-grid">
+      <a routerLink="/about" class="quick-link-card">
+        <div class="icon">📚</div>
+        <h3>About</h3>
+        <p>Learn about PASC Region J</p>
+      </a>
+      <a routerLink="/workshops" class="quick-link-card">
+        <div class="icon">🎓</div>
+        <h3>Workshops</h3>
+        <p>Apply to lead a workshop</p>
+      </a>
+      <a routerLink="/gallery" class="quick-link-card">
+        <div class="icon">📸</div>
+        <h3>Gallery</h3>
+        <p>View conference photos</p>
+      </a>
+      <a routerLink="/resources" class="quick-link-card">
+        <div class="icon">📥</div>
+        <h3>Resources</h3>
+        <p>Download materials</p>
+      </a>
+      <a routerLink="/contact" class="quick-link-card">
+        <div class="icon">📧</div>
+        <h3>Contact</h3>
+        <p>Get in touch with us</p>
+      </a>
+    </div>
+  </div>
+</section>

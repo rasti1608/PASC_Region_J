@@ -1,0 +1,134 @@
+/* Resources Component Styles */
+
+.resources-intro {
+  margin: 40px auto;
+  max-width: 800px;
+  text-align: center;
+}
+
+.resources-intro .lead {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #e0e0e0;
+}
+
+.no-documents {
+  text-align: center;
+  padding: 60px 20px;
+  color: #aaa;
+}
+
+/* Documents Grid */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+  margin: 40px 0;
+}
+
+.document-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(26, 31, 58, 0.6);
+  padding: 25px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.document-card:hover {
+  background: rgba(26, 31, 58, 0.8);
+  border-color: #4fc3f7;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(79, 195, 247, 0.3);
+}
+
+.document-icon {
+  font-size: 3rem;
+  flex-shrink: 0;
+}
+
+.document-info {
+  flex: 1;
+}
+
+.document-info h3 {
+  color: #fff;
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.document-description {
+  color: #b0b0b0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 10px 0;
+}
+
+.document-meta {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.document-type,
+.document-size {
+  font-size: 0.85rem;
+  color: #4fc3f7;
+  background: rgba(79, 195, 247, 0.1);
+  padding: 4px 12px;
+  border-radius: 15px;
+}
+
+.download-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.document-card:hover .download-icon {
+  opacity: 1;
+}
+
+.cta-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(26, 31, 58, 0.8) 100%);
+}
+
+.cta-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+}
+
+.cta-section p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: #b0b0b0;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .documents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .document-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .download-icon {
+    order: -1;
+  }
+}

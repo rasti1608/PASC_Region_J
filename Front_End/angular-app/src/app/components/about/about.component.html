@@ -1,0 +1,81 @@
+<!-- Hero Section -->
+<section class="page-hero">
+  <video class="hero-video hero-video-desktop" muted loop playsinline autoplay>
+    <source src="/assets/video/space-background.mp4" type="video/mp4">
+  </video>
+
+  <video class="hero-video hero-video-mobile" muted loop playsinline autoplay>
+    <source src="/assets/video/space-background.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <h1 class="hero-title">{{ pageContent()?.title || 'About Us' }}</h1>
+    <p class="hero-subtitle">{{ pageContent()?.subtitle || 'Learn More About PASC Region J' }}</p>
+  </div>
+</section>
+
+<!-- About Content Section -->
+<section class="about-content-section">
+  <div class="container">
+    @if (loading()) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading content...</p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="alert alert-error">
+        <p>{{ error() }}</p>
+      </div>
+    }
+
+    @if (!loading() && pageContent()) {
+      <!-- Mission Statement -->
+      @if (pageContent()?.mission) {
+        <div class="mission-statement">
+          <p class="lead">{{ pageContent()?.mission }}</p>
+        </div>
+      }
+
+      <!-- Content Sections -->
+      @if (pageContent()?.sections && pageContent()?.sections?.length) {
+        <div class="content-sections">
+          @for (section of pageContent()?.sections || []; track section.title) {
+            <div class="content-card">
+              <h2>{{ section.title }}</h2>
+              <p>{{ section.content }}</p>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Gallery Images -->
+      @if (galleryImages().length > 0) {
+        <div class="about-gallery">
+          <h2>What We Do</h2>
+          <div class="gallery-grid">
+            @for (image of galleryImages(); track image.id) {
+              <div class="gallery-item">
+                <img [src]="image.fullPath" [alt]="image.title" loading="lazy">
+                <div class="gallery-caption">{{ image.title }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to Get Involved?</h2>
+    <p>Join us at the PASC Region J Conference 2026</p>
+    <div class="cta-buttons">
+      <a routerLink="/workshops" class="btn btn-primary">Apply for Workshops</a>
+      <a routerLink="/contact" class="btn btn-secondary">Contact Us</a>
+    </div>
+  </div>
+</section>

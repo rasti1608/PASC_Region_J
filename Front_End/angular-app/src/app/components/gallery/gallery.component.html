@@ -1,0 +1,100 @@
+<!-- Hero Section -->
+<section class="page-hero">
+  <video class="hero-video hero-video-desktop" muted loop playsinline autoplay>
+    <source src="/assets/video/space-background.mp4" type="video/mp4">
+  </video>
+
+  <video class="hero-video hero-video-mobile" muted loop playsinline autoplay>
+    <source src="/assets/video/space-background.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <h1 class="hero-title">Gallery</h1>
+    <p class="hero-subtitle">Memories from Past Conferences</p>
+  </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="gallery-section">
+  <div class="container">
+    @if (loading()) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading gallery...</p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="alert alert-error">
+        <p>{{ error() }}</p>
+      </div>
+    }
+
+    @if (!loading() && !error() && images().length === 0) {
+      <div class="no-images">
+        <p>No images available at this time.</p>
+      </div>
+    }
+
+    @if (!loading() && images().length > 0) {
+      <div class="gallery-grid">
+        @for (image of images(); track image.id; let i = $index) {
+          <div class="gallery-item" (click)="openLightbox(image, i)">
+            <img [src]="image.fullPath" [alt]="image.title" loading="lazy">
+            <div class="gallery-overlay">
+              <div class="gallery-title">{{ image.title }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Pagination -->
+      @if (getTotalPages() > 1) {
+        <div class="pagination">
+          <button
+            class="btn-page"
+            (click)="goToPage(currentPage() - 1)"
+            [disabled]="currentPage() === 1">
+            &laquo; Previous
+          </button>
+
+          @for (page of [].constructor(getTotalPages()); track page; let i = $index) {
+            <button
+              class="btn-page"
+              [class.active]="currentPage() === i + 1"
+              (click)="goToPage(i + 1)">
+              {{ i + 1 }}
+            </button>
+          }
+
+          <button
+            class="btn-page"
+            (click)="goToPage(currentPage() + 1)"
+            [disabled]="currentPage() === getTotalPages()">
+            Next &raquo;
+          </button>
+        </div>
+      }
+    }
+  </div>
+</section>
+
+<!-- Lightbox Modal -->
+@if (lightboxOpen() && lightboxImage()) {
+  <div class="lightbox-overlay" (click)="closeLightbox()">
+    <div class="lightbox-container" (click)="$event.stopPropagation()">
+      <button class="lightbox-close" (click)="closeLightbox()">&times;</button>
+
+      @if (lightboxIndex() > 0) {
+        <button class="lightbox-prev" (click)="prevImage()">&lsaquo;</button>
+      }
+
+      @if (lightboxIndex() < images().length - 1) {
+        <button class="lightbox-next" (click)="nextImage()">&rsaquo;</button>
+      }
+
+      <img [src]="lightboxImage()?.fullPath" [alt]="lightboxImage()?.title">
+      <div class="lightbox-caption">{{ lightboxImage()?.title }}</div>
+    </div>
+  </div>
+}

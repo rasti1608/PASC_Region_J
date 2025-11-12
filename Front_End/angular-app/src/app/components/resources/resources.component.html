@@ -1,0 +1,78 @@
+<!-- Hero Section -->
+<section class="page-hero">
+  <video class="hero-video hero-video-desktop" muted loop playsinline autoplay>
+    <source src="/assets/video/resources-background.mp4" type="video/mp4">
+  </video>
+
+  <video class="hero-video hero-video-mobile" muted loop playsinline autoplay>
+    <source src="/assets/video/resources-background.mp4" type="video/mp4">
+  </video>
+
+  <div class="container">
+    <h1 class="hero-title">{{ pageContent()?.title || 'Resources' }}</h1>
+    <p class="hero-subtitle">{{ pageContent()?.subtitle || 'Downloads & Materials' }}</p>
+  </div>
+</section>
+
+<!-- Resources Content Section -->
+<section class="resources-section">
+  <div class="container">
+    @if (pageContent()) {
+      <div class="resources-intro">
+        <p class="lead">{{ pageContent()?.description }}</p>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading resources...</p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="alert alert-error">
+        <p>{{ error() }}</p>
+      </div>
+    }
+
+    @if (!loading() && !error() && documents().length === 0) {
+      <div class="no-documents">
+        <p>No resources available at this time. Check back soon!</p>
+      </div>
+    }
+
+    @if (!loading() && documents().length > 0) {
+      <div class="documents-grid">
+        @for (doc of documents(); track doc.id) {
+          <a [href]="doc.downloadPath" target="_blank" class="document-card" download>
+            <div class="document-icon">
+              {{ getFileIconClass(doc.fileIcon) }}
+            </div>
+            <div class="document-info">
+              <h3>{{ doc.title }}</h3>
+              <p class="document-description">{{ doc.description }}</p>
+              <div class="document-meta">
+                <span class="document-type">{{ doc.documentType || 'Document' }}</span>
+                <span class="document-size">{{ doc.fileSizeFormatted }}</span>
+              </div>
+            </div>
+            <div class="download-icon">⬇️</div>
+          </a>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Need More Information?</h2>
+    <p>Contact us if you have questions about the conference or resources</p>
+    <div class="cta-buttons">
+      <a routerLink="/contact" class="btn btn-primary">Contact Us</a>
+      <a routerLink="/about" class="btn btn-secondary">About PASC</a>
+    </div>
+  </div>
+</section>
