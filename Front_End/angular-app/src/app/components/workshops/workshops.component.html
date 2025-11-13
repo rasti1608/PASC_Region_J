@@ -82,7 +82,12 @@
                                 [attr.aria-expanded]="activeFormIndex() === i"
                                 [attr.aria-controls]="'collapse' + form.id"
                                 (click)="toggleForm(i)">
-                                {{ form.formName }}
+                                <div class="accordion-header-content">
+                                    <div class="form-title">{{ form.formName }}</div>
+                                    @if (form.formDescription && form.formDescription.trim()) {
+                                        <div class="form-description-preview">{{ form.formDescription }}</div>
+                                    }
+                                </div>
                             </button>
                         </h2>
                         <div
@@ -92,7 +97,7 @@
                             [attr.aria-labelledby]="'heading' + form.id"
                             data-bs-parent="#workshopFormsAccordion">
                             <div class="accordion-body">
-                                <div class="form-container" [innerHTML]="form.embedCode"></div>
+                                <div class="form-container" [innerHTML]="getSafeEmbedCode(form.embedCode)"></div>
                             </div>
                         </div>
                     </div>

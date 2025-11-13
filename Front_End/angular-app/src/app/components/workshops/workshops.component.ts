@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { AudioService } from '../../services/audio.service';
@@ -19,6 +20,7 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private apiService = inject(ApiService);
   private audioService = inject(AudioService);
+  private sanitizer = inject(DomSanitizer);
 
   forms = signal<WorkshopForm[]>([]);
   pageContent = signal<PageContent | null>(null);
@@ -50,6 +52,13 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  /**
+   * Sanitize embed code HTML to allow iframe rendering
+   */
+  getSafeEmbedCode(embedCode: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(embedCode);
   }
 
   private setupAudioSubscription(): void {
