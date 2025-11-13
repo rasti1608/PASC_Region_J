@@ -75,14 +75,20 @@ body::before {
 
 /* Page Hero Section */
 .page-hero {
-  position: relative;
-  min-height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: transparent;
+  padding: 4rem 0;
   text-align: center;
+  position: relative;
   overflow: hidden;
-  margin-bottom: 60px;
+}
+
+.page-hero::before {
+  display: none;
+}
+
+.page-hero .container {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-video-desktop {
@@ -297,10 +303,6 @@ section {
   .announcements-grid,
   .quick-links-grid {
     grid-template-columns: 1fr;
-  }
-
-  .page-hero {
-    min-height: 300px;
   }
 }
 
