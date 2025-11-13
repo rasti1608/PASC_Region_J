@@ -33,7 +33,7 @@
     <div class="container">
         <h1 class="hero-title" id="registerTitle">Conference Registration</h1>
         <p class="hero-subtitle" id="registerSubtitle">Coming Soon!</p>
-        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
+        <p class="hero-subtitle" class="hero-subtitle-accent">&nbsp</p>
     </div>
 </section>
 

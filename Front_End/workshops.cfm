@@ -58,7 +58,7 @@
     <div class="container">
         <h1 class="hero-title" id="workshopsTitle">Workshop Application</h1>
         <p class="hero-subtitle" id="workshopsSubtitle">Share Your Leadership Expertise</p>
-        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
+        <p class="hero-subtitle" class="hero-subtitle-accent">&nbsp</p>
     </div>
 </section>
 
@@ -112,7 +112,12 @@
                                 data-target="##collapse#id#"
                                 aria-expanded="false"
                                 aria-controls="collapse#id#">
-                                #form_name#
+                                <div class="accordion-header-content">
+                                    <div class="form-title">#form_name#</div>
+                                    <cfif len(trim(form_description))>
+                                        <div class="form-description-preview">#form_description#</div>
+                                    </cfif>
+                                </div>
                             </button>
                         </h2>
                         <div
@@ -183,4 +188,59 @@
 </section>
 
 <!--- Include footer --->
+<!--- Page-specific styles for form accordion headers --->
+<style>
+    /* Form Accordion Header Enhancements */
+    .accordion-header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        text-align: left;
+        width: 100%;
+    }
+    
+    .form-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ffffff;
+        line-height: 1.3;
+    }
+    
+    .form-description-preview {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #b0b8d4;
+        line-height: 1.4;
+        opacity: 0.9;
+    }
+    
+    /* Ensure accordion button styling works with new structure */
+    .accordion-button {
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .accordion-button:not(.collapsed) .form-title {
+        color: #4fc3f7;
+    }
+    
+    .accordion-button:not(.collapsed) .form-description-preview {
+        color: #8ab4d4;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .form-title {
+            font-size: 1rem;
+        }
+        
+        .form-description-preview {
+            font-size: 0.85rem;
+        }
+        
+        .accordion-button {
+            padding: 1rem 1.25rem;
+        }
+    }
+</style>
+
 <cfinclude template="includes/footer.cfm">

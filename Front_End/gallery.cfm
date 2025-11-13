@@ -108,8 +108,8 @@
     <div class="container">
         <h1 class="hero-title" id="galleryTitle">Photo Gallery</h1>
         <p class="hero-subtitle" id="gallerySubtitle">Conference Memories & Highlights</p>
-        <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">&nbsp</p>
-        <!---<p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem; color: #FFB300;">Reach for the Stars, Lead Beyond Limits</p>--->
+        <p class="hero-subtitle" class="hero-subtitle-accent">&nbsp</p>
+        <!---<p class="hero-subtitle" class="hero-subtitle-accent">Reach for the Stars, Lead Beyond Limits</p>--->
     </div>
 </section>
 

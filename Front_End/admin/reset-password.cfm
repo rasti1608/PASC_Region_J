@@ -272,7 +272,7 @@
             </cfif>
 
             <div class="login-footer">
-                <p><a href="login.cfm" style="color: #4fc3f7; text-decoration: none;">← Back to Login</a></p>
+                <p><a href="login.cfm" class="link-primary">← Back to Login</a></p>
             </div>
         </div>
     </div>

@@ -127,7 +127,7 @@
             <!--- Content Header --->
             <div class="content-header">
                 <h1>Delete User</h1>
-                <p><a href="index.cfm" style="color: #4fc3f7; text-decoration: none;">← Back to User Management</a></p>
+                <p><a href="index.cfm" class="link-primary">← Back to User Management</a></p>
             </div>
 
             <!--- Main Section --->
