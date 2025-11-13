@@ -7,6 +7,10 @@ import { ApiService } from '../../services/api.service';
 import { AudioService } from '../../services/audio.service';
 import { WorkshopForm, PageContent } from '../../models/api-models';
 
+interface WorkshopFormWithSanitized extends WorkshopForm {
+  sanitizedEmbedCode?: SafeHtml;
+}
+
 @Component({
   selector: 'app-workshops',
   standalone: true,
@@ -22,7 +26,7 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
   private audioService = inject(AudioService);
   private sanitizer = inject(DomSanitizer);
 
-  forms = signal<WorkshopForm[]>([]);
+  forms = signal<WorkshopFormWithSanitized[]>([]);
   pageContent = signal<PageContent | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -52,13 +56,6 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
-
-  /**
-   * Sanitize embed code HTML to allow iframe rendering
-   */
-  getSafeEmbedCode(embedCode: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(embedCode);
   }
 
   private setupAudioSubscription(): void {
@@ -98,7 +95,13 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.apiService.getWorkshopForms('Workshops').subscribe({
       next: (response) => {
         if (response.success && response.data) {
-          this.forms.set(response.data);
+          // Pre-sanitize all embed codes to prevent iframe reloading
+          const formsWithSanitized = response.data.map(form => ({
+            ...form,
+            sanitizedEmbedCode: this.sanitizer.bypassSecurityTrustHtml(form.embedCode)
+          }));
+
+          this.forms.set(formsWithSanitized);
           // Auto-open first form
           if (response.data.length > 0) {
             this.activeFormIndex.set(0);

@@ -97,7 +97,7 @@
                             [attr.aria-labelledby]="'heading' + form.id"
                             data-bs-parent="#workshopFormsAccordion">
                             <div class="accordion-body">
-                                <div class="form-container" [innerHTML]="getSafeEmbedCode(form.embedCode)"></div>
+                                <div class="form-container" [innerHTML]="form.sanitizedEmbedCode"></div>
                             </div>
                         </div>
                     </div>
