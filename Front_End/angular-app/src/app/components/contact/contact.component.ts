@@ -43,6 +43,16 @@ export class ContactComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    // Explicitly ensure hero videos are muted
+    if (this.heroVideoDesktop?.nativeElement) {
+      this.heroVideoDesktop.nativeElement.muted = true;
+      this.heroVideoDesktop.nativeElement.volume = 0;
+    }
+    if (this.heroVideoMobile?.nativeElement) {
+      this.heroVideoMobile.nativeElement.muted = true;
+      this.heroVideoMobile.nativeElement.volume = 0;
+    }
+
     this.controlVideoPlayback(this.audioService.isPlaying());
   }
 
