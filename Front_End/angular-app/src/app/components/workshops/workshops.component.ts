@@ -102,10 +102,6 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
           }));
 
           this.forms.set(formsWithSanitized);
-          // Auto-open first form
-          if (response.data.length > 0) {
-            this.activeFormIndex.set(0);
-          }
         } else {
           this.error.set('Failed to load workshop forms');
         }
