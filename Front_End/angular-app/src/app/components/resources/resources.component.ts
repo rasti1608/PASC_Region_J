@@ -19,6 +19,7 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('anthemAudio', { static: false }) anthemAudio!: ElementRef<HTMLAudioElement>;
   @ViewChild('anthemSectionVideo', { static: false }) anthemSectionVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('anthemPlayerVideo', { static: false}) anthemPlayerVideo!: ElementRef<HTMLVideoElement>;
+  @ViewChild('cinemaSpaceBg', { static: false }) cinemaSpaceBg!: ElementRef<HTMLVideoElement>;
   @ViewChild('progressBar', { static: false }) progressBar!: ElementRef<HTMLDivElement>;
 
   private apiService = inject(ApiService);
@@ -52,6 +53,22 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.heroVideoMobile?.nativeElement) {
       this.heroVideoMobile.nativeElement.muted = true;
       this.heroVideoMobile.nativeElement.volume = 0;
+    }
+
+    // Mute cinema background video
+    if (this.cinemaSpaceBg?.nativeElement) {
+      this.cinemaSpaceBg.nativeElement.muted = true;
+      this.cinemaSpaceBg.nativeElement.volume = 0;
+    }
+
+    // Explicitly ensure anthem videos are muted
+    if (this.anthemSectionVideo?.nativeElement) {
+      this.anthemSectionVideo.nativeElement.muted = true;
+      this.anthemSectionVideo.nativeElement.volume = 0;
+    }
+    if (this.anthemPlayerVideo?.nativeElement) {
+      this.anthemPlayerVideo.nativeElement.muted = true;
+      this.anthemPlayerVideo.nativeElement.volume = 0;
     }
 
     this.controlVideoPlayback(this.audioService.isPlaying());
