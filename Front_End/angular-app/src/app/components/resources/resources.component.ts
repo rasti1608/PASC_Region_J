@@ -86,6 +86,11 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
   private setupAudioSubscription(): void {
     const playingSub = this.audioService.isPlaying$.subscribe(playing => {
       this.controlVideoPlayback(playing);
+
+      // Stop anthem if background music starts playing
+      if (playing && this.anthemAudio && !this.anthemAudio.nativeElement.paused) {
+        this.anthemAudio.nativeElement.pause();
+      }
     });
     this.subscriptions.push(playingSub);
   }

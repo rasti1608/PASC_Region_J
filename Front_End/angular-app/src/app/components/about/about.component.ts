@@ -14,7 +14,9 @@ import { AudioService } from '../../services/audio.service';
 export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('heroVideoDesktop', { static: false }) heroVideoDesktop!: ElementRef<HTMLVideoElement>;
   @ViewChild('heroVideoMobile', { static: false }) heroVideoMobile!: ElementRef<HTMLVideoElement>;
+  @ViewChild('largeLogo', { static: false }) largeLogo!: ElementRef<HTMLImageElement>;
 
+  isPlaying = false;
   private subscriptions: Subscription[] = [];
 
   constructor(private audioService: AudioService) {}
@@ -49,6 +51,7 @@ export class AboutComponent implements OnInit, AfterViewInit, OnDestroy {
   private setupAudioSubscription(): void {
     // Subscribe to playing state only (mute state doesn't affect video)
     const playingSub = this.audioService.isPlaying$.subscribe(playing => {
+      this.isPlaying = playing;
       this.controlVideoPlayback(playing);
     });
 
