@@ -421,8 +421,8 @@
 }
 
 .anthem-player:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(138, 43, 226, 0.4);
+    transform: scale(1.01);
+    box-shadow: 0 8px 24px rgba(138, 43, 226, 0.3);
     border-color: rgba(138, 43, 226, 0.6);
 }
 
@@ -708,8 +708,8 @@ audio {
 }
 
 .mute-toggle-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(91, 75, 138, 0.6);
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(91, 75, 138, 0.7);
 }
 
 .mute-icon {
@@ -750,6 +750,7 @@ audio {
     );
     animation: innerGlow 1.5s ease-in-out infinite;
     z-index: -1;
+    pointer-events: none;
 }
 
 /* Outer massive blurry haze - VERY visible */
@@ -771,6 +772,7 @@ audio {
     filter: blur(50px);
     animation: outerAura 2s ease-in-out infinite;
     z-index: -2;
+    pointer-events: none;
 }
 
 @keyframes boomPulse {

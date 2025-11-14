@@ -71,10 +71,10 @@ export class IntroComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
 
-    // Auto-complete intro after 7 seconds
+    // Auto-complete intro after 10 seconds
     this.introTimeout = setTimeout(() => {
       this.completeIntro();
-    }, 7000);
+    }, 10000);
   }
 
   /**

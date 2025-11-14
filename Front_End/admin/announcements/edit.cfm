@@ -112,7 +112,7 @@
 
             <div class="content-header">
                 <h1>Edit Announcement</h1>
-                <p><a href="index.cfm">← Back to Announcements</a></p>
+                <a href="index.cfm" class="btn btn-secondary">← Back to Announcements</a>
             </div>
             
             <div class="section">

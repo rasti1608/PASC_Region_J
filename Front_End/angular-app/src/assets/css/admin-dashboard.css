@@ -222,8 +222,8 @@ body {
 }
 
 .stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .stat-icon {
@@ -420,6 +420,8 @@ body {
 
 .btn-secondary:hover {
     background: #d0d0d0;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-danger {
@@ -875,6 +877,7 @@ body {
 
 .btn-sm:hover {
     transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn-edit:hover {
@@ -1091,6 +1094,7 @@ body {
 
 .hamburger-menu:hover {
     background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
 }
 
 .hamburger-menu:active {

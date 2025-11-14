@@ -97,9 +97,9 @@
 }
 
 .detail-item:hover {
-    transform: translateY(-5px);
+    transform: scale(1.02);
     border-color: rgba(79, 195, 247, 0.6);
-    box-shadow: 0 15px 40px rgba(79, 195, 247, 0.2);
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.15);
 }
 
 .detail-item h3 {
@@ -190,9 +190,9 @@
 }
 
 .preview-item:hover {
-    transform: translateY(-3px);
+    transform: scale(1.02);
     border-color: rgba(79, 195, 247, 0.6);
-    box-shadow: 0 10px 30px rgba(79, 195, 247, 0.2);
+    box-shadow: 0 6px 20px rgba(79, 195, 247, 0.15);
 }
 
 .preview-item h4 {

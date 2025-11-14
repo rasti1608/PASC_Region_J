@@ -136,6 +136,7 @@ body {
 
 .password-toggle:hover {
     color: #4fc3f7;
+    transform: scale(1.1);
 }
 
 .password-toggle:focus {
@@ -165,8 +166,8 @@ body {
 }
 
 .btn-login:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+    transform: translateY(-2px) scale(1.08);
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.5);
 }
 
 .btn-login:active {

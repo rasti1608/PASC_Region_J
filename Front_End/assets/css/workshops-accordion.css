@@ -24,8 +24,7 @@
 }
 
 .accordion-item:hover {
-    border-color: rgba(79, 195, 247, 0.6);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 10px 30px rgba(79, 195, 247, 0.2);
 }
 
