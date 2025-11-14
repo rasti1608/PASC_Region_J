@@ -36,7 +36,9 @@
               "src/assets/css/hero-video.css",
               "src/assets/css/gallery-grid.css",
               "src/assets/css/contact-form.css",
-              "src/assets/css/resources-anthem-player.css"
+              "src/assets/css/resources-anthem-player.css",
+              "src/assets/css/admin-dashboard.css",
+              "src/assets/css/admin-login.css"
             ]
           },
           "configurations": {
@@ -107,7 +109,9 @@
               "src/assets/css/hero-video.css",
               "src/assets/css/gallery-grid.css",
               "src/assets/css/contact-form.css",
-              "src/assets/css/resources-anthem-player.css"
+              "src/assets/css/resources-anthem-player.css",
+              "src/assets/css/admin-dashboard.css",
+              "src/assets/css/admin-login.css"
             ]
           }
         }

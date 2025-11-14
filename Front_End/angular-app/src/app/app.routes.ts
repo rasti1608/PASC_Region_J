@@ -20,5 +20,13 @@ export const routes: Routes = [
   { path: 'workshops', component: WorkshopsComponent, title: 'Workshops - PASC Region J' },
   { path: 'resources', component: ResourcesComponent, title: 'Resources - PASC Region J' },
   { path: 'contact', component: ContactComponent, title: 'Contact - PASC Region J' },
+
+  // Admin routes (lazy-loaded)
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    title: 'Admin Panel - PASC Region J'
+  },
+
   { path: '**', redirectTo: 'pre-intro', pathMatch: 'full' } // 404 redirect to pre-intro
 ];

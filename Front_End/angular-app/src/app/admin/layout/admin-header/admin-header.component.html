@@ -1,0 +1,22 @@
+<header class="admin-header">
+  <!-- Mobile Hamburger Menu Button -->
+  <button class="hamburger-menu" (click)="toggleMenu()">
+    <span>☰</span>
+  </button>
+
+  <!-- Header Right Section -->
+  <div class="header-right">
+    <!-- Profile Link with Avatar and Settings Icon -->
+    <a routerLink="/admin/profile" class="header-profile-link" title="Profile & Settings">
+      <!-- Profile Avatar -->
+      <span class="header-avatar">👤</span>
+      <!-- Settings Gear Icon -->
+      <span class="header-settings-icon">⚙️</span>
+    </a>
+
+    <!-- Logout Button -->
+    <a (click)="logout()" class="header-logout-link" title="Logout">
+      <span>🚪</span>
+    </a>
+  </div>
+</header>

@@ -6,14 +6,8 @@
 * Project: PASC Region J Conference 2026 Website
 *******************************************************************************/
 
-/* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
+/* Admin Login Page Wrapper - Scoped styles */
+.admin-login-page {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-image: url('/assets/img/intro-background.png');
     background-size: cover;
@@ -25,6 +19,11 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
+}
+
+/* Scoped reset for admin login page only */
+.admin-login-page * {
+    box-sizing: border-box;
 }
 
 /* Login Container */

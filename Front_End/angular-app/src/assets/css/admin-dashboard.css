@@ -6,26 +6,19 @@
 * Project: PASC Region J Conference 2026 Website
 *******************************************************************************/
 
-/* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
+/* Admin Wrapper - Scoped styles for admin pages */
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background: #f5f7fa;
     color: #333;
     line-height: 1.6;
-    overflow-x: hidden;
-    max-width: 100vw;
 }
 
-/* Admin Wrapper */
-.admin-wrapper {
-    display: flex;
-    min-height: 100vh;
+/* Scoped reset for admin pages only */
+.admin-wrapper * {
+    box-sizing: border-box;
 }
 
 /* Sidebar */

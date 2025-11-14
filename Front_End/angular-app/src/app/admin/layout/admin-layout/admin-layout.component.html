@@ -1,0 +1,16 @@
+<div class="admin-wrapper">
+  <!-- Sidebar Navigation -->
+  <app-admin-sidebar [isMobileOpen]="isMobileMenuOpen"></app-admin-sidebar>
+
+  <!-- Mobile Overlay (for closing sidebar when clicking outside) -->
+  <div class="mobile-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+  <!-- Main Content Area -->
+  <main class="admin-content">
+    <!-- Fixed Header Bar -->
+    <app-admin-header (toggleMobileMenu)="toggleMobileMenu()"></app-admin-header>
+
+    <!-- Router outlet for admin pages -->
+    <router-outlet></router-outlet>
+  </main>
+</div>

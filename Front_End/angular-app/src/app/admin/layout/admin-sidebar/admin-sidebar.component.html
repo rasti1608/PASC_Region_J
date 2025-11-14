@@ -1,0 +1,91 @@
+<aside class="admin-sidebar" [class.mobile-open]="isMobileOpen">
+  <!-- Logo Header -->
+  <div class="sidebar-header">
+    <img src="/assets/img/logo.png" alt="PASC Region J" class="sidebar-logo">
+    <h2>Admin Panel</h2>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="sidebar-nav">
+    <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📊</span>
+      <span class="nav-text">Dashboard</span>
+    </a>
+
+    <a routerLink="/admin/announcements" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📢</span>
+      <span class="nav-text">Announcements</span>
+    </a>
+
+    <a routerLink="/admin/forms" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📝</span>
+      <span class="nav-text">Forms</span>
+    </a>
+
+    <a routerLink="/admin/gallery" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📷</span>
+      <span class="nav-text">Gallery</span>
+    </a>
+
+    <a routerLink="/admin/documents" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📁</span>
+      <span class="nav-text">Documents</span>
+    </a>
+
+    <a routerLink="/admin/contacts" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">📧</span>
+      <span class="nav-text">Contact Submissions</span>
+      <!-- TODO: Add badge for new contacts in Phase 2 -->
+    </a>
+
+    <!-- Divider -->
+    <div class="nav-divider"></div>
+
+    <!-- User Management (Admin Only) -->
+    <!-- TODO: Add permission check in Phase 2 -->
+    <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+      <span class="nav-icon">👥</span>
+      <span class="nav-text">User Management</span>
+    </a>
+
+    <!-- Divider -->
+    <div class="nav-divider"></div>
+
+    <!-- External Links -->
+    <a href="/" target="_blank" class="nav-item">
+      <span class="nav-icon">🌐</span>
+      <span class="nav-text">View Website</span>
+    </a>
+
+    <a href="https://analytics.google.com" target="_blank" class="nav-item">
+      <span class="nav-icon">📈</span>
+      <span class="nav-text">Analytics</span>
+    </a>
+
+    <a (click)="logout()" class="nav-item nav-logout">
+      <span class="nav-icon">🚪</span>
+      <span class="nav-text">Logout</span>
+    </a>
+  </nav>
+
+  <!-- Sidebar Footer (User Info) -->
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <!-- Profile Picture Placeholder (40px for sidebar) -->
+      <div class="profile-placeholder" style="width: 40px; height: 40px; font-size: 20px; margin: 0 auto 10px auto;">
+        👤
+      </div>
+      <!-- TODO: Replace with actual user data from session in Phase 2 -->
+      <strong>Admin User</strong><br>
+      <small style="color: #b0b8d4;">Administrator</small>
+    </div>
+
+    <!-- My Profile Link -->
+    <div style="margin-top: 15px;">
+      <a routerLink="/admin/profile" class="nav-item" style="padding: 8px 15px;">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-text">My Profile</span>
+      </a>
+    </div>
+  </div>
+</aside>

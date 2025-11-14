@@ -24,8 +24,8 @@ export class App implements OnInit {
       .subscribe((event: any) => {
         const url = event.urlAfterRedirects || event.url;
 
-        // Hide header/footer on intro pages
-        const hideRoutes = ['/pre-intro', '/intro'];
+        // Hide header/footer on intro pages and admin pages
+        const hideRoutes = ['/pre-intro', '/intro', '/admin'];
         this.showHeaderFooter.set(!hideRoutes.some(route => url.startsWith(route)));
       });
   }
