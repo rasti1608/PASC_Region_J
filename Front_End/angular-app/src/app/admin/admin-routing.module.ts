@@ -17,6 +17,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 // Announcements
 import { AnnouncementListComponent } from './announcements/announcement-list/announcement-list.component';
 import { AnnouncementFormComponent } from './announcements/announcement-form/announcement-form.component';
+import { AnnouncementDeleteComponent } from './announcements/announcement-delete/announcement-delete.component';
 
 // Forms
 import { FormListComponent } from './forms/form-list/form-list.component';
@@ -68,6 +69,7 @@ const routes: Routes = [
           { path: 'announcements', component: AnnouncementListComponent },
           { path: 'announcements/add', component: AnnouncementFormComponent },
           { path: 'announcements/edit/:id', component: AnnouncementFormComponent },
+          { path: 'announcements/delete/:id', component: AnnouncementDeleteComponent },
 
           // Forms
           { path: 'forms', component: FormListComponent },

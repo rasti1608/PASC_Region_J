@@ -1,8 +1,149 @@
-<div class="page-header">
-  <h1>Announcements</h1>
-  <button class="btn btn-primary">Add New Announcement</button>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>Manage Announcements</h1>
+  <p>Create and manage homepage announcements</p>
 </div>
 
-<div class="content-card">
-  <p>Announcements list will be populated in Phase 2 (API Integration)</p>
+<div class="section">
+  <!-- Section Header with Add Button -->
+  <div class="section-header">
+    <h2>All Announcements ({{ announcements.length }})</h2>
+    <button class="btn btn-primary" (click)="addNew()">
+      + Add New Announcement
+    </button>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="search-container">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search by title or content..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+    />
+
+    <select class="status-filter" [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+      <option value="all">All Statuses</option>
+      <option value="inactive">Inactive</option>
+      <option value="live">Live</option>
+      <option value="future">Future</option>
+      <option value="expired">Expired</option>
+    </select>
+
+    <span class="search-results">
+      Showing {{ filteredAnnouncements.length }} of {{ announcements.length }} total
+    </span>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading announcements...</p>
+  </div>
+
+  <!-- Announcements Table -->
+  <div class="table-container" *ngIf="!loading">
+  <table class="data-table" id="announcements-table">
+    <thead>
+      <tr>
+        <th style="width: 10%;">Order</th>
+        <th style="width: 45%;">Title</th>
+        <th style="width: 15%;">Status</th>
+        <th style="width: 15%;">Publish Date</th>
+        <th style="width: 15%;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Empty State -->
+      <tr *ngIf="filteredAnnouncements.length === 0">
+        <td colspan="5" class="text-center">
+          <div class="empty-state">
+            <p>{{ searchQuery || statusFilter !== 'all' ? 'No announcements match your filters' : 'No announcements yet' }}</p>
+            <button class="btn btn-primary btn-sm" (click)="addNew()" *ngIf="!searchQuery && statusFilter === 'all'">
+              Create First Announcement
+            </button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- Data Rows -->
+      <tr *ngFor="let announcement of filteredAnnouncements">
+        <!-- Display Order Dropdown -->
+        <td>
+          <select
+            class="order-select"
+            (change)="updateDisplayOrder(announcement, $any($event.target).value)"
+          >
+            <option
+              *ngFor="let i of [].constructor(announcements.length); let idx = index"
+              [value]="idx + 1"
+              [selected]="announcement.display_order === (idx + 1)">
+              {{ idx + 1 }}
+            </option>
+          </select>
+        </td>
+
+        <!-- Title with Content Preview -->
+        <td data-label="TITLE">
+          <strong>{{ announcement.title }}</strong>
+          <span class="badge" *ngIf="announcement.is_featured" style="background: #fff9c4; color: #f57f17; font-size: 0.75rem;">⭐ Featured</span>
+          <br>
+          <small class="text-muted">
+            {{ announcement.content.length > 100 ? announcement.content.substring(0, 100) + '...' : announcement.content }}
+          </small>
+        </td>
+
+        <!-- Status Badge -->
+        <td data-label="STATUS" class="col-status">
+          <span class="badge badge-inactive" *ngIf="announcement.computed_status === 'inactive'">Inactive</span>
+          <span class="badge" style="background: #ffebee; color: #c62828;" *ngIf="announcement.computed_status === 'expired'">Expired</span>
+          <span class="badge" style="background: #e3f2fd; color: #1565c0;" *ngIf="announcement.computed_status === 'future'">📅 Future</span>
+          <span class="badge badge-success" *ngIf="announcement.computed_status === 'live'">✓ Live</span>
+        </td>
+
+        <!-- Publish Dates -->
+        <td data-label="PUBLISH DATE">
+          {{ formatDate(announcement.publish_start) }}
+          <br *ngIf="announcement.publish_end">
+          <small class="text-muted" *ngIf="announcement.publish_end">
+            to {{ formatDate(announcement.publish_end) }}
+          </small>
+        </td>
+
+        <!-- Actions -->
+        <td data-label="ACTIONS" class="actions">
+          <button
+            class="btn btn-sm btn-edit"
+            (click)="edit(announcement.id)"
+            title="Edit"
+          >
+            ✏️
+          </button>
+
+          <button
+            class="btn btn-sm btn-toggle"
+            (click)="toggleActive(announcement)"
+            [title]="announcement.is_active ? 'Toggle Active/Inactive' : 'Toggle Active/Inactive'"
+          >
+            {{ announcement.is_active ? '👁️' : '🚫' }}
+          </button>
+
+          <button
+            class="btn btn-sm btn-delete"
+            (click)="deleteAnnouncement(announcement)"
+            title="Delete"
+          >
+            🗑️
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
 </div>

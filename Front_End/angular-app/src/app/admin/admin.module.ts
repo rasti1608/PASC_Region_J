@@ -21,6 +21,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 // Announcements
 import { AnnouncementListComponent } from './announcements/announcement-list/announcement-list.component';
 import { AnnouncementFormComponent } from './announcements/announcement-form/announcement-form.component';
+import { AnnouncementDeleteComponent } from './announcements/announcement-delete/announcement-delete.component';
 
 // Forms
 import { FormListComponent } from './forms/form-list/form-list.component';
@@ -74,6 +75,7 @@ import { EmptyStateComponent } from './shared/empty-state/empty-state.component'
     // Announcements
     AnnouncementListComponent,
     AnnouncementFormComponent,
+    AnnouncementDeleteComponent,
 
     // Forms
     FormListComponent,

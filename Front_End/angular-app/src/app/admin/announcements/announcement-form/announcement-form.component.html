@@ -1,1 +1,133 @@
-<p>announcement-form works!</p>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>{{ isEditMode ? 'Edit Announcement' : 'Add New Announcement' }}</h1>
+  <p class="section-subtitle">{{ isEditMode ? 'Update announcement details' : 'Create a new announcement for the homepage' }}</p>
+</div>
+
+<!-- Back Button -->
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to Announcements
+  </button>
+</div>
+
+<!-- Success Message -->
+<div class="alert alert-success" *ngIf="successMessage">
+  {{ successMessage }}
+</div>
+
+<!-- Error Message -->
+<div class="alert alert-error" *ngIf="error">
+  {{ error }}
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading && !formData.title">
+  <div class="spinner"></div>
+  <p>Loading announcement...</p>
+</div>
+
+<!-- Form -->
+<form class="admin-form" (ngSubmit)="onSubmit()" *ngIf="!loading || formData.title">
+  <!-- Title -->
+  <div class="form-group">
+    <label for="title">Title <span class="required">*</span></label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      class="form-control"
+      [(ngModel)]="formData.title"
+      placeholder="Enter announcement title"
+      maxlength="255"
+      required
+    />
+    <small class="form-help">Keep it short and clear (max 255 characters)</small>
+  </div>
+
+  <!-- Content -->
+  <div class="form-group">
+    <label for="content">Content <span class="required">*</span></label>
+    <textarea
+      id="content"
+      name="content"
+      class="form-control"
+      [(ngModel)]="formData.content"
+      placeholder="Enter announcement content"
+      rows="6"
+      required
+    ></textarea>
+    <small class="form-help">This will appear on the homepage</small>
+  </div>
+
+  <!-- Publish Start Date -->
+  <div class="form-group">
+    <label for="publish_start">Publish Start Date <span class="required">*</span></label>
+    <input
+      type="date"
+      id="publish_start"
+      name="publish_start"
+      class="form-control"
+      [(ngModel)]="formData.publish_start"
+      required
+    />
+    <small class="form-help">Announcement will appear on homepage starting this date</small>
+  </div>
+
+  <!-- Publish End Date -->
+  <div class="form-group">
+    <label for="publish_end">Publish End Date</label>
+    <input
+      type="date"
+      id="publish_end"
+      name="publish_end"
+      class="form-control"
+      [(ngModel)]="formData.publish_end"
+    />
+    <small class="form-help">Leave empty for no end date</small>
+  </div>
+
+  <!-- Is Featured Checkbox -->
+  <div class="form-group">
+    <label class="checkbox-label">
+      <input
+        type="checkbox"
+        name="is_featured"
+        [(ngModel)]="formData.is_featured"
+      />
+      <span>Featured announcement (highlighted on homepage)</span>
+    </label>
+  </div>
+
+  <!-- Is Active Checkbox -->
+  <div class="form-group">
+    <label class="checkbox-label">
+      <input
+        type="checkbox"
+        name="is_active"
+        [(ngModel)]="formData.is_active"
+      />
+      <span>Active (ready to publish)</span>
+    </label>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Saving...' : (isEditMode ? 'Update Announcement' : 'Create Announcement') }}
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="cancel()"
+      [disabled]="loading"
+    >
+      Cancel
+    </button>
+  </div>
+</form>
