@@ -26,6 +26,7 @@ import { AnnouncementDeleteComponent } from './announcements/announcement-delete
 // Forms
 import { FormListComponent } from './forms/form-list/form-list.component';
 import { FormFormComponent } from './forms/form-form/form-form.component';
+import { FormDeleteComponent } from './forms/form-delete/form-delete';
 
 // Gallery
 import { GalleryListComponent } from './gallery/gallery-list/gallery-list.component';
@@ -80,6 +81,7 @@ import { EmptyStateComponent } from './shared/empty-state/empty-state.component'
     // Forms
     FormListComponent,
     FormFormComponent,
+    FormDeleteComponent,
 
     // Gallery
     GalleryListComponent,

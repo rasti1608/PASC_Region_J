@@ -33,7 +33,7 @@
     font-size: 16px;
 }
 
-.announcement-details {
+.form-details {
     background: #f8f9fa;
     border-left: 4px solid #dc3545;
     padding: 20px;
@@ -41,20 +41,20 @@
     border-radius: 4px;
 }
 
-.announcement-details h3 {
+.form-details h3 {
     margin: 0 0 10px 0;
     color: #2c3e50;
     font-size: 18px;
 }
 
-.announcement-details p {
+.form-details p {
     margin: 5px 0;
     color: #666;
     text-align: left;
     font-size: 14px;
 }
 
-.announcement-details .meta {
+.form-details .meta {
     display: flex;
     gap: 20px;
     margin-top: 10px;

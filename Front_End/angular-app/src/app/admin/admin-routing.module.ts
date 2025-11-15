@@ -22,6 +22,7 @@ import { AnnouncementDeleteComponent } from './announcements/announcement-delete
 // Forms
 import { FormListComponent } from './forms/form-list/form-list.component';
 import { FormFormComponent } from './forms/form-form/form-form.component';
+import { FormDeleteComponent } from './forms/form-delete/form-delete';
 
 // Gallery
 import { GalleryListComponent } from './gallery/gallery-list/gallery-list.component';
@@ -75,6 +76,7 @@ const routes: Routes = [
           { path: 'forms', component: FormListComponent },
           { path: 'forms/add', component: FormFormComponent },
           { path: 'forms/edit/:id', component: FormFormComponent },
+          { path: 'forms/delete/:id', component: FormDeleteComponent },
 
           // Gallery
           { path: 'gallery', component: GalleryListComponent },

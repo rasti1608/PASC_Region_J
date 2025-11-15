@@ -1,8 +1,209 @@
-<div class="page-header">
-  <h1>Forms</h1>
-  <button class="btn btn-primary">Add New Form</button>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>Forms Management</h1>
+  <p>Manage Google Forms for workshops and registration</p>
 </div>
 
-<div class="content-card">
-  <p>Forms list will be populated in Phase 2 (API Integration)</p>
+<!-- Tabs Navigation -->
+<div class="tabs">
+  <button
+    class="tab"
+    [class.active]="currentLocation === 'Workshops'"
+    (click)="switchTab('Workshops')"
+  >
+    📝 Workshops
+    <span class="tab-badge">{{ workshopsCount }}</span>
+  </button>
+  <button
+    class="tab"
+    [class.active]="currentLocation === 'Registration'"
+    (click)="switchTab('Registration')"
+  >
+    👥 Registration
+    <span class="tab-badge">{{ registrationCount }}</span>
+  </button>
+</div>
+
+<div class="section">
+  <!-- Section Header with Add Button -->
+  <div class="section-header">
+    <h2>{{ currentLocation }} Forms ({{ forms.length }})</h2>
+    <button class="btn btn-primary" (click)="addNew()">
+      + Add New Form
+    </button>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="search-container">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search by form name or description..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+    />
+
+    <select class="status-filter" [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+      <option value="all">All Statuses</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+
+    <span class="search-results" *ngIf="searchQuery || statusFilter !== 'all'">
+      {{ filteredForms.length }} result{{ filteredForms.length !== 1 ? 's' : '' }} found
+    </span>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading forms...</p>
+  </div>
+
+  <!-- Pagination Info (Top) -->
+  <div class="pagination-container" *ngIf="!loading && filteredForms.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredForms.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
+  </div>
+
+  <!-- Forms Table -->
+  <div class="table-container" *ngIf="!loading">
+    <table class="data-table" id="forms-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Form Details</th>
+          <th class="col-status">Status</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Empty State -->
+        <tr *ngIf="filteredForms.length === 0">
+          <td colspan="4" class="text-center">
+            <div class="empty-state">
+              <p *ngIf="searchQuery || statusFilter !== 'all'">No forms match your filters</p>
+              <p *ngIf="!searchQuery && statusFilter === 'all'">No {{ currentLocation.toLowerCase() }} forms found.</p>
+              <button class="btn btn-primary btn-sm" (click)="addNew()" *ngIf="!searchQuery && statusFilter === 'all'">
+                Create Your First Form
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Data Rows -->
+        <tr *ngFor="let form of getPaginatedForms()">
+          <!-- Display Order Dropdown -->
+          <td data-label="ORDER" class="text-center">
+            <select
+              class="order-select"
+              (change)="updateDisplayOrder(form, $any($event.target).value)"
+            >
+              <option
+                *ngFor="let i of [].constructor(forms.length); let idx = index"
+                [value]="idx + 1"
+                [selected]="form.display_order === (idx + 1)">
+                {{ idx + 1 }}
+              </option>
+            </select>
+          </td>
+
+          <!-- Form Name and Description -->
+          <td data-label="FORM NAME">
+            <strong>{{ form.form_name }}</strong>
+            <br *ngIf="form.form_description">
+            <small class="text-muted" *ngIf="form.form_description">
+              {{ form.form_description.length > 100 ? form.form_description.substring(0, 100) + '...' : form.form_description }}
+            </small>
+          </td>
+
+          <!-- Status Badge -->
+          <td data-label="STATUS" class="col-status">
+            <span class="badge badge-success" *ngIf="form.is_active">✓ Active</span>
+            <span class="badge badge-inactive" *ngIf="!form.is_active">Inactive</span>
+          </td>
+
+          <!-- Actions -->
+          <td data-label="ACTIONS" class="actions">
+            <button
+              class="btn btn-sm btn-edit"
+              (click)="edit(form.id)"
+              title="Edit"
+            >
+              ✏️
+            </button>
+
+            <button
+              class="btn btn-sm btn-toggle"
+              (click)="toggleActive(form)"
+              [title]="form.is_active ? 'Toggle Active/Inactive' : 'Toggle Active/Inactive'"
+            >
+              {{ form.is_active ? '👁️' : '🚫' }}
+            </button>
+
+            <button
+              class="btn btn-sm btn-delete"
+              (click)="deleteForm(form)"
+              title="Delete"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination (Bottom) -->
+  <div class="pagination-container" *ngIf="!loading && filteredForms.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredForms.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
+  </div>
 </div>

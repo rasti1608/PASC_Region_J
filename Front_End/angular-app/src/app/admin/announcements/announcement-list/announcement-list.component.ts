@@ -17,6 +17,10 @@ export class AnnouncementListComponent implements OnInit {
   searchQuery = '';
   statusFilter = 'all';
 
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 10;
+
   constructor(
     private announcementsService: AnnouncementsService,
     private router: Router
@@ -74,6 +78,7 @@ export class AnnouncementListComponent implements OnInit {
    * Handle search input
    */
   onSearch(): void {
+    this.currentPage = 1; // Reset to page 1 on search
     this.applyFilters();
   }
 
@@ -81,6 +86,7 @@ export class AnnouncementListComponent implements OnInit {
    * Handle status filter change
    */
   onStatusFilterChange(): void {
+    this.currentPage = 1; // Reset to page 1 on filter change
     this.applyFilters();
   }
 
@@ -104,11 +110,19 @@ export class AnnouncementListComponent implements OnInit {
   toggleActive(announcement: Announcement): void {
     this.announcementsService.toggleActive(announcement.id).subscribe({
       next: (updated) => {
-        // Update local data
+        // Update local data with computed_status
         const index = this.announcements.findIndex(a => a.id === announcement.id);
         if (index !== -1) {
-          this.announcements[index] = updated;
-          this.applyFilters();
+          this.announcements[index] = {
+            ...updated,
+            computed_status: this.computeStatus(updated)
+          };
+        }
+
+        // Update filtered list
+        const filteredIndex = this.filteredAnnouncements.findIndex(a => a.id === announcement.id);
+        if (filteredIndex !== -1) {
+          this.filteredAnnouncements[filteredIndex] = this.announcements[index];
         }
       },
       error: (err) => {
@@ -116,6 +130,21 @@ export class AnnouncementListComponent implements OnInit {
         console.error('Error toggling status:', err);
       }
     });
+  }
+
+  /**
+   * Compute status based on dates and is_active flag
+   */
+  private computeStatus(announcement: Announcement): 'live' | 'inactive' | 'expired' | 'future' {
+    if (!announcement.is_active) return 'inactive';
+
+    const now = new Date();
+    const startDate = new Date(announcement.publish_start);
+    const endDate = announcement.publish_end ? new Date(announcement.publish_end) : null;
+
+    if (startDate > now) return 'future';
+    if (endDate && endDate < now) return 'expired';
+    return 'live';
   }
 
   /**
@@ -147,5 +176,82 @@ export class AnnouncementListComponent implements OnInit {
     if (!dateString) return 'No end date';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  /**
+   * Get paginated announcements for current page
+   */
+  getPaginatedAnnouncements(): Announcement[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredAnnouncements.slice(startIndex, endIndex);
+  }
+
+  /**
+   * Get total number of pages
+   */
+  getTotalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredAnnouncements.length / this.itemsPerPage));
+  }
+
+  /**
+   * Get page numbers to display
+   */
+  getPageNumbers(): number[] {
+    const totalPages = this.getTotalPages();
+    const maxPagesToShow = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+    if (endPage - startPage < maxPagesToShow - 1) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+
+    const pages: number[] = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  /**
+   * Get start index for current page (for display)
+   */
+  getPageStart(): number {
+    if (this.filteredAnnouncements.length === 0) return 0;
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+
+  /**
+   * Get end index for current page (for display)
+   */
+  getPageEnd(): number {
+    const end = this.currentPage * this.itemsPerPage;
+    return Math.min(end, this.filteredAnnouncements.length);
+  }
+
+  /**
+   * Go to specific page
+   */
+  goToPage(page: number): void {
+    this.currentPage = page;
+  }
+
+  /**
+   * Go to previous page
+   */
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  /**
+   * Go to next page
+   */
+  nextPage(): void {
+    if (this.currentPage < this.getTotalPages()) {
+      this.currentPage++;
+    }
   }
 }

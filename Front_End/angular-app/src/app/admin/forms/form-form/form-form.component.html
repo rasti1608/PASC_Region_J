@@ -1,1 +1,119 @@
-<p>form-form works!</p>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>{{ isEditMode ? 'Edit Form' : 'Add New Form' }}</h1>
+  <p class="section-subtitle">{{ isEditMode ? 'Update form details' : 'Create a new Google Form for ' + currentLocation.toLowerCase() }}</p>
+</div>
+
+<!-- Back Button -->
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to Forms
+  </button>
+</div>
+
+<!-- Error Message -->
+<div class="alert alert-error" *ngIf="error">
+  {{ error }}
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading && !formData.form_name">
+  <div class="spinner"></div>
+  <p>Loading form...</p>
+</div>
+
+<!-- Form -->
+<form class="admin-form" (ngSubmit)="onSubmit()" *ngIf="!loading || formData.form_name">
+  <!-- Form Name -->
+  <div class="form-group">
+    <label for="form_name">Form Name <span class="required">*</span></label>
+    <input
+      type="text"
+      id="form_name"
+      name="form_name"
+      class="form-control"
+      [(ngModel)]="formData.form_name"
+      placeholder="e.g., Workshop Application"
+      maxlength="255"
+      required
+    />
+    <small class="form-help">This name will be displayed on the website</small>
+  </div>
+
+  <!-- Form Description -->
+  <div class="form-group">
+    <label for="form_description">Description</label>
+    <textarea
+      id="form_description"
+      name="form_description"
+      class="form-control"
+      [(ngModel)]="formData.form_description"
+      placeholder="Brief description of this form"
+      rows="3"
+    ></textarea>
+    <small class="form-help">Optional description shown below the form name</small>
+  </div>
+
+  <!-- Google Form Embed Code -->
+  <div class="form-group">
+    <label for="embed_code">Google Form Embed Code <span class="required">*</span></label>
+    <textarea
+      id="embed_code"
+      name="embed_code"
+      class="form-control"
+      [(ngModel)]="formData.embed_code"
+      placeholder='<iframe src="https://docs.google.com/forms/d/e/..." width="640" height="800" frameborder="0"></iframe>'
+      rows="5"
+      required
+    ></textarea>
+    <small class="form-help">Paste the complete iframe embed code from Google Forms</small>
+  </div>
+
+  <!-- Page Location -->
+  <div class="form-group">
+    <label for="page_location">Page Location <span class="required">*</span></label>
+    <select
+      id="page_location"
+      name="page_location"
+      class="form-control"
+      [(ngModel)]="formData.page_location"
+      required
+    >
+      <option value="Workshops">Workshops</option>
+      <option value="Registration">Registration</option>
+    </select>
+    <small class="form-help">Where should this form appear on the website?</small>
+  </div>
+
+  <!-- Is Active Checkbox -->
+  <div class="form-group">
+    <label class="checkbox-label">
+      <input
+        type="checkbox"
+        name="is_active"
+        [(ngModel)]="formData.is_active"
+      />
+      <span>Active (visible on website)</span>
+    </label>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Saving...' : (isEditMode ? 'Update Form' : 'Create Form') }}
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="cancel()"
+      [disabled]="loading"
+    >
+      Cancel
+    </button>
+  </div>
+</form>

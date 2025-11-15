@@ -14,13 +14,12 @@ export class AnnouncementFormComponent implements OnInit {
   announcementId: number | null = null;
   loading = false;
   error: string | null = null;
-  successMessage: string | null = null;
 
   // Form data
   formData: AnnouncementFormData = {
     title: '',
     content: '',
-    is_active: true,
+    is_active: false, // Default to inactive - must be manually activated
     is_featured: false,
     publish_start: this.getTodayDate(),
     publish_end: null
@@ -99,11 +98,8 @@ export class AnnouncementFormComponent implements OnInit {
 
     operation.subscribe({
       next: () => {
-        this.successMessage = this.isEditMode ? 'Announcement updated successfully!' : 'Announcement created successfully!';
-        // Redirect to list after short delay
-        setTimeout(() => {
-          this.router.navigate(['/admin/announcements']);
-        }, 1500);
+        // Redirect immediately to list page (like CF admin)
+        this.router.navigate(['/admin/announcements']);
       },
       error: (err) => {
         this.error = err.message || 'Failed to save announcement';

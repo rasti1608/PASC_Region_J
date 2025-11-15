@@ -1,0 +1,51 @@
+<!-- Error Message -->
+<div class="alert alert-error" *ngIf="error">
+  {{ error }}
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading && !form">
+  <div class="spinner"></div>
+  <p>Loading form...</p>
+</div>
+
+<!-- Delete Confirmation -->
+<div class="delete-confirmation" *ngIf="!loading && form">
+  <div class="delete-icon">⚠️</div>
+  <h1>Delete Form?</h1>
+  <p>Are you sure you want to delete this form? This action cannot be undone.</p>
+
+  <div class="form-details">
+    <h3>{{ form.form_name }}</h3>
+    <p *ngIf="form.form_description">{{ form.form_description.length > 100 ? form.form_description.substring(0, 100) + '...' : form.form_description }}</p>
+    <div class="meta">
+      <p><strong>Location:</strong> {{ form.page_location }}</p>
+      <p><strong>Status:</strong> {{ form.is_active ? 'Active' : 'Inactive' }}</p>
+    </div>
+  </div>
+
+  <div class="warning-note">
+    <span style="font-size: 24px;">⚠️</span>
+    <p><strong>Note:</strong> This will remove the form from the {{ form.page_location }} page immediately.</p>
+  </div>
+
+  <div class="delete-actions">
+    <button
+      type="button"
+      class="btn-confirm-delete"
+      (click)="confirmDelete()"
+      [disabled]="loading"
+    >
+      🗑️ {{ loading ? 'Deleting...' : 'Yes, Delete Form' }}
+    </button>
+
+    <button
+      type="button"
+      class="btn-cancel"
+      (click)="cancel()"
+      [disabled]="loading"
+    >
+      ✕ Cancel
+    </button>
+  </div>
+</div>

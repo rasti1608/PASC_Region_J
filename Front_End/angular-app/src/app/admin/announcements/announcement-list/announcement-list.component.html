@@ -47,6 +47,33 @@
     <p>Loading announcements...</p>
   </div>
 
+  <!-- Pagination Info (Top) -->
+  <div class="pagination-container" *ngIf="!loading && filteredAnnouncements.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredAnnouncements.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
+  </div>
+
   <!-- Announcements Table -->
   <div class="table-container" *ngIf="!loading">
   <table class="data-table" id="announcements-table">
@@ -73,7 +100,7 @@
       </tr>
 
       <!-- Data Rows -->
-      <tr *ngFor="let announcement of filteredAnnouncements">
+      <tr *ngFor="let announcement of getPaginatedAnnouncements()">
         <!-- Display Order Dropdown -->
         <td>
           <select
@@ -145,5 +172,32 @@
       </tr>
     </tbody>
   </table>
+  </div>
+
+  <!-- Pagination (Bottom) -->
+  <div class="pagination-container" *ngIf="!loading && filteredAnnouncements.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredAnnouncements.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
   </div>
 </div>
