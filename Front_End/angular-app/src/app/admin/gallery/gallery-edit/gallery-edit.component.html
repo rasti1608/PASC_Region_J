@@ -1,1 +1,99 @@
-<p>gallery-edit works!</p>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>Edit Image</h1>
+  <p class="section-subtitle">Update image details</p>
+</div>
+
+<!-- Back Button -->
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to Gallery
+  </button>
+</div>
+
+<!-- Error Message -->
+<div class="alert alert-error" *ngIf="error">
+  {{ error }}
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading && !formData.title">
+  <div class="spinner"></div>
+  <p>Loading image...</p>
+</div>
+
+<!-- Edit Form -->
+<form class="admin-form" (ngSubmit)="onSubmit()" *ngIf="!loading || formData.title">
+  <!-- Current Image Preview -->
+  <div class="form-group" *ngIf="image">
+    <label>Current Image</label>
+    <div class="image-preview">
+      <img [src]="getImageUrl()" [alt]="image.title">
+    </div>
+    <small class="form-help">{{ image.original_filename }} ({{ image.file_size }} bytes)</small>
+  </div>
+
+  <!-- Image Title -->
+  <div class="form-group">
+    <label for="title">Image Title <span class="required">*</span></label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      class="form-control"
+      [(ngModel)]="formData.title"
+      placeholder="Enter image title"
+      maxlength="255"
+      required
+    />
+    <small class="form-help">This title will be displayed with the image</small>
+  </div>
+
+  <!-- Page Location -->
+  <div class="form-group">
+    <label for="page_location">Page Location <span class="required">*</span></label>
+    <select
+      id="page_location"
+      name="page_location"
+      class="form-control"
+      [(ngModel)]="formData.page_location"
+      required
+    >
+      <option value="about_page">About Page</option>
+      <option value="gallery">Gallery</option>
+    </select>
+    <small class="form-help">Where should this image appear on the website?</small>
+  </div>
+
+  <!-- Is Active Checkbox -->
+  <div class="form-group">
+    <label class="checkbox-label">
+      <input
+        type="checkbox"
+        name="is_active"
+        [(ngModel)]="formData.is_active"
+      />
+      <span>Active (visible on website)</span>
+    </label>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Saving...' : 'Update Image' }}
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="cancel()"
+      [disabled]="loading"
+    >
+      Cancel
+    </button>
+  </div>
+</form>

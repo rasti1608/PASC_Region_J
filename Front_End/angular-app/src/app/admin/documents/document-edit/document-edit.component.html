@@ -1,1 +1,117 @@
-<p>document-edit works!</p>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>Edit Document</h1>
+  <p class="section-subtitle">Update document details</p>
+</div>
+
+<!-- Back Button -->
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to Documents
+  </button>
+</div>
+
+<!-- Error Message -->
+<div class="alert alert-error" *ngIf="error">
+  {{ error }}
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading && !formData.title">
+  <div class="spinner"></div>
+  <p>Loading document...</p>
+</div>
+
+<!-- Edit Form -->
+<form class="admin-form" (ngSubmit)="onSubmit()" *ngIf="!loading || formData.title">
+  <!-- Current Document Info -->
+  <div class="form-group" *ngIf="document">
+    <label>Current Document</label>
+    <div class="document-info">
+      <div [class]="getDocIconClass(document.file_extension)">
+        {{ getDocumentIcon(document.file_extension) }}
+      </div>
+      <div>
+        <div><strong>{{ document.original_filename }}</strong></div>
+        <div class="file-info">{{ formatFileSize(document.file_size) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Document Title -->
+  <div class="form-group">
+    <label for="title">Document Title <span class="required">*</span></label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      class="form-control"
+      [(ngModel)]="formData.title"
+      placeholder="Enter document title"
+      maxlength="255"
+      required
+    />
+    <small class="form-help">This title will be displayed on the website</small>
+  </div>
+
+  <!-- Description -->
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      name="description"
+      class="form-control"
+      [(ngModel)]="formData.description"
+      placeholder="Brief description of this document"
+      rows="3"
+    ></textarea>
+    <small class="form-help">Optional description shown with the document</small>
+  </div>
+
+  <!-- Document Type -->
+  <div class="form-group">
+    <label for="document_type">Document Type</label>
+    <input
+      type="text"
+      id="document_type"
+      name="document_type"
+      class="form-control"
+      [(ngModel)]="formData.document_type"
+      placeholder="e.g., Workshop Materials, Registration Form, etc."
+      maxlength="100"
+    />
+    <small class="form-help">Optional category or type for this document</small>
+  </div>
+
+  <!-- Is Active Checkbox -->
+  <div class="form-group">
+    <label class="checkbox-label">
+      <input
+        type="checkbox"
+        name="is_active"
+        [(ngModel)]="formData.is_active"
+      />
+      <span>Active (visible on website)</span>
+    </label>
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Saving...' : 'Update Document' }}
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="cancel()"
+      [disabled]="loading"
+    >
+      Cancel
+    </button>
+  </div>
+</form>

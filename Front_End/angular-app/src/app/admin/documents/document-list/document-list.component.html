@@ -1,8 +1,202 @@
-<div class="page-header">
-  <h1>Documents</h1>
-  <button class="btn btn-primary">Upload Document</button>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>Documents Management</h1>
+  <p>Manage downloadable resources and documents</p>
 </div>
 
-<div class="content-card">
-  <p>Documents list will be populated in Phase 2 (API Integration)</p>
+<div class="section">
+  <!-- Section Header with Upload Button -->
+  <div class="section-header">
+    <h2>All Documents ({{ documents.length }})</h2>
+    <button class="btn btn-primary" (click)="uploadNew()">
+      + Upload New Document
+    </button>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="search-container">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search by title, description, or filename..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+    />
+
+    <select class="status-filter" [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+      <option value="all">All Statuses</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+
+    <span class="search-results" *ngIf="searchQuery || statusFilter !== 'all'">
+      {{ filteredDocuments.length }} result{{ filteredDocuments.length !== 1 ? 's' : '' }} found
+    </span>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading documents...</p>
+  </div>
+
+  <!-- Pagination Info (Top) -->
+  <div class="pagination-container" *ngIf="!loading && filteredDocuments.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredDocuments.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
+  </div>
+
+  <!-- Documents Table -->
+  <div class="table-container" *ngIf="!loading">
+    <table class="data-table" id="documents-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Icon</th>
+          <th>Document Details</th>
+          <th class="col-status">Status</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Empty State -->
+        <tr *ngIf="filteredDocuments.length === 0">
+          <td colspan="5" class="text-center">
+            <div class="empty-state">
+              <p *ngIf="searchQuery || statusFilter !== 'all'">No documents match your filters</p>
+              <p *ngIf="!searchQuery && statusFilter === 'all'">No documents found.</p>
+              <button class="btn btn-primary btn-sm" (click)="uploadNew()" *ngIf="!searchQuery && statusFilter === 'all'">
+                Upload Your First Document
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Data Rows -->
+        <tr *ngFor="let document of getPaginatedDocuments()">
+          <!-- Display Order Dropdown -->
+          <td data-label="ORDER" class="text-center">
+            <select
+              class="order-select"
+              (change)="updateDisplayOrder(document, $any($event.target).value)"
+            >
+              <option
+                *ngFor="let i of [].constructor(documents.length); let idx = index"
+                [value]="idx + 1"
+                [selected]="document.display_order === (idx + 1)">
+                {{ idx + 1 }}
+              </option>
+            </select>
+          </td>
+
+          <!-- Document Icon -->
+          <td data-label="ICON">
+            <div [class]="getDocIconClass(document.file_extension)">
+              {{ getDocumentIcon(document.file_extension) }}
+            </div>
+          </td>
+
+          <!-- Document Details -->
+          <td data-label="DOCUMENT DETAILS">
+            <strong>{{ document.title }}</strong>
+            <br *ngIf="document.description">
+            <small class="doc-description" *ngIf="document.description">
+              {{ document.description.length > 100 ? document.description.substring(0, 100) + '...' : document.description }}
+            </small>
+            <br>
+            <small class="file-info">
+              {{ document.original_filename }} ({{ formatFileSize(document.file_size) }})
+              <span *ngIf="document.document_type"> • {{ document.document_type }}</span>
+            </small>
+          </td>
+
+          <!-- Status Badge -->
+          <td data-label="STATUS" class="col-status">
+            <span class="badge badge-success" *ngIf="document.is_active">✓ Active</span>
+            <span class="badge badge-inactive" *ngIf="!document.is_active">Inactive</span>
+          </td>
+
+          <!-- Actions -->
+          <td data-label="ACTIONS" class="actions">
+            <button
+              class="btn btn-sm btn-edit"
+              (click)="edit(document.id)"
+              title="Edit"
+            >
+              ✏️
+            </button>
+
+            <button
+              class="btn btn-sm btn-toggle"
+              (click)="toggleActive(document)"
+              [title]="document.is_active ? 'Toggle Active/Inactive' : 'Toggle Active/Inactive'"
+            >
+              {{ document.is_active ? '👁️' : '🚫' }}
+            </button>
+
+            <button
+              class="btn btn-sm btn-delete"
+              (click)="deleteDocument(document)"
+              title="Delete"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination (Bottom) -->
+  <div class="pagination-container" *ngIf="!loading && filteredDocuments.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredDocuments.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
+  </div>
 </div>

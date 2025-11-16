@@ -1,0 +1,51 @@
+/* Document Info Display */
+.document-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+}
+
+.doc-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border-radius: 6px;
+    font-size: 28px;
+    border: 2px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+.doc-icon.pdf {
+    background: #ffebee;
+    border-color: #ef5350;
+}
+
+.doc-icon.doc,
+.doc-icon.docx {
+    background: #e3f2fd;
+    border-color: #42a5f5;
+}
+
+.doc-icon.xls,
+.doc-icon.xlsx {
+    background: #e8f5e9;
+    border-color: #66bb6a;
+}
+
+.doc-icon.ppt,
+.doc-icon.pptx {
+    background: #fff3e0;
+    border-color: #ff9800;
+}
+
+.file-info {
+    font-size: 12px;
+    color: #999;
+}

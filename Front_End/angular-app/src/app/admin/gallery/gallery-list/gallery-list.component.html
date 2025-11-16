@@ -1,8 +1,215 @@
-<div class="page-header">
-  <h1>Gallery</h1>
-  <button class="btn btn-primary">Upload Images</button>
+<!-- Content Header -->
+<div class="content-header">
+  <h1>Gallery Management</h1>
+  <p>Manage images for About Page and Gallery</p>
 </div>
 
-<div class="content-card">
-  <p>Gallery items will be populated in Phase 2 (API Integration)</p>
+<!-- Tabs Navigation -->
+<div class="tabs">
+  <button
+    class="tab"
+    [class.active]="currentLocation === 'about_page'"
+    (click)="switchTab('about_page')"
+  >
+    📄 About Page
+    <span class="tab-badge">{{ aboutPageCount }}</span>
+  </button>
+  <button
+    class="tab"
+    [class.active]="currentLocation === 'gallery'"
+    (click)="switchTab('gallery')"
+  >
+    🖼️ Gallery
+    <span class="tab-badge">{{ galleryCount }}</span>
+  </button>
+</div>
+
+<div class="section">
+  <!-- Section Header with Upload Button -->
+  <div class="section-header">
+    <h2>{{ currentLocation === 'about_page' ? 'About Page' : 'Gallery' }} Images ({{ images.length }})</h2>
+    <button class="btn btn-primary" (click)="uploadNew()">
+      + Upload New Image
+    </button>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="search-container">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search by title or filename..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+    />
+
+    <select class="status-filter" [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+      <option value="all">All Statuses</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+
+    <span class="search-results" *ngIf="searchQuery || statusFilter !== 'all'">
+      {{ filteredImages.length }} result{{ filteredImages.length !== 1 ? 's' : '' }} found
+    </span>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading images...</p>
+  </div>
+
+  <!-- Pagination Info (Top) -->
+  <div class="pagination-container" *ngIf="!loading && filteredImages.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredImages.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
+  </div>
+
+  <!-- Images Table -->
+  <div class="table-container" *ngIf="!loading">
+    <table class="data-table" id="gallery-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Preview</th>
+          <th>Image Details</th>
+          <th class="col-status">Status</th>
+          <th class="actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Empty State -->
+        <tr *ngIf="filteredImages.length === 0">
+          <td colspan="5" class="text-center">
+            <div class="empty-state">
+              <p *ngIf="searchQuery || statusFilter !== 'all'">No images match your filters</p>
+              <p *ngIf="!searchQuery && statusFilter === 'all'">No {{ currentLocation === 'about_page' ? 'About Page' : 'Gallery' }} images found.</p>
+              <button class="btn btn-primary btn-sm" (click)="uploadNew()" *ngIf="!searchQuery && statusFilter === 'all'">
+                Upload Your First Image
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Data Rows -->
+        <tr *ngFor="let image of getPaginatedImages()">
+          <!-- Display Order Dropdown -->
+          <td data-label="ORDER" class="text-center">
+            <select
+              class="order-select"
+              (change)="updateDisplayOrder(image, $any($event.target).value)"
+            >
+              <option
+                *ngFor="let i of [].constructor(images.length); let idx = index"
+                [value]="idx + 1"
+                [selected]="image.display_order === (idx + 1)">
+                {{ idx + 1 }}
+              </option>
+            </select>
+          </td>
+
+          <!-- Image Preview -->
+          <td data-label="PREVIEW">
+            <img [src]="getImageUrl(image.filename)" [alt]="image.title" class="image-thumbnail">
+          </td>
+
+          <!-- Image Details -->
+          <td data-label="IMAGE DETAILS">
+            <strong>{{ image.title }}</strong>
+            <br>
+            <small class="text-muted">
+              {{ image.original_filename }} ({{ formatFileSize(image.file_size) }})
+            </small>
+          </td>
+
+          <!-- Status Badge -->
+          <td data-label="STATUS" class="col-status">
+            <span class="badge badge-success" *ngIf="image.is_active">✓ Active</span>
+            <span class="badge badge-inactive" *ngIf="!image.is_active">Inactive</span>
+          </td>
+
+          <!-- Actions -->
+          <td data-label="ACTIONS" class="actions">
+            <button
+              class="btn btn-sm btn-edit"
+              (click)="edit(image.id)"
+              title="Edit"
+            >
+              ✏️
+            </button>
+
+            <button
+              class="btn btn-sm btn-toggle"
+              (click)="toggleActive(image)"
+              [title]="image.is_active ? 'Toggle Active/Inactive' : 'Toggle Active/Inactive'"
+            >
+              {{ image.is_active ? '👁️' : '🚫' }}
+            </button>
+
+            <button
+              class="btn btn-sm btn-delete"
+              (click)="deleteImage(image)"
+              title="Delete"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination (Bottom) -->
+  <div class="pagination-container" *ngIf="!loading && filteredImages.length > 0">
+    <div class="pagination-info">
+      Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredImages.length }} total
+    </div>
+    <div class="pagination-controls">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+      <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+      <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="pagination-btn"
+        [class.active]="page === currentPage"
+        [disabled]="page === currentPage && getTotalPages() === 1"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+
+      <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+      <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+    </div>
+  </div>
 </div>

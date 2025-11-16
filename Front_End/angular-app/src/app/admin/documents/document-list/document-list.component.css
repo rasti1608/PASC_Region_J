@@ -1,0 +1,155 @@
+/* Search box and filters */
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.status-filter {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #333;
+    font-size: 0.95rem;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.status-filter:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.search-results {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pagination-info {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.pagination-btn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background: #ffffff;
+    color: #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #4a90e2;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-btn.active {
+    background: #4a90e2;
+    color: #ffffff;
+    border-color: #4a90e2;
+}
+
+/* Document icon styling */
+.doc-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    border-radius: 6px;
+    font-size: 24px;
+    border: 2px solid #e0e0e0;
+}
+
+.doc-icon.pdf {
+    background: #ffebee;
+    border-color: #ef5350;
+}
+
+.doc-icon.doc,
+.doc-icon.docx {
+    background: #e3f2fd;
+    border-color: #42a5f5;
+}
+
+.doc-icon.xls,
+.doc-icon.xlsx {
+    background: #e8f5e9;
+    border-color: #66bb6a;
+}
+
+.doc-icon.ppt,
+.doc-icon.pptx {
+    background: #fff3e0;
+    border-color: #ff9800;
+}
+
+.file-info {
+    font-size: 12px;
+    color: #999;
+}
+
+.doc-description {
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Order Dropdown */
+.order-select {
+    padding: 5px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.order-select:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
