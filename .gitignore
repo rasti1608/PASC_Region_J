@@ -38,7 +38,7 @@
 # NetBeans
 nbproject/
 nbbuild/
-dist/
+#dist/
 nbdist/
 
 # Vim
@@ -141,7 +141,7 @@ yarn-error.log*
 .sass-cache/
 
 # Build output
-dist/
+#dist/
 build/
 out/
 
