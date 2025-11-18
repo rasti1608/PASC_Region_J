@@ -1,10 +1,11 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd, NavigationStart } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { HeaderComponent } from './components/shared/header.component';
 import { FooterComponent } from './components/shared/footer.component';
 import { FaviconService } from './core/services/favicon.service';
+import { AudioService } from './services/audio.service';
 
 @Component({
   selector: 'app-root',
@@ -18,12 +19,25 @@ export class App implements OnInit {
 
   constructor(
     private router: Router,
-    private faviconService: FaviconService
+    private faviconService: FaviconService,
+    private audioService: AudioService
   ) {}
 
   ngOnInit(): void {
     // Initialize favicon service
     this.faviconService.initialize();
+
+    // Pause music when navigating to admin routes
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe((event: any) => {
+        const url = event.url;
+
+        // Pause audio when navigating to admin pages
+        if (url.startsWith('/admin')) {
+          this.audioService.pause();
+        }
+      });
 
     // Listen to router events to determine if we should show header/footer
     this.router.events
