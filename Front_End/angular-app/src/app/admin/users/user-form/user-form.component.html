@@ -1,1 +1,172 @@
-<p>user-form works!</p>
+<div class="content-header">
+  <h1>{{ isEditMode ? 'Edit User' : 'Add New User' }}</h1>
+  <p class="section-subtitle">{{ isEditMode ? 'Update user account details' : 'Create a new admin user account' }}</p>
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to User Management
+  </button>
+</div>
+
+<div class="section">
+  <!-- Success Message with Temp Password -->
+  <div *ngIf="successMessage" class="alert alert-success" style="margin-bottom: 20px;">
+    <strong>✓ {{ successMessage }}</strong>
+    <div *ngIf="tempPassword" style="margin-top: 15px; padding: 15px; background: #fff; border-left: 4px solid #4fc3f7; border-radius: 4px;">
+      <strong style="color: #2d3561;">Temporary Password:</strong>
+      <code style="display: block; margin-top: 10px; padding: 10px; background: #f5f7fa; border-radius: 4px; font-size: 1.1rem; font-family: 'Courier New', monospace; color: #2d3561;">
+        {{ tempPassword }}
+      </code>
+      <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+        ⚠️ <strong>Important:</strong> Share this password securely with the user.
+        They will be required to change it upon first login.
+      </p>
+    </div>
+    <div style="margin-top: 15px;">
+      <a routerLink="/admin/users/add" class="btn btn-primary">Add Another User</a>
+      <a routerLink="/admin/users" class="btn btn-secondary">Back to User List</a>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+  <!-- User Form -->
+  <form *ngIf="!successMessage" (ngSubmit)="onSubmit()" class="admin-form">
+    <!-- Username (Add Mode Only) -->
+    <div class="form-group" *ngIf="!isEditMode">
+      <label for="username">Username *</label>
+      <input type="text" id="username" [(ngModel)]="username" name="username" required maxlength="50" autocomplete="off">
+      <small>Username for logging into the admin panel. Must be unique.</small>
+    </div>
+
+    <!-- Username (Edit Mode - Read Only) -->
+    <div class="form-group" *ngIf="isEditMode">
+      <label>Username</label>
+      <input type="text" [value]="username" readonly style="background-color: #f5f7fa; cursor: not-allowed;">
+      <small>Username cannot be changed.</small>
+    </div>
+
+    <!-- Password (Add Mode Only) -->
+    <div class="form-group" *ngIf="!isEditMode">
+      <label for="password">Password *</label>
+      <div class="password-input-wrapper">
+        <input type="password" id="password" [(ngModel)]="password" name="password" required minlength="8" autocomplete="new-password">
+        <button type="button" class="password-toggle" (click)="togglePasswordVisibility('password')" aria-label="Toggle password visibility">
+          <span class="toggle-icon">{{ showPassword ? '🙈' : '👁️' }}</span>
+        </button>
+      </div>
+      <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*). User will be required to change this on first login.</small>
+    </div>
+
+    <!-- Confirm Password (Add Mode Only) -->
+    <div class="form-group" *ngIf="!isEditMode">
+      <label for="confirmPassword">Confirm Password *</label>
+      <div class="password-input-wrapper">
+        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required minlength="8" autocomplete="new-password">
+        <button type="button" class="password-toggle" (click)="togglePasswordVisibility('confirmPassword')" aria-label="Toggle password visibility">
+          <span class="toggle-icon">{{ showConfirmPassword ? '🙈' : '👁️' }}</span>
+        </button>
+      </div>
+      <small>Re-enter the password to confirm.</small>
+    </div>
+
+    <!-- Full Name -->
+    <div class="form-group">
+      <label for="fullName">Full Name *</label>
+      <input type="text" id="fullName" [(ngModel)]="fullName" name="fullName" required maxlength="100">
+      <small>User's full name (displayed in admin panel).</small>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" [(ngModel)]="email" name="email" required maxlength="100">
+      <small>Valid email address for notifications and password reset.</small>
+    </div>
+
+    <!-- Role -->
+    <div class="form-group">
+      <label for="roleId">Role *</label>
+      <select id="roleId" [(ngModel)]="roleId" name="roleId" required>
+        <option [value]="0" disabled>-- Select Role --</option>
+        <option *ngFor="let role of roles" [value]="role.id">{{ role.role_name }}</option>
+      </select>
+      <small>
+        <strong>Admin:</strong> Full access including user management. |
+        <strong>Content Manager:</strong> Can manage all content sections.
+      </small>
+    </div>
+
+    <!-- Active Status -->
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="isActive" name="isActive">
+        Active
+      </label>
+      <small>If checked, user can log in immediately. Uncheck to create inactive user.</small>
+    </div>
+
+    <!-- Password Change Section (Edit Mode Only) -->
+    <div *ngIf="isEditMode" style="margin: 30px 0; padding: 20px; background: #f5f7fa; border-radius: 8px;">
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="changePasswordCheck" [(ngModel)]="changePassword" name="changePassword" (change)="onChangePasswordToggle()">
+          Change Password
+        </label>
+        <small>Check this box if you want to reset the user's password.</small>
+      </div>
+
+      <div *ngIf="changePassword">
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="newPassword" [(ngModel)]="newPassword" name="newPassword" minlength="8" [required]="changePassword" autocomplete="new-password">
+            <button type="button" class="password-toggle" (click)="togglePasswordVisibility('newPassword')" aria-label="Toggle password visibility">
+              <span class="toggle-icon">{{ showNewPassword ? '🙈' : '👁️' }}</span>
+            </button>
+          </div>
+          <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*). User will NOT be required to change this password.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmNewPassword">Confirm New Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="confirmNewPassword" [(ngModel)]="confirmNewPassword" name="confirmNewPassword" minlength="8" [required]="changePassword" autocomplete="new-password">
+            <button type="button" class="password-toggle" (click)="togglePasswordVisibility('confirmNewPassword')" aria-label="Toggle password visibility">
+              <span class="toggle-icon">{{ showConfirmNewPassword ? '🙈' : '👁️' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Read-Only Information (Edit Mode Only) -->
+    <div *ngIf="isEditMode && user" style="margin: 30px 0; padding: 20px; background: #f5f7fa; border-radius: 8px;">
+      <h3 style="margin-bottom: 15px; color: #2d3561;">Account Information</h3>
+
+      <div class="info-row">
+        <span class="info-label">Last Login:</span>
+        <span class="info-value">
+          <span *ngIf="user.last_login">{{ user.last_login }}</span>
+          <span *ngIf="!user.last_login">Never logged in</span>
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Account Created:</span>
+        <span class="info-value">{{ user.created_at }}</span>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update User' : 'Create User') }}
+      </button>
+      <a routerLink="/admin/users" class="btn btn-secondary">Cancel</a>
+      <a *ngIf="isEditMode && userId" [routerLink]="['/admin/users/delete', userId]" class="btn btn-danger" style="margin-left: auto;">Delete User</a>
+    </div>
+  </form>
+</div>

@@ -183,22 +183,10 @@ export class GalleryListComponent implements OnInit {
   }
 
   /**
-   * Navigate to delete confirmation page (will be created separately)
+   * Navigate to delete confirmation page
    */
   deleteImage(image: GalleryImage): void {
-    // For now, simple confirmation
-    if (confirm(`Are you sure you want to delete "${image.title}"?`)) {
-      this.galleryService.delete(image.id).subscribe({
-        next: () => {
-          this.loadImages();
-          this.loadTabCounts();
-        },
-        error: (err) => {
-          this.error = 'Failed to delete image';
-          console.error('Error deleting image:', err);
-        }
-      });
-    }
+    this.router.navigate(['/admin/gallery/delete', image.id]);
   }
 
   /**

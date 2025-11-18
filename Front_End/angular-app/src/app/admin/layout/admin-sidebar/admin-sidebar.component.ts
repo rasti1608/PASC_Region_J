@@ -19,14 +19,12 @@ export class AdminSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     // Subscribe to current user
-    this.authService.currentUser.subscribe(user => {
+    this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
   }
 
   logout(): void {
-    if (confirm('Are you sure you want to logout?')) {
-      this.authService.logout();
-    }
+    this.authService.logout().subscribe();
   }
 }

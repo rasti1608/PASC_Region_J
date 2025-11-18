@@ -1,51 +1,80 @@
-<!-- Error Message -->
-<div class="alert alert-error" *ngIf="error">
-  {{ error }}
+<div class="content-header">
+  <h1>Delete Form</h1>
+  <p class="section-subtitle">Permanently remove form from the website</p>
 </div>
 
-<!-- Loading State -->
-<div class="loading-container" *ngIf="loading && !form">
-  <div class="spinner"></div>
-  <p>Loading form...</p>
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to Forms
+  </button>
 </div>
 
-<!-- Delete Confirmation -->
-<div class="delete-confirmation" *ngIf="!loading && form">
-  <div class="delete-icon">⚠️</div>
-  <h1>Delete Form?</h1>
-  <p>Are you sure you want to delete this form? This action cannot be undone.</p>
+<div class="section">
+  <div *ngIf="loading" class="loading-container">Loading...</div>
 
-  <div class="form-details">
-    <h3>{{ form.form_name }}</h3>
-    <p *ngIf="form.form_description">{{ form.form_description.length > 100 ? form.form_description.substring(0, 100) + '...' : form.form_description }}</p>
-    <div class="meta">
-      <p><strong>Location:</strong> {{ form.page_location }}</p>
-      <p><strong>Status:</strong> {{ form.is_active ? 'Active' : 'Inactive' }}</p>
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+    <div style="margin-top: 20px;">
+      <a routerLink="/admin/forms" class="btn btn-secondary">← Back to Forms</a>
+      <a *ngIf="form" [routerLink]="['/admin/forms/edit', formId]" class="btn btn-primary">Edit Form Instead</a>
     </div>
   </div>
 
-  <div class="warning-note">
-    <span style="font-size: 24px;">⚠️</span>
-    <p><strong>Note:</strong> This will remove the form from the {{ form.page_location }} page immediately.</p>
-  </div>
+  <div *ngIf="form && !error" style="max-width: 700px;">
+    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+      <div style="display: flex; align-items: flex-start; gap: 15px;">
+        <div style="font-size: 2rem;">⚠️</div>
+        <div>
+          <h3 style="margin: 0 0 10px 0; color: #856404;">Warning: Permanent Deletion</h3>
+          <p style="margin: 0; color: #856404; line-height: 1.6;">
+            You are about to permanently delete this form. This action cannot be undone.
+            The form will be removed from the {{ form.page_location }} page immediately.
+          </p>
+        </div>
+      </div>
+    </div>
 
-  <div class="delete-actions">
-    <button
-      type="button"
-      class="btn-confirm-delete"
-      (click)="confirmDelete()"
-      [disabled]="loading"
-    >
-      🗑️ {{ loading ? 'Deleting...' : 'Yes, Delete Form' }}
-    </button>
+    <div class="admin-form">
+      <h3 style="margin-bottom: 20px; color: #2d3561;">Form Details:</h3>
 
-    <button
-      type="button"
-      class="btn-cancel"
-      (click)="cancel()"
-      [disabled]="loading"
-    >
-      ✕ Cancel
-    </button>
+      <div class="info-row">
+        <span class="info-label">Form Name:</span>
+        <span class="info-value">{{ form.form_name }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="form.form_description">
+        <span class="info-label">Description:</span>
+        <span class="info-value">{{ form.form_description.length > 100 ? form.form_description.substring(0, 100) + '...' : form.form_description }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Page Location:</span>
+        <span class="info-value">{{ form.page_location }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="info-value">
+          <span *ngIf="form.is_active" class="badge badge-success">✓ Active</span>
+          <span *ngIf="!form.is_active" class="badge badge-inactive">Inactive</span>
+        </span>
+      </div>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+        <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <p style="margin: 0; color: #c62828; font-weight: 600;">
+            Are you absolutely sure you want to delete this form?
+          </p>
+        </div>
+
+        <div class="form-actions" style="margin: 0; padding: 0; border: none;">
+          <button (click)="confirmDelete()" class="btn btn-danger" [disabled]="loading">
+            🗑️ {{ loading ? 'Deleting...' : 'Yes, Delete Form' }}
+          </button>
+          <button (click)="cancel()" class="btn btn-secondary">Cancel</button>
+          <a [routerLink]="['/admin/forms/edit', formId]" class="btn btn-primary">Edit Instead</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

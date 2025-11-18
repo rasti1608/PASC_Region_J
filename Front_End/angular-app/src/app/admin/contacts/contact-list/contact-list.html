@@ -1,0 +1,281 @@
+<div class="content-header">
+  <h1>Contact Submissions</h1>
+  <p>View and manage contact form submissions</p>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="loading" class="loading-container">
+  <p>Loading submissions...</p>
+</div>
+
+<!-- Error State -->
+<div *ngIf="error" class="alert alert-danger">
+  {{ error }}
+</div>
+
+<!-- Main Content -->
+<div *ngIf="!loading && !error">
+  <!-- Stats Summary -->
+  <div class="stats-summary">
+    <div class="stat-box stat-new">
+      <div class="stat-value">{{ statusCounts.new }}</div>
+      <div class="stat-label">New</div>
+    </div>
+    <div class="stat-box stat-read">
+      <div class="stat-value">{{ statusCounts.read }}</div>
+      <div class="stat-label">Read</div>
+    </div>
+    <div class="stat-box stat-replied">
+      <div class="stat-value">{{ statusCounts.replied }}</div>
+      <div class="stat-label">Replied</div>
+    </div>
+    <div class="stat-box stat-archived">
+      <div class="stat-value">{{ statusCounts.archived }}</div>
+      <div class="stat-label">Archived</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <!-- Section Header with Email Settings Button -->
+    <div class="section-header">
+      <h2>All Submissions ({{ filteredSubmissions.length }})</h2>
+      <a href="/admin/contacts/email-settings" class="btn btn-primary">⚙️ Email Settings</a>
+    </div>
+
+    <!-- Search and Filter Controls -->
+    <div class="search-container">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+        placeholder="Search by name, email, subject, or message..."
+        class="search-input">
+      <select
+        id="statusFilter"
+        [(ngModel)]="statusFilter"
+        (change)="onStatusFilterChange()"
+        class="status-filter">
+        <option value="all">All Statuses</option>
+        <option value="new">New</option>
+        <option value="read">Read</option>
+        <option value="replied">Replied</option>
+        <option value="archived">Archived</option>
+      </select>
+      <span class="search-results" *ngIf="searchQuery">
+        {{ filteredSubmissions.length }} result{{ filteredSubmissions.length !== 1 ? 's' : '' }} found
+      </span>
+    </div>
+
+    <!-- No Results Message -->
+    <div *ngIf="filteredSubmissions.length === 0" class="no-results">
+      <p>No contact submissions found matching your criteria.</p>
+    </div>
+
+    <!-- Pagination (Top) -->
+    <div class="pagination-container">
+      <div class="pagination-info">
+        {{ filteredSubmissions.length > 0 ? 'Showing ' + getPageStart() + '-' + getPageEnd() + ' of ' + filteredSubmissions.length + ' total' : 'No results found' }}
+      </div>
+      <div class="pagination-controls">
+        <button
+          class="pagination-btn"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1">
+          &laquo; Previous
+        </button>
+
+        <button
+          *ngFor="let page of getPageNumbers()"
+          class="pagination-btn"
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <button
+          class="pagination-btn"
+          (click)="nextPage()"
+          [disabled]="currentPage === getTotalPages()">
+          Next &raquo;
+        </button>
+      </div>
+    </div>
+
+    <!-- Submissions Table -->
+    <div class="table-container" *ngIf="filteredSubmissions.length > 0">
+      <table class="table submissions-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Date & Time</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Subject</th>
+            <th>Preview</th>
+            <th class="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let submission of getPaginatedSubmissions()">
+            <td>
+              <span [ngClass]="getStatusBadgeClass(submission.status)">
+                {{ submission.status | uppercase }}
+              </span>
+            </td>
+            <td class="datetime-cell">
+              <div class="date">{{ formatDateTime(submission.submitted_at).date }}</div>
+              <div class="time">{{ formatDateTime(submission.submitted_at).time }}</div>
+            </td>
+            <td>{{ submission.name }}</td>
+            <td>
+              <a [href]="'mailto:' + submission.email" class="email-link">{{ submission.email }}</a>
+            </td>
+            <td>{{ submission.subject }}</td>
+            <td class="message-preview">{{ getMessagePreview(submission.message) }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-sm btn-edit"
+                title="Edit Details"
+                (click)="viewSubmission(submission)">
+                ✏️
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination (Bottom) -->
+    <div class="pagination-container">
+      <div class="pagination-info">
+        {{ filteredSubmissions.length > 0 ? 'Showing ' + getPageStart() + '-' + getPageEnd() + ' of ' + filteredSubmissions.length + ' total' : 'No results found' }}
+      </div>
+      <div class="pagination-controls">
+        <button
+          class="pagination-btn"
+          (click)="previousPage()"
+          [disabled]="currentPage === 1">
+          &laquo; Previous
+        </button>
+
+        <button
+          *ngFor="let page of getPageNumbers()"
+          class="pagination-btn"
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <button
+          class="pagination-btn"
+          (click)="nextPage()"
+          [disabled]="currentPage === getTotalPages()">
+          Next &raquo;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Viewing Submission Details -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Contact Submission Details</h2>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div *ngIf="modalError" class="alert alert-danger">
+      {{ modalError }}
+    </div>
+
+    <div class="modal-body" *ngIf="selectedSubmission">
+      <!-- Submission Information -->
+      <div class="info-section">
+        <h3>Submission Information</h3>
+        <div class="info-row">
+          <label>Submitted:</label>
+          <span>{{ formatDateTime(selectedSubmission.submitted_at).date }} at {{ formatDateTime(selectedSubmission.submitted_at).time }}</span>
+        </div>
+        <div class="info-row">
+          <label>IP Address:</label>
+          <span>{{ selectedSubmission.ip_address }}</span>
+        </div>
+        <div class="info-row">
+          <label>Current Status:</label>
+          <span [ngClass]="getStatusBadgeClass(selectedSubmission.status)">
+            {{ selectedSubmission.status | uppercase }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="info-section">
+        <h3>Contact Information</h3>
+        <div class="info-row">
+          <label>Name:</label>
+          <span>{{ selectedSubmission.name }}</span>
+        </div>
+        <div class="info-row">
+          <label>Email:</label>
+          <span><a [href]="'mailto:' + selectedSubmission.email">{{ selectedSubmission.email }}</a></span>
+        </div>
+        <div class="info-row">
+          <label>Subject:</label>
+          <span>{{ selectedSubmission.subject }}</span>
+        </div>
+      </div>
+
+      <!-- Message -->
+      <div class="info-section">
+        <h3>Message</h3>
+        <div class="message-full">{{ selectedSubmission.message }}</div>
+      </div>
+
+      <!-- Status Update -->
+      <div class="info-section">
+        <h3>Update Status</h3>
+        <div class="form-group">
+          <label for="statusSelect">Status:</label>
+          <select
+            id="statusSelect"
+            [(ngModel)]="modalFormData.status"
+            class="form-control">
+            <option value="new">New</option>
+            <option value="read">Read</option>
+            <option value="replied">Replied</option>
+            <option value="archived">Archived</option>
+          </select>
+          <button
+            class="btn btn-primary"
+            (click)="updateStatus()"
+            [disabled]="modalLoading || modalFormData.status === selectedSubmission.status">
+            {{ modalLoading ? 'Updating...' : 'Update Status' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Notes -->
+      <div class="info-section">
+        <h3>Admin Notes</h3>
+        <div class="form-group">
+          <textarea
+            [(ngModel)]="modalFormData.admin_notes"
+            class="form-control admin-notes-textarea"
+            rows="5"
+            placeholder="Add internal notes about this submission..."></textarea>
+          <button
+            class="btn btn-primary"
+            (click)="saveAdminNotes()"
+            [disabled]="modalLoading">
+            {{ modalLoading ? 'Saving...' : 'Save Notes' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeModal()">Close</button>
+    </div>
+  </div>
+</div>

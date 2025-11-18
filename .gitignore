@@ -189,6 +189,7 @@ api_keys.cfm
 coverage/
 .nyc_output/
 *.coverage
+.temp-testing
 
 # ========================================
 # FTP & Deployment
@@ -229,3 +230,7 @@ web.config
 
 # Reference files (examples, not for production)
 reference_files/
+
+Front_End/temp-testing/
+Front_End/assets/audio/temp-garbage/
+Front_End/assets/video/temp-garbage/

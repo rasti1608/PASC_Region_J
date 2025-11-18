@@ -14,7 +14,7 @@ export class AdminHeaderComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.currentUser.subscribe(user => {
+    this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
   }
@@ -24,8 +24,6 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   logout(): void {
-    if (confirm('Are you sure you want to logout?')) {
-      this.authService.logout();
-    }
+    this.authService.logout().subscribe();
   }
 }

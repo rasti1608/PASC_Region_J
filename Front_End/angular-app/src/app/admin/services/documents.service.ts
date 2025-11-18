@@ -49,8 +49,15 @@ export class DocumentsService {
    * Update an existing document
    */
   update(id: number, data: DocumentFormData): Observable<Document> {
-    const dataWithId = { ...data, id };
-    return this.http.post<{ data: Document }>(`${this.apiUrl}?method=updateDocument`, dataWithId)
+    const params = new URLSearchParams({
+      method: 'updateDocument',
+      id: id.toString(),
+      title: data.title,
+      description: data.description || '',
+      document_type: data.document_type || '',
+      is_active: data.is_active.toString()
+    });
+    return this.http.get<{ data: Document }>(`${this.apiUrl}?${params.toString()}`)
       .pipe(
         map(response => response.data),
         catchError(this.handleError)

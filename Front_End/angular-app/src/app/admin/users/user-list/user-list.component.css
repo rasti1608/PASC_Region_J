@@ -1,0 +1,204 @@
+/* Import core styles from contacts - will use same pagination, section, etc */
+
+/* Filters Container */
+.filters-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #2d3561;
+  font-size: 14px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  font-size: 14px;
+}
+
+.search-group {
+  min-width: 250px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  font-size: 14px;
+}
+
+.search-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+/* Profile Picture */
+.col-picture {
+  width: 60px;
+  text-align: center;
+}
+
+.table-profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.table-profile-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin: 0 auto;
+}
+
+/* Role Badge */
+.role-badge {
+  font-weight: 600;
+  color: #2d3561;
+}
+
+.text-muted {
+  color: #999;
+}
+
+/* Locked Icon */
+.locked-icon {
+  font-size: 1.2rem;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Email Link */
+.email-link {
+  color: #4fc3f7;
+  text-decoration: none;
+}
+
+.email-link:hover {
+  text-decoration: underline;
+}
+
+/* Status Badges */
+.badge-success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-inactive {
+  background: #fafafa;
+  color: #666;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Buttons */
+.btn-toggle {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.btn-toggle:hover {
+  background: #f5f5f5;
+  border-color: #4a90e2;
+}
+
+.btn-delete {
+  background: transparent;
+  color: #dc3545;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-delete:hover {
+  background: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.pagination-info {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #4a90e2;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-btn.active {
+  background: #4a90e2;
+  color: #ffffff;
+  border-color: #4a90e2;
+}

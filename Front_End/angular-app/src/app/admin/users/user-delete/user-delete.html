@@ -1,0 +1,101 @@
+<div class="content-header">
+  <h1>Delete User</h1>
+  <p class="section-subtitle">Permanently remove user account from the system</p>
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to User Management
+  </button>
+</div>
+
+<div class="section">
+  <div *ngIf="loading" class="loading-container">Loading...</div>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+    <div style="margin-top: 20px;">
+      <a routerLink="/admin/users" class="btn btn-secondary">← Back to User Management</a>
+      <a *ngIf="user" [routerLink]="['/admin/users/edit', userId]" class="btn btn-primary">Edit User Instead</a>
+    </div>
+  </div>
+
+  <div *ngIf="user && !error" style="max-width: 700px;">
+    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+      <div style="display: flex; align-items: flex-start; gap: 15px;">
+        <div style="font-size: 2rem;">⚠️</div>
+        <div>
+          <h3 style="margin: 0 0 10px 0; color: #856404;">Warning: Permanent Deletion</h3>
+          <p style="margin: 0; color: #856404; line-height: 1.6;">
+            You are about to permanently delete this user account. This action cannot be undone.
+            All user data will be permanently removed from the system.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-form">
+      <h3 style="margin-bottom: 20px; color: #2d3561;">User Details:</h3>
+
+      <div class="info-row">
+        <span class="info-label">Username:</span>
+        <span class="info-value">{{ user.username }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Full Name:</span>
+        <span class="info-value">{{ user.full_name }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Email:</span>
+        <span class="info-value">{{ user.email }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Role:</span>
+        <span class="info-value">
+          <span *ngIf="user.role_name">{{ user.role_name }}</span>
+          <span *ngIf="!user.role_name" style="color: #999;">No Role Assigned</span>
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="info-value">
+          <span *ngIf="user.is_active" class="badge badge-success">✓ Active</span>
+          <span *ngIf="!user.is_active" class="badge badge-inactive">Inactive</span>
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Last Login:</span>
+        <span class="info-value">
+          <span *ngIf="user.last_login">{{ user.last_login }}</span>
+          <span *ngIf="!user.last_login">Never logged in</span>
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Created:</span>
+        <span class="info-value">{{ user.created_at }}</span>
+      </div>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+        <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <p style="margin: 0; color: #c62828; font-weight: 600;">
+            Are you absolutely sure you want to delete this user?
+          </p>
+        </div>
+
+        <div class="form-actions" style="margin: 0; padding: 0; border: none;">
+          <button (click)="confirmDelete()" class="btn btn-danger" [disabled]="loading">
+            🗑️ {{ loading ? 'Deleting...' : 'Yes, Delete User' }}
+          </button>
+          <button (click)="cancel()" class="btn btn-secondary">Cancel</button>
+          <a [routerLink]="['/admin/users/edit', userId]" class="btn btn-primary">Edit Instead</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -131,20 +131,10 @@ export class DocumentListComponent implements OnInit {
   }
 
   /**
-   * Delete document with confirmation
+   * Navigate to delete confirmation page
    */
   deleteDocument(document: Document): void {
-    if (confirm(`Are you sure you want to delete "${document.title}"?`)) {
-      this.documentsService.delete(document.id).subscribe({
-        next: () => {
-          this.loadDocuments();
-        },
-        error: (err) => {
-          this.error = 'Failed to delete document';
-          console.error('Error deleting document:', err);
-        }
-      });
-    }
+    this.router.navigate(['/admin/documents/delete', document.id]);
   }
 
   /**

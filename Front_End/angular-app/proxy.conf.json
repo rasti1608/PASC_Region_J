@@ -2,8 +2,21 @@
   "/api": {
     "target": "http://localhost",
     "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug"
+    "changeOrigin": false,
+    "logLevel": "debug",
+    "cookieDomainRewrite": "localhost"
+  },
+  "/admin_api": {
+    "target": "http://localhost",
+    "secure": false,
+    "changeOrigin": false,
+    "logLevel": "debug",
+    "cookieDomainRewrite": "localhost",
+    "onProxyReq": function(proxyReq, req, res) {
+      if (req.headers.cookie) {
+        proxyReq.setHeader('cookie', req.headers.cookie);
+      }
+    }
   },
   "/assets": {
     "target": "http://localhost",

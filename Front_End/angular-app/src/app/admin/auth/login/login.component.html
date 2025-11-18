@@ -1,5 +1,64 @@
-<div class="admin-login-page">
-  <div class="login-container">
-    <p>Admin Login Page - Coming Soon</p>
+<div class="login-container">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="logo">
+        <img src="/assets/img/logo.png" alt="PASC Region J" class="logo-img">
+      </div>
+      <h1>Admin Panel</h1>
+      <p>PASC Region J Conference 2026</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          class="form-control"
+          autocomplete="username"
+          autofocus
+          [class.error]="usernameControl?.invalid && usernameControl?.touched">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            autocomplete="current-password"
+            [class.error]="passwordControl?.invalid && passwordControl?.touched">
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePassword()"
+            aria-label="Toggle password visibility">
+            <span class="toggle-icon">{{ showPassword ? '🙈' : '👁️' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-login"
+        [disabled]="loading">
+        <span *ngIf="!loading">Sign In</span>
+        <span *ngIf="loading">Signing In...</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p><small>Default credentials: devadmin / Welcome01!</small></p>
+      <p><small>Please change default password after first login</small></p>
+    </div>
   </div>
 </div>

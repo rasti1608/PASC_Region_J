@@ -1,7 +1,203 @@
-<div class="page-header">
+<div class="content-header">
   <h1>My Profile</h1>
+  <p>Manage your personal information and account settings</p>
 </div>
 
-<div class="content-card">
-  <p>Profile settings will be available in Phase 2 (API Integration)</p>
+<!-- Loading State -->
+<div *ngIf="loading" class="loading-container">Loading profile...</div>
+
+<!-- Personal Information Section -->
+<div *ngIf="!loading && user" class="section">
+  <h2>Personal Information</h2>
+
+  <div *ngIf="profileSuccess" class="alert alert-success">
+    {{ profileSuccess }}
+  </div>
+
+  <div *ngIf="profileError" class="alert alert-error">
+    {{ profileError }}
+  </div>
+
+  <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="admin-form profile-form">
+    <div class="form-group">
+      <label for="full_name">Full Name *</label>
+      <input type="text"
+             id="full_name"
+             formControlName="full_name"
+             [class.error]="profileForm.get('full_name')?.invalid && profileForm.get('full_name')?.touched"
+             maxlength="100">
+      <div *ngIf="profileForm.get('full_name')?.invalid && profileForm.get('full_name')?.touched" class="error-message">
+        <span *ngIf="profileForm.get('full_name')?.errors?.['required']">Full name is required</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input type="email"
+             id="email"
+             formControlName="email"
+             [class.error]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+             maxlength="100">
+      <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-message">
+        <span *ngIf="profileForm.get('email')?.errors?.['required']">Email is required</span>
+        <span *ngIf="profileForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="profileLoading">
+        {{ profileLoading ? 'Updating...' : 'Update Profile' }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Profile Picture Section -->
+<div *ngIf="!loading && user" class="section">
+  <h2>Profile Picture</h2>
+
+  <div *ngIf="pictureSuccess" class="alert alert-success">
+    {{ pictureSuccess }}
+  </div>
+
+  <div *ngIf="pictureError" class="alert alert-error">
+    {{ pictureError }}
+  </div>
+
+  <form class="admin-form profile-form">
+    <!-- Display Current Picture -->
+    <div style="text-align: center; margin-bottom: 30px;">
+      <img *ngIf="getProfilePictureUrl()"
+           [src]="getProfilePictureUrl()"
+           alt="Profile Picture"
+           class="profile-picture-preview">
+      <div *ngIf="!getProfilePictureUrl()" class="profile-placeholder">
+        👤
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="profile_picture">Choose New Picture</label>
+      <input type="file"
+             id="profile_picture"
+             (change)="onFileSelected($event)"
+             accept=".jpg,.jpeg,.png,.gif">
+      <small>Maximum file size: 5MB. Allowed types: JPG, PNG, GIF</small>
+    </div>
+
+    <div class="form-actions" style="justify-content: center;">
+      <button type="button"
+              (click)="uploadPicture()"
+              class="btn btn-primary"
+              [disabled]="pictureLoading || !selectedPictureFile">
+        {{ pictureLoading ? 'Uploading...' : 'Upload Picture' }}
+      </button>
+      <button *ngIf="user.profile_picture"
+              type="button"
+              (click)="removePicture()"
+              class="btn btn-secondary"
+              style="background: #dc3545; color: white;"
+              [disabled]="pictureLoading">
+        Remove Picture
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Change Password Section -->
+<div *ngIf="!loading && user" class="section">
+  <h2>Change Password</h2>
+
+  <div *ngIf="passwordSuccess" class="alert alert-success">
+    {{ passwordSuccess }}
+  </div>
+
+  <div *ngIf="passwordError" class="alert alert-error">
+    {{ passwordError }}
+  </div>
+
+  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="admin-form profile-form">
+    <div class="form-group">
+      <label for="current_password">Current Password *</label>
+      <input type="password"
+             id="current_password"
+             formControlName="current_password"
+             [class.error]="passwordForm.get('current_password')?.invalid && passwordForm.get('current_password')?.touched"
+             autocomplete="current-password">
+      <small>Enter your current password for security verification.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="new_password">New Password *</label>
+      <input type="password"
+             id="new_password"
+             formControlName="new_password"
+             [class.error]="passwordForm.get('new_password')?.invalid && passwordForm.get('new_password')?.touched"
+             autocomplete="new-password">
+      <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*).</small>
+      <div *ngIf="passwordForm.get('new_password')?.invalid && passwordForm.get('new_password')?.touched" class="error-message">
+        {{ getPasswordErrorMessage() }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirm_new_password">Confirm New Password *</label>
+      <input type="password"
+             id="confirm_new_password"
+             formControlName="confirm_new_password"
+             [class.error]="passwordForm.get('confirm_new_password')?.invalid && passwordForm.get('confirm_new_password')?.touched"
+             autocomplete="new-password">
+      <div *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirm_new_password')?.touched" class="error-message">
+        Passwords do not match
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="passwordLoading">
+        {{ passwordLoading ? 'Changing...' : 'Change Password' }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Account Information Section (Read-Only) -->
+<div *ngIf="!loading && user" class="section">
+  <h2>Account Information</h2>
+
+  <div class="admin-form profile-form">
+    <div class="info-row">
+      <span class="info-label">Username:</span>
+      <span class="info-value">{{ user.username }}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Role:</span>
+      <span class="info-value">
+        <strong style="color: #2d3561;">{{ user.role_name }}</strong>
+      </span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Account Status:</span>
+      <span class="info-value">
+        <span *ngIf="user.is_active" class="badge badge-success">✓ Active</span>
+        <span *ngIf="!user.is_active" class="badge badge-inactive">Inactive</span>
+      </span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Last Login:</span>
+      <span class="info-value">{{ formatDate(user.last_login) }}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Account Created:</span>
+      <span class="info-value">{{ formatDate(user.created_at) }}</span>
+    </div>
+
+    <div class="info-row">
+      <span class="info-label">Password Last Changed:</span>
+      <span class="info-value">{{ formatDate(user.password_changed_at) }}</span>
+    </div>
+  </div>
 </div>

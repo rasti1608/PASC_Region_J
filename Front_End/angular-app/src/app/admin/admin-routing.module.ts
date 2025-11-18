@@ -28,18 +28,21 @@ import { FormDeleteComponent } from './forms/form-delete/form-delete';
 import { GalleryListComponent } from './gallery/gallery-list/gallery-list.component';
 import { GalleryUploadComponent } from './gallery/gallery-upload/gallery-upload.component';
 import { GalleryEditComponent } from './gallery/gallery-edit/gallery-edit.component';
+import { GalleryDeleteComponent } from './gallery/gallery-delete/gallery-delete.component';
 
 // Documents
 import { DocumentListComponent } from './documents/document-list/document-list.component';
 import { DocumentUploadComponent } from './documents/document-upload/document-upload.component';
 import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
+import { DocumentDeleteComponent } from './documents/document-delete/document-delete.component';
 
 // Contacts
-import { ContactListComponent } from './contacts/contact-list/contact-list.component';
+import { ContactListComponent } from './contacts/contact-list/contact-list';
 
 // Users
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserFormComponent } from './users/user-form/user-form.component';
+import { UserDeleteComponent } from './users/user-delete/user-delete';
 
 // Profile
 import { ProfileComponent } from './profile/profile.component';
@@ -54,11 +57,10 @@ const routes: Routes = [
       { path: 'reset-password', component: ResetPasswordComponent },
 
       // Protected routes with admin layout
-      // TODO: Re-enable AuthGuard in Phase 2 when authentication API is connected
       {
         path: '',
         component: AdminLayoutComponent,
-        // canActivate: [AuthGuard],  // Temporarily disabled for Phase 1 development
+        canActivate: [AuthGuard],
         children: [
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
           { path: 'dashboard', component: DashboardComponent },
@@ -82,11 +84,13 @@ const routes: Routes = [
           { path: 'gallery', component: GalleryListComponent },
           { path: 'gallery/upload', component: GalleryUploadComponent },
           { path: 'gallery/edit/:id', component: GalleryEditComponent },
+          { path: 'gallery/delete/:id', component: GalleryDeleteComponent },
 
           // Documents
           { path: 'documents', component: DocumentListComponent },
           { path: 'documents/upload', component: DocumentUploadComponent },
           { path: 'documents/edit/:id', component: DocumentEditComponent },
+          { path: 'documents/delete/:id', component: DocumentDeleteComponent },
 
           // Contacts
           { path: 'contacts', component: ContactListComponent },
@@ -95,6 +99,7 @@ const routes: Routes = [
           { path: 'users', component: UserListComponent },
           { path: 'users/add', component: UserFormComponent },
           { path: 'users/edit/:id', component: UserFormComponent },
+          { path: 'users/delete/:id', component: UserDeleteComponent },
 
           // Profile
           { path: 'profile', component: ProfileComponent },

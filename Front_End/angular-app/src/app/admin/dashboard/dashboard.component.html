@@ -1,50 +1,93 @@
-<!-- Content Header -->
 <div class="content-header">
   <h1>Dashboard</h1>
   <p class="welcome-message">Welcome back, Admin User!</p>
 </div>
 
-<!-- Dashboard Stats Grid -->
-<div class="dashboard-stats">
+<!-- Statistics Cards -->
+<div class="stats-grid">
   <div class="stat-card">
     <div class="stat-icon">📢</div>
-    <div class="stat-content">
-      <h3>Announcements</h3>
-      <p class="stat-number">0</p>
-      <p class="stat-label">Total Posts</p>
+    <div class="stat-info">
+      <h3>{{ stats.activeAnnouncements }}</h3>
+      <p>Active Announcements</p>
     </div>
+    <a routerLink="/admin/announcements" class="stat-link">Manage →</a>
   </div>
 
   <div class="stat-card">
     <div class="stat-icon">📝</div>
-    <div class="stat-content">
-      <h3>Forms</h3>
-      <p class="stat-number">0</p>
-      <p class="stat-label">Active Forms</p>
+    <div class="stat-info">
+      <h3>{{ stats.activeForms }}</h3>
+      <p>Active Forms</p>
     </div>
+    <a routerLink="/admin/forms" class="stat-link">Manage →</a>
   </div>
 
   <div class="stat-card">
     <div class="stat-icon">📷</div>
-    <div class="stat-content">
-      <h3>Gallery</h3>
-      <p class="stat-number">0</p>
-      <p class="stat-label">Images</p>
+    <div class="stat-info">
+      <h3>{{ stats.activeGallery }}</h3>
+      <p>Active Gallery Images</p>
     </div>
+    <a routerLink="/admin/gallery" class="stat-link">Manage →</a>
   </div>
 
   <div class="stat-card">
-    <div class="stat-icon">📁</div>
-    <div class="stat-content">
-      <h3>Documents</h3>
-      <p class="stat-number">0</p>
-      <p class="stat-label">Files</p>
+    <div class="stat-icon">👥</div>
+    <div class="stat-info">
+      <h3>{{ stats.activeSessions }}</h3>
+      <p>Active Sessions</p>
+      <small style="color: #999; font-size: 0.85rem; display: block; margin-top: 4px;">Currently online</small>
     </div>
+    <a routerLink="/admin/users" class="stat-link">Manage →</a>
   </div>
 </div>
 
-<!-- Phase 1 Notice -->
-<div class="content-card" style="margin-top: 30px;">
-  <h3>Phase 1 Complete</h3>
-  <p>Admin panel foundation is ready. Phase 2 will add API integration, authentication, and data management.</p>
+<!-- Quick Actions -->
+<div class="section">
+  <h2>Quick Actions</h2>
+  <div class="action-grid">
+    <a routerLink="/admin/announcements/add" class="action-card">
+      <div class="action-icon">➕</div>
+      <h3>New Announcement</h3>
+      <p>Create a new homepage announcement</p>
+    </a>
+
+    <a routerLink="/admin/forms/add" class="action-card">
+      <div class="action-icon">📋</div>
+      <h3>Add Form</h3>
+      <p>Add a new Google Form embed</p>
+    </a>
+
+    <a routerLink="/admin/gallery/upload" class="action-card">
+      <div class="action-icon">📷</div>
+      <h3>Add Image</h3>
+      <p>Upload a new gallery image</p>
+    </a>
+
+    <a href="/" target="_blank" class="action-card">
+      <div class="action-icon">🌐</div>
+      <h3>View Website</h3>
+      <p>Open public website in new tab</p>
+    </a>
+  </div>
+</div>
+
+<!-- System Information -->
+<div class="section">
+  <h2>System Information</h2>
+  <div class="info-box">
+    <div class="info-row">
+      <span class="info-label">Conference Date:</span>
+      <span class="info-value">February 13, 2026</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Conference Theme:</span>
+      <span class="info-value">Reach for the Stars, Lead Beyond Limits</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Website Version:</span>
+      <span class="info-value">1.0.0 MVP</span>
+    </div>
+  </div>
 </div>

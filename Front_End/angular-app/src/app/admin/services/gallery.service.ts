@@ -49,8 +49,14 @@ export class GalleryService {
    * Update an existing image
    */
   update(id: number, data: GalleryImageFormData): Observable<GalleryImage> {
-    const dataWithId = { ...data, id };
-    return this.http.post<{ data: GalleryImage }>(`${this.apiUrl}?method=updateImage`, dataWithId)
+    const params = new URLSearchParams({
+      method: 'updateImage',
+      id: id.toString(),
+      title: data.title,
+      page_location: data.page_location,
+      is_active: data.is_active.toString()
+    });
+    return this.http.get<{ data: GalleryImage }>(`${this.apiUrl}?${params.toString()}`)
       .pipe(
         map(response => response.data),
         catchError(this.handleError)

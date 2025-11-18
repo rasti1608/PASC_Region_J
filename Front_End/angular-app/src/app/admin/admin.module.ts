@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AdminRoutingModule } from './admin-routing.module';
+import { SecureJsonInterceptor } from './interceptors/secure-json.interceptor';
 
 // Layout Components
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
@@ -32,18 +34,21 @@ import { FormDeleteComponent } from './forms/form-delete/form-delete';
 import { GalleryListComponent } from './gallery/gallery-list/gallery-list.component';
 import { GalleryUploadComponent } from './gallery/gallery-upload/gallery-upload.component';
 import { GalleryEditComponent } from './gallery/gallery-edit/gallery-edit.component';
+import { GalleryDeleteComponent } from './gallery/gallery-delete/gallery-delete.component';
 
 // Documents
 import { DocumentListComponent } from './documents/document-list/document-list.component';
 import { DocumentUploadComponent } from './documents/document-upload/document-upload.component';
 import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
+import { DocumentDeleteComponent } from './documents/document-delete/document-delete.component';
 
 // Contacts
-import { ContactListComponent } from './contacts/contact-list/contact-list.component';
+import { ContactListComponent } from './contacts/contact-list/contact-list';
 
 // Users
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UserFormComponent } from './users/user-form/user-form.component';
+import { UserDeleteComponent } from './users/user-delete/user-delete';
 
 // Profile
 import { ProfileComponent } from './profile/profile.component';
@@ -87,11 +92,13 @@ import { EmptyStateComponent } from './shared/empty-state/empty-state.component'
     GalleryListComponent,
     GalleryUploadComponent,
     GalleryEditComponent,
+    GalleryDeleteComponent,
 
     // Documents
     DocumentListComponent,
     DocumentUploadComponent,
     DocumentEditComponent,
+    DocumentDeleteComponent,
 
     // Contacts
     ContactListComponent,
@@ -99,6 +106,7 @@ import { EmptyStateComponent } from './shared/empty-state/empty-state.component'
     // Users
     UserListComponent,
     UserFormComponent,
+    UserDeleteComponent,
 
     // Profile
     ProfileComponent,
@@ -117,6 +125,13 @@ import { EmptyStateComponent } from './shared/empty-state/empty-state.component'
     ReactiveFormsModule,
     FormsModule,
     AdminRoutingModule
+  ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SecureJsonInterceptor,
+      multi: true
+    }
   ]
 })
 export class AdminModule { }

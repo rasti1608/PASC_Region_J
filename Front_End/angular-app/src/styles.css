@@ -148,39 +148,135 @@ section {
   color: var(--primary-color);
 }
 
-/* Buttons */
-.btn {
-  display: inline-block;
-  padding: 12px 30px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
+/* Buttons - EXACT copy from original site - Override Bootstrap */
+.btn,
+a.btn,
+button.btn {
+  display: inline-block !important;
+  padding: 16px 32px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: 0.3s !important;
+  border: 2px solid transparent !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  text-align: center !important;
+  background-image: none !important;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #4fc3f7 0%, #03a9f4 100%);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+.btn-primary,
+a.btn-primary,
+button.btn-primary {
+  background: #4a90e2 !important;
+  background-image: none !important;
+  color: white !important;
+  box-shadow: 0 0 20px rgba(74, 144, 226, 0.4) !important;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(79, 195, 247, 0.5);
+.btn-primary:hover,
+a.btn-primary:hover,
+button.btn-primary:hover {
+  background: #3a7bc8 !important;
+  background-image: none !important;
+  transform: translateY(-2px) scale(1.08) !important;
+  box-shadow: 0 8px 30px rgba(74, 144, 226, 0.6) !important;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: #fff;
-  border: 2px solid var(--primary-color);
+.btn-secondary,
+a.btn-secondary,
+button.btn-secondary {
+  background: #5b4b8a !important;
+  background-image: none !important;
+  color: white !important;
 }
 
-.btn-secondary:hover {
-  background: var(--primary-color);
-  color: #0a0e27;
+.btn-secondary:hover,
+a.btn-secondary:hover,
+button.btn-secondary:hover {
+  background: #4a3b7a !important;
+  background-image: none !important;
+  transform: translateY(-2px) scale(1.08) !important;
+  box-shadow: 0 6px 20px rgba(91, 75, 138, 0.4) !important;
+}
+
+.btn-outline,
+a.btn-outline,
+button.btn-outline {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: #4a90e2 !important;
+  color: #4a90e2 !important;
+}
+
+.btn-outline:hover,
+a.btn-outline:hover,
+button.btn-outline:hover {
+  background: #4a90e2 !important;
+  background-image: none !important;
+  color: white !important;
+  transform: scale(1.08) !important;
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4) !important;
+}
+
+.btn-large,
+a.btn-large,
+button.btn-large {
+  padding: 24px 48px !important;
+  font-size: 18px !important;
+}
+
+/* Custom Button: Submit (Contact Form) */
+.btn-submit,
+a.btn-submit,
+button.btn-submit {
+  width: 100% !important;
+  padding: 15px 30px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+}
+
+.btn-submit:hover,
+a.btn-submit:hover,
+button.btn-submit:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(79, 195, 247, 0.4) !important;
+}
+
+/* Custom Button: Download (Resources Page) */
+.btn-download,
+a.btn-download,
+button.btn-download {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: linear-gradient(135deg, #4a90e2, #357abd) !important;
+  background-image: linear-gradient(135deg, #4a90e2, #357abd) !important;
+  color: #ffffff !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3) !important;
+}
+
+.btn-download:hover,
+a.btn-download:hover,
+button.btn-download:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(74, 144, 226, 0.5) !important;
+  background: linear-gradient(135deg, #357abd, #2868a8) !important;
+  background-image: linear-gradient(135deg, #357abd, #2868a8) !important;
+}
+
+.btn-download svg {
+  width: 20px !important;
+  height: 20px !important;
 }
 
 /* Cards */

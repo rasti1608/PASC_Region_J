@@ -1,0 +1,78 @@
+/* Password input wrapper with eye icon */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  padding-right: 45px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.password-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+.toggle-icon {
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Info row styling */
+.info-row {
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #2d3561;
+  min-width: 150px;
+  flex-shrink: 0;
+}
+
+.info-value {
+  color: #666;
+  flex: 1;
+}
+
+/* Badge styles */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge-inactive {
+  background: #fafafa;
+  color: #666;
+}

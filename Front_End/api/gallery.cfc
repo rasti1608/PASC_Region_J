@@ -134,4 +134,438 @@ Version: 1.0
         <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
+
+    <!--- ================================================================== --->
+    <!--- GET IMAGES ADMIN --->
+    <!--- Returns ALL images for admin panel (active and inactive) --->
+    <!--- Parameters:
+         - location: 'gallery' or 'about_page' (default: 'gallery')
+    --->
+    <!--- ================================================================== --->
+    <cffunction name="getImagesAdmin" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="location" type="string" default="gallery" required="false">
+
+        <cfset var result = {}>
+        <cfset var qImages = "">
+
+        <cftry>
+            <!--- Query ALL gallery images for admin --->
+            <cfquery name="qImages" datasource="pasc_regionj">
+                SELECT
+                    id,
+                    title,
+                    filename,
+                    original_filename,
+                    file_extension,
+                    file_size,
+                    is_active,
+                    page_location,
+                    display_order,
+                    uploaded_at,
+                    updated_at
+                FROM dbo.gallery
+                WHERE page_location = <cfqueryparam value="#arguments.location#" cfsqltype="cf_sql_varchar">
+                ORDER BY display_order ASC, uploaded_at DESC
+            </cfquery>
+
+            <!--- Convert query to array of structs --->
+            <cfset var images = []>
+
+            <cfloop query="qImages">
+                <cfset var image = {
+                    "id" = qImages.id,
+                    "title" = qImages.title,
+                    "filename" = qImages.filename,
+                    "original_filename" = qImages.original_filename,
+                    "file_extension" = qImages.file_extension,
+                    "file_size" = qImages.file_size,
+                    "is_active" = qImages.is_active,
+                    "page_location" = qImages.page_location,
+                    "display_order" = qImages.display_order,
+                    "uploaded_at" = dateFormat(qImages.uploaded_at, "yyyy-mm-dd") & " " & timeFormat(qImages.uploaded_at, "HH:mm:ss"),
+                    "updated_at" = dateFormat(qImages.updated_at, "yyyy-mm-dd") & " " & timeFormat(qImages.updated_at, "HH:mm:ss")
+                }>
+                <cfset arrayAppend(images, image)>
+            </cfloop>
+
+            <!--- Build success response --->
+            <cfset result = {
+                "success" = true,
+                "data" = images,
+                "message" = "Gallery images retrieved successfully"
+            }>
+
+            <cfcatch type="any">
+                <!--- Build error response --->
+                <cfset result = {
+                    "success" = false,
+                    "data" = [],
+                    "error" = cfcatch.message,
+                    "detail" = cfcatch.detail,
+                    "message" = "Error retrieving gallery images"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- GET IMAGE --->
+    <!--- Returns single image by ID for admin --->
+    <!--- ================================================================== --->
+    <cffunction name="getImage" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="id" type="numeric" required="true">
+
+        <cfset var result = {}>
+        <cfset var qImage = "">
+
+        <cftry>
+            <cfquery name="qImage" datasource="pasc_regionj">
+                SELECT
+                    id,
+                    title,
+                    filename,
+                    original_filename,
+                    file_extension,
+                    file_size,
+                    is_active,
+                    page_location,
+                    display_order,
+                    uploaded_at,
+                    updated_at
+                FROM dbo.gallery
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <cfif qImage.recordCount GT 0>
+                <cfset var image = {
+                    "id" = qImage.id,
+                    "title" = qImage.title,
+                    "filename" = qImage.filename,
+                    "original_filename" = qImage.original_filename,
+                    "file_extension" = qImage.file_extension,
+                    "file_size" = qImage.file_size,
+                    "is_active" = qImage.is_active,
+                    "page_location" = qImage.page_location,
+                    "display_order" = qImage.display_order,
+                    "uploaded_at" = dateFormat(qImage.uploaded_at, "yyyy-mm-dd") & " " & timeFormat(qImage.uploaded_at, "HH:mm:ss"),
+                    "updated_at" = dateFormat(qImage.updated_at, "yyyy-mm-dd") & " " & timeFormat(qImage.updated_at, "HH:mm:ss")
+                }>
+
+                <cfset result = {
+                    "success" = true,
+                    "data" = image,
+                    "message" = "Image retrieved successfully"
+                }>
+            <cfelse>
+                <cfset result = {
+                    "success" = false,
+                    "data" = {},
+                    "message" = "Image not found"
+                }>
+            </cfif>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "data" = {},
+                    "error" = cfcatch.message,
+                    "message" = "Error retrieving image"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- TOGGLE ACTIVE --->
+    <!--- Toggle is_active status for an image --->
+    <!--- ================================================================== --->
+    <cffunction name="toggleActive" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="id" type="numeric" required="true">
+
+        <cfset var result = {}>
+
+        <cftry>
+            <!--- Toggle the active status --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.gallery
+                SET is_active = CASE WHEN is_active = 1 THEN 0 ELSE 1 END
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Get the updated image --->
+            <cfset var getImageResult = deserializeJSON(getImage(arguments.id))>
+
+            <cfif getImageResult.success>
+                <cfset result = getImageResult>
+            <cfelse>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Error retrieving updated image"
+                }>
+            </cfif>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error toggling image status"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- UPLOAD IMAGE --->
+    <!--- Upload a new image with metadata --->
+    <!--- ================================================================== --->
+    <cffunction name="uploadImage" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="title" type="string" required="true">
+        <cfargument name="page_location" type="string" required="true">
+        <cfargument name="is_active" type="boolean" default="true" required="false">
+
+        <cfset var result = {}>
+        <cfset var uploadDir = expandPath("/assets/img/gallery/")>
+        <cfset var fileData = "">
+        <cfset var newFileName = "">
+        <cfset var newImageId = 0>
+
+        <cftry>
+            <!--- Ensure upload directory exists --->
+            <cfif NOT directoryExists(uploadDir)>
+                <cfdirectory action="create" directory="#uploadDir#">
+            </cfif>
+
+            <!--- Handle file upload --->
+            <cffile action="upload"
+                    fileField="image_file"
+                    destination="#uploadDir#"
+                    nameConflict="makeunique"
+                    result="fileData"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
+
+            <!--- Get next display order --->
+            <cfquery name="qMaxOrder" datasource="pasc_regionj">
+                SELECT ISNULL(MAX(display_order), 0) AS maxOrder
+                FROM dbo.gallery
+                WHERE page_location = <cfqueryparam value="#arguments.page_location#" cfsqltype="cf_sql_varchar">
+            </cfquery>
+
+            <!--- Insert image record --->
+            <cfquery name="qInsert" datasource="pasc_regionj">
+                INSERT INTO dbo.gallery (
+                    title,
+                    filename,
+                    original_filename,
+                    file_extension,
+                    file_size,
+                    page_location,
+                    is_active,
+                    display_order,
+                    uploaded_at,
+                    updated_at
+                )
+                VALUES (
+                    <cfqueryparam value="#arguments.title#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#fileData.serverFile#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#fileData.clientFile#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#fileData.serverFileExt#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#fileData.fileSize#" cfsqltype="cf_sql_integer">,
+                    <cfqueryparam value="#arguments.page_location#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#arguments.is_active#" cfsqltype="cf_sql_bit">,
+                    <cfqueryparam value="#qMaxOrder.maxOrder + 1#" cfsqltype="cf_sql_integer">,
+                    GETDATE(),
+                    GETDATE()
+                );
+                SELECT SCOPE_IDENTITY() AS newId
+            </cfquery>
+
+            <!--- Get the newly created image --->
+            <cfset newImageId = qInsert.newId>
+            <cfset var getImageResult = deserializeJSON(getImage(newImageId))>
+
+            <cfif getImageResult.success>
+                <cfset result = getImageResult>
+                <cfset result.message = "Image uploaded successfully">
+            <cfelse>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Image uploaded but error retrieving data"
+                }>
+            </cfif>
+
+            <cfcatch type="any">
+                <!--- Clean up uploaded file if database insert failed --->
+                <cfif isDefined("fileData.serverDirectory") AND isDefined("fileData.serverFile")>
+                    <cfset var uploadedFile = fileData.serverDirectory & "/" & fileData.serverFile>
+                    <cfif fileExists(uploadedFile)>
+                        <cffile action="delete" file="#uploadedFile#">
+                    </cfif>
+                </cfif>
+
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "detail" = cfcatch.detail,
+                    "message" = "Error uploading image"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- UPDATE IMAGE --->
+    <!--- Update image metadata (not the file itself) --->
+    <!--- ================================================================== --->
+    <cffunction name="updateImage" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="id" type="numeric" required="true">
+        <cfargument name="title" type="string" required="true">
+        <cfargument name="page_location" type="string" required="true">
+        <cfargument name="is_active" type="boolean" required="true">
+
+        <cfset var result = {}>
+
+        <cftry>
+            <!--- Update the image metadata --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.gallery
+                SET
+                    title = <cfqueryparam value="#arguments.title#" cfsqltype="cf_sql_varchar">,
+                    page_location = <cfqueryparam value="#arguments.page_location#" cfsqltype="cf_sql_varchar">,
+                    is_active = <cfqueryparam value="#arguments.is_active#" cfsqltype="cf_sql_bit">,
+                    updated_at = GETDATE()
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Get the updated image --->
+            <cfset var getImageResult = deserializeJSON(getImage(arguments.id))>
+
+            <cfif getImageResult.success>
+                <cfset result = getImageResult>
+                <cfset result.message = "Image updated successfully">
+            <cfelse>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Image updated but error retrieving data"
+                }>
+            </cfif>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error updating image"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- DELETE IMAGE --->
+    <!--- Delete image and its file from server --->
+    <!--- ================================================================== --->
+    <cffunction name="deleteImage" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="id" type="numeric" required="true">
+
+        <cfset var result = {}>
+        <cfset var qImage = "">
+
+        <cftry>
+            <!--- Get image details before deleting --->
+            <cfquery name="qImage" datasource="pasc_regionj">
+                SELECT filename
+                FROM dbo.gallery
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <cfif qImage.recordCount GT 0>
+                <!--- Delete from database --->
+                <cfquery datasource="pasc_regionj">
+                    DELETE FROM dbo.gallery
+                    WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                </cfquery>
+
+                <!--- Delete physical file --->
+                <cfset var filePath = expandPath("/assets/img/gallery/" & qImage.filename)>
+                <cfif fileExists(filePath)>
+                    <cffile action="delete" file="#filePath#">
+                </cfif>
+
+                <cfset result = {
+                    "success" = true,
+                    "message" = "Image deleted successfully"
+                }>
+            <cfelse>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Image not found"
+                }>
+            </cfif>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error deleting image"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- UPDATE ORDER --->
+    <!--- Update display order for an image --->
+    <!--- ================================================================== --->
+    <cffunction name="updateOrder" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="id" type="numeric" required="true">
+        <cfargument name="newOrder" type="numeric" required="true">
+        <cfargument name="location" type="string" required="true">
+
+        <cfset var result = {}>
+
+        <cftry>
+            <!--- Update the display order --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.gallery
+                SET
+                    display_order = <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">,
+                    updated_at = GETDATE()
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                    AND page_location = <cfqueryparam value="#arguments.location#" cfsqltype="cf_sql_varchar">
+            </cfquery>
+
+            <cfset result = {
+                "success" = true,
+                "message" = "Display order updated successfully"
+            }>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error updating display order"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
 </cfcomponent>

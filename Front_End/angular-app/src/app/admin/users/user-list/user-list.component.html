@@ -1,8 +1,193 @@
-<div class="page-header">
-  <h1>Users</h1>
-  <button class="btn btn-primary">Add New User</button>
+<div class="content-header">
+  <h1>User Management</h1>
+  <p>Manage admin users and their roles</p>
 </div>
 
-<div class="content-card">
-  <p>Users list will be populated in Phase 2 (API Integration)</p>
+<!-- Loading State -->
+<div *ngIf="loading" class="loading-container">
+  <p>Loading users...</p>
+</div>
+
+<!-- Success Message -->
+<div *ngIf="successMessage" class="alert alert-success">
+  {{ successMessage }}
+</div>
+
+<!-- Error State -->
+<div *ngIf="error" class="alert alert-danger">
+  {{ error }}
+</div>
+
+<!-- Main Content -->
+<div *ngIf="!loading">
+  <div class="section">
+    <!-- Section Header with Add User Button -->
+    <div class="section-header">
+      <h2>Users ({{ filteredUsers.length }})</h2>
+      <a routerLink="/admin/users/add" class="btn btn-primary">+ Add New User</a>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="filters-container">
+      <div class="filter-group">
+        <label for="statusFilter">Filter by Status:</label>
+        <select
+          id="statusFilter"
+          [(ngModel)]="statusFilter"
+          (change)="onStatusFilterChange()"
+          class="form-select">
+          <option value="all">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="roleFilter">Filter by Role:</label>
+        <select
+          id="roleFilter"
+          [(ngModel)]="roleFilter"
+          (change)="onRoleFilterChange()"
+          class="form-select">
+          <option value="all">All Roles</option>
+          <option value="1">Admin</option>
+          <option value="2">Content Manager</option>
+        </select>
+      </div>
+
+      <div class="filter-group search-group">
+        <label for="searchInput">Search:</label>
+        <input
+          type="text"
+          id="searchInput"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+          placeholder="Search by username, name, or email..."
+          class="search-input">
+      </div>
+    </div>
+
+    <!-- No Results Message -->
+    <div *ngIf="filteredUsers.length === 0" class="empty-state">
+      <p>No users found matching your criteria.</p>
+      <a routerLink="/admin/users/add" class="btn btn-primary">Add First User</a>
+    </div>
+
+    <!-- Pagination (Top) -->
+    <div class="pagination-container" *ngIf="filteredUsers.length > 0">
+      <div class="pagination-info">
+        Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredUsers.length }} total
+      </div>
+      <div class="pagination-controls">
+        <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+        <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+        <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+        <button
+          *ngFor="let page of getPageNumbers()"
+          class="pagination-btn"
+          [class.active]="page === currentPage"
+          [disabled]="page === currentPage && getTotalPages() === 1"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+        <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+        <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-container" *ngIf="filteredUsers.length > 0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="col-picture">Picture</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th class="col-status">Status</th>
+            <th class="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of getPaginatedUsers()">
+            <td class="col-picture">
+              <ng-container *ngIf="hasProfilePicture(user); else avatarPlaceholder">
+                <img [src]="getProfilePicturePath(user)"
+                     [alt]="user.full_name"
+                     class="table-profile-pic"
+                     (error)="$any($event.target).style.display='none'; $any($event.target).parentElement.innerHTML='<div class=\'table-profile-placeholder\'>👤</div>'">
+              </ng-container>
+              <ng-template #avatarPlaceholder>
+                <div class="table-profile-placeholder">👤</div>
+              </ng-template>
+            </td>
+            <td>
+              <strong>{{ user.username }}</strong>
+            </td>
+            <td>{{ user.full_name }}</td>
+            <td>
+              <a [href]="'mailto:' + user.email" class="email-link">{{ user.email }}</a>
+            </td>
+            <td>
+              <span *ngIf="user.role_name" class="role-badge">{{ user.role_name }}</span>
+              <span *ngIf="!user.role_name" class="text-muted">No Role</span>
+            </td>
+            <td class="col-status">
+              <span [ngClass]="getStatusBadgeClass(user.is_active)">
+                {{ user.is_active ? '✓ Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td class="actions">
+              <ng-container *ngIf="isMasterAdmin(user); else normalActions">
+                <span title="Master Admin - Cannot be modified" class="locked-icon">🔒</span>
+              </ng-container>
+              <ng-template #normalActions>
+                <a [routerLink]="['/admin/users/edit', user.id]" class="btn btn-sm btn-edit" title="Edit User">✏️</a>
+                <button
+                  (click)="toggleUserActive(user)"
+                  class="btn btn-sm btn-toggle"
+                  [title]="user.is_active ? 'Deactivate User' : 'Activate User'">
+                  {{ user.is_active ? '👁️' : '🚫' }}
+                </button>
+                <a [routerLink]="['/admin/users/delete', user.id]" class="btn btn-sm btn-delete" title="Delete User">🗑️</a>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination (Bottom) -->
+    <div class="pagination-container" *ngIf="filteredUsers.length > 0">
+      <div class="pagination-info">
+        Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ filteredUsers.length }} total
+      </div>
+      <div class="pagination-controls">
+        <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">« Previous</button>
+
+        <button class="pagination-btn" (click)="goToPage(1)" *ngIf="getPageNumbers()[0] > 1">1</button>
+        <span *ngIf="getPageNumbers()[0] > 2" style="padding: 0 8px; color: #666;">...</span>
+
+        <button
+          *ngFor="let page of getPageNumbers()"
+          class="pagination-btn"
+          [class.active]="page === currentPage"
+          [disabled]="page === currentPage && getTotalPages() === 1"
+          (click)="goToPage(page)">
+          {{ page }}
+        </button>
+
+        <span *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages() - 1" style="padding: 0 8px; color: #666;">...</span>
+        <button class="pagination-btn" (click)="goToPage(getTotalPages())" *ngIf="getPageNumbers()[getPageNumbers().length - 1] < getTotalPages()">{{ getTotalPages() }}</button>
+
+        <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
+      </div>
+    </div>
+  </div>
 </div>

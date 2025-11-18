@@ -1,37 +1,112 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
 
 export interface AdminUser {
   id: number;
   username: string;
-  fullName: string;
+  full_name: string;
   email: string;
-  role: string;
-  profilePicture?: string;
+  role_id: number;
+  role_name: string;
+  is_active: boolean;
+  profile_picture?: string;
+}
+
+export interface LoginResponse {
+  success: boolean;
+  message?: string;
+  user?: AdminUser;
+}
+
+export interface AuthCheckResponse {
+  success: boolean;
+  authenticated: boolean;
+  user?: AdminUser;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<AdminUser | null>;
-  public currentUser: Observable<AdminUser | null>;
+  private apiUrl = '/admin_api/auth_api.cfm';
+  private currentUserSubject = new BehaviorSubject<AdminUser | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private router: Router) {
-    // Load user from localStorage if exists
-    const storedUser = localStorage.getItem('adminUser');
-    this.currentUserSubject = new BehaviorSubject<AdminUser | null>(
-      storedUser ? JSON.parse(storedUser) : null
-    );
-    this.currentUser = this.currentUserSubject.asObservable();
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
+    // Check authentication status on service initialization
+    this.checkAuthStatus();
   }
 
   /**
-   * Get current user value
+   * Check current authentication status with backend
    */
-  public get currentUserValue(): AdminUser | null {
-    return this.currentUserSubject.value;
+  checkAuthStatus(): void {
+    this.http.get<AuthCheckResponse>(`${this.apiUrl}?method=checkAuth`, { withCredentials: true })
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.authenticated && response.user) {
+            this.currentUserSubject.next(response.user);
+          } else {
+            this.currentUserSubject.next(null);
+          }
+        },
+        error: () => {
+          this.currentUserSubject.next(null);
+        }
+      });
+  }
+
+  /**
+   * Login with username and password
+   */
+  login(credentials: LoginCredentials): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}?method=login`,
+      credentials,
+      { withCredentials: true }
+    ).pipe(
+      tap(response => {
+        if (response.success && response.user) {
+          this.currentUserSubject.next(response.user);
+        }
+      }),
+      catchError(error => {
+        const errorMessage = error.error?.message || 'Login failed. Please try again.';
+        return throwError(() => ({
+          success: false,
+          message: errorMessage
+        }));
+      })
+    );
+  }
+
+  /**
+   * Logout current user
+   */
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiUrl}?method=logout`, {}, { withCredentials: true }).pipe(
+      tap(() => {
+        this.currentUserSubject.next(null);
+        this.router.navigate(['/admin/login']);
+      }),
+      catchError(() => {
+        // Even if API call fails, clear local state and redirect
+        this.currentUserSubject.next(null);
+        this.router.navigate(['/admin/login']);
+        return of({ success: true });
+      })
+    );
   }
 
   /**
@@ -42,39 +117,16 @@ export class AuthService {
   }
 
   /**
-   * Login method (placeholder - will connect to API in Phase 2)
+   * Get current user value
    */
-  login(username: string, password: string): Observable<AdminUser> {
-    // TODO: Connect to API endpoint in Phase 2
-    // For now, return mock data
-    throw new Error('Login API not yet implemented - Phase 2');
+  getCurrentUser(): AdminUser | null {
+    return this.currentUserSubject.value;
   }
 
   /**
-   * Logout method
+   * Get current user value (alias for compatibility)
    */
-  logout(): void {
-    // Remove user from local storage
-    localStorage.removeItem('adminUser');
-    this.currentUserSubject.next(null);
-
-    // Navigate to login
-    this.router.navigate(['/admin/login']);
-  }
-
-  /**
-   * Check if user has specific permission
-   */
-  hasPermission(permission: string): boolean {
-    // TODO: Implement permission checking in Phase 2
-    return true;
-  }
-
-  /**
-   * Set current user (used after login)
-   */
-  setCurrentUser(user: AdminUser): void {
-    localStorage.setItem('adminUser', JSON.stringify(user));
-    this.currentUserSubject.next(user);
+  public get currentUserValue(): AdminUser | null {
+    return this.currentUserSubject.value;
   }
 }

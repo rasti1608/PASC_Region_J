@@ -1,0 +1,92 @@
+<div class="content-header">
+  <h1>Delete Gallery Image</h1>
+  <p class="section-subtitle">Permanently remove image from the gallery</p>
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="cancel()">
+    ← Back to Gallery
+  </button>
+</div>
+
+<div class="section">
+  <div *ngIf="loading" class="loading-container">Loading...</div>
+
+  <div *ngIf="error" class="alert alert-error">
+    {{ error }}
+    <div style="margin-top: 20px;">
+      <a routerLink="/admin/gallery" class="btn btn-secondary">← Back to Gallery</a>
+      <a *ngIf="image" [routerLink]="['/admin/gallery/edit', imageId]" class="btn btn-primary">Edit Image Instead</a>
+    </div>
+  </div>
+
+  <div *ngIf="image && !error" style="max-width: 700px;">
+    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+      <div style="display: flex; align-items: flex-start; gap: 15px;">
+        <div style="font-size: 2rem;">⚠️</div>
+        <div>
+          <h3 style="margin: 0 0 10px 0; color: #856404;">Warning: Permanent Deletion</h3>
+          <p style="margin: 0; color: #856404; line-height: 1.6;">
+            You are about to permanently delete this gallery image. This action cannot be undone.
+            The image file will be removed from the server.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-form">
+      <h3 style="margin-bottom: 20px; color: #2d3561;">Image Details:</h3>
+
+      <!-- Image Preview -->
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img [src]="'/assets/img/gallery/' + image.filename"
+             [alt]="image.title"
+             style="max-width: 300px; max-height: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Title:</span>
+        <span class="info-value">{{ image.title }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Filename:</span>
+        <span class="info-value">{{ image.original_filename }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Location:</span>
+        <span class="info-value">{{ image.page_location === 'gallery' ? 'Gallery Page' : 'About Page' }}</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="info-value">
+          <span *ngIf="image.is_active" class="badge badge-success">✓ Active</span>
+          <span *ngIf="!image.is_active" class="badge badge-inactive">Inactive</span>
+        </span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Uploaded:</span>
+        <span class="info-value">{{ image.uploaded_at }}</span>
+      </div>
+
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+        <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <p style="margin: 0; color: #c62828; font-weight: 600;">
+            Are you absolutely sure you want to delete this image?
+          </p>
+        </div>
+
+        <div class="form-actions" style="margin: 0; padding: 0; border: none;">
+          <button (click)="confirmDelete()" class="btn btn-danger" [disabled]="loading">
+            🗑️ {{ loading ? 'Deleting...' : 'Yes, Delete Image' }}
+          </button>
+          <button (click)="cancel()" class="btn btn-secondary">Cancel</button>
+          <a [routerLink]="['/admin/gallery/edit', imageId]" class="btn btn-primary">Edit Instead</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
