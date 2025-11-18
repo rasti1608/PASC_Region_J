@@ -36,7 +36,7 @@ export interface AuthCheckResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/admin_api/auth_api.cfm';
+  private apiUrl = '/api/auth.cfc';
   private currentUserSubject = new BehaviorSubject<AdminUser | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 

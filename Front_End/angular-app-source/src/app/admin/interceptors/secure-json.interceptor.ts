@@ -40,9 +40,9 @@ export class SecureJsonInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    // For auth_api.cfm requests, force responseType to 'text' to prevent auto-parsing
+    // For CFC API requests, force responseType to 'text' to prevent auto-parsing
     let modifiedRequest = request;
-    if (request.url.includes('auth_api.cfm') || request.url.includes('admin_api')) {
+    if (request.url.includes('/api/')) {
       modifiedRequest = request.clone({
         responseType: 'text' as any
       });

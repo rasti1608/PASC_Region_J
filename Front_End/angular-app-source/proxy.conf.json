@@ -4,13 +4,6 @@
     "secure": false,
     "changeOrigin": false,
     "logLevel": "debug",
-    "cookieDomainRewrite": "localhost"
-  },
-  "/admin_api": {
-    "target": "http://localhost",
-    "secure": false,
-    "changeOrigin": false,
-    "logLevel": "debug",
     "cookieDomainRewrite": "localhost",
     "onProxyReq": function(proxyReq, req, res) {
       if (req.headers.cookie) {

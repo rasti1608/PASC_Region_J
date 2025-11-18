@@ -43,7 +43,7 @@ import { RouterModule } from '@angular/router';
         </div>
 
         <div class="footer-bottom">
-          <p>&copy; {{ currentYear }} PASC Region J. All rights reserved.</p>
+          <p>&copy; {{ currentYear }} PASC Region J. All rights reserved. <a routerLink="/admin" class="admin-link" title="Admin Login">admin</a></p>
           <p class="footer-credit">Powered by Angular & ColdFusion</p>
         </div>
       </div>
@@ -120,6 +120,18 @@ import { RouterModule } from '@angular/router';
 
     .footer-credit {
       font-size: 0.85rem;
+    }
+
+    .admin-link {
+      font-size: 0.8em;
+      color: #666;
+      margin-left: 1rem;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .admin-link:hover {
+      color: #4fc3f7;
     }
 
     @media (max-width: 768px) {

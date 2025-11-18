@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { HeaderComponent } from './components/shared/header.component';
 import { FooterComponent } from './components/shared/footer.component';
+import { FaviconService } from './core/services/favicon.service';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +16,15 @@ import { FooterComponent } from './components/shared/footer.component';
 export class App implements OnInit {
   showHeaderFooter = signal(true);
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private faviconService: FaviconService
+  ) {}
 
   ngOnInit(): void {
+    // Initialize favicon service
+    this.faviconService.initialize();
+
     // Listen to router events to determine if we should show header/footer
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))

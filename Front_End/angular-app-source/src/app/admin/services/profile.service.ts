@@ -8,7 +8,7 @@ import { User, UpdateProfileRequest, ChangePasswordRequest } from '../models/use
   providedIn: 'root'
 })
 export class ProfileService {
-  private apiUrl = '/admin_api/profile_api.cfm';
+  private apiUrl = '/api/profile.cfc';
 
   constructor(private http: HttpClient) {}
 
