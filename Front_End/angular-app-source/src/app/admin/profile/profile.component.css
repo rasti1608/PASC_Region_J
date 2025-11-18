@@ -1,0 +1,109 @@
+/* Password input wrapper with eye icon */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  padding-right: 45px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent !important;
+  border: none !important;
+  color: #666;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  outline: none;
+}
+
+.password-toggle:hover {
+  color: #4fc3f7;
+}
+
+.password-toggle:focus {
+  outline: none;
+}
+
+.toggle-icon {
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Info row styling */
+.info-row {
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #2d3561;
+  min-width: 150px;
+  flex-shrink: 0;
+}
+
+.info-value {
+  color: #666;
+  flex: 1;
+}
+
+/* Badge styles */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge-inactive {
+  background: #fafafa;
+  color: #666;
+}
+
+/* Profile picture preview */
+.profile-picture-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4fc3f7;
+  margin: 10px 0;
+}
+
+.profile-placeholder {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  margin: 10px auto;
+  color: #999;
+  border: 3px solid #ddd;
+}

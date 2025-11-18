@@ -137,7 +137,13 @@
 
           <!-- Image Preview -->
           <td data-label="PREVIEW">
-            <img [src]="getImageUrl(image.filename)" [alt]="image.title" class="image-thumbnail">
+            <img
+              [src]="getImageUrl(image.filename)"
+              [alt]="image.title"
+              class="image-thumbnail"
+              (click)="openImageModal(image.filename)"
+              style="cursor: pointer;"
+              title="Click to preview full size">
           </td>
 
           <!-- Image Details -->
@@ -211,5 +217,13 @@
 
       <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">Next »</button>
     </div>
+  </div>
+</div>
+
+<!-- Image Preview Modal -->
+<div class="image-modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="image-modal-content" (click)="$event.stopPropagation()">
+    <button class="modal-close-btn" (click)="closeModal()">&times;</button>
+    <img [src]="modalImageUrl" alt="Full size preview">
   </div>
 </div>

@@ -30,9 +30,9 @@ export interface GalleryImage {
   id: number;
   title: string;
   filename: string;
-  fileExtension: string;
-  displayOrder: number;
-  fullPath: string;
+  fileextension: string;
+  displayorder: number;
+  fullpath: string;
 }
 
 export interface GalleryResponse extends ApiResponse<GalleryImage[]> {

@@ -39,7 +39,7 @@
     <!-- Section Header with Email Settings Button -->
     <div class="section-header">
       <h2>All Submissions ({{ filteredSubmissions.length }})</h2>
-      <a href="/admin/contacts/email-settings" class="btn btn-primary">⚙️ Email Settings</a>
+      <a routerLink="/admin/contacts/email-settings" class="btn btn-primary">⚙️ Email Settings</a>
     </div>
 
     <!-- Search and Filter Controls -->
@@ -103,7 +103,7 @@
 
     <!-- Submissions Table -->
     <div class="table-container" *ngIf="filteredSubmissions.length > 0">
-      <table class="table submissions-table">
+      <table class="data-table contact-submissions-table">
         <thead>
           <tr>
             <th>Status</th>

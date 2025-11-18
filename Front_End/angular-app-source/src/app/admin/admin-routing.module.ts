@@ -38,6 +38,7 @@ import { DocumentDeleteComponent } from './documents/document-delete/document-de
 
 // Contacts
 import { ContactListComponent } from './contacts/contact-list/contact-list';
+import { EmailSettingsComponent } from './contacts/email-settings/email-settings.component';
 
 // Users
 import { UserListComponent } from './users/user-list/user-list.component';
@@ -94,6 +95,7 @@ const routes: Routes = [
 
           // Contacts
           { path: 'contacts', component: ContactListComponent },
+          { path: 'contacts/email-settings', component: EmailSettingsComponent },
 
           // Users (admin only)
           { path: 'users', component: UserListComponent },

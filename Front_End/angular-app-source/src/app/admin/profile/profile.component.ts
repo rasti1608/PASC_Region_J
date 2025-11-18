@@ -34,6 +34,11 @@ export class ProfileComponent implements OnInit {
   selectedPictureFile: File | null = null;
   picturePreviewUrl: string | null = null;
 
+  // Password visibility toggles
+  showCurrentPassword = false;
+  showNewPassword = false;
+  showConfirmNewPassword = false;
+
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService
@@ -264,6 +269,23 @@ export class ProfileComponent implements OnInit {
       return 'Password must contain uppercase letter, number, and special character';
     }
     return '';
+  }
+
+  /**
+   * Toggle password visibility
+   */
+  togglePasswordVisibility(field: 'current' | 'new' | 'confirm'): void {
+    switch (field) {
+      case 'current':
+        this.showCurrentPassword = !this.showCurrentPassword;
+        break;
+      case 'new':
+        this.showNewPassword = !this.showNewPassword;
+        break;
+      case 'confirm':
+        this.showConfirmNewPassword = !this.showConfirmNewPassword;
+        break;
+    }
   }
 
   /**

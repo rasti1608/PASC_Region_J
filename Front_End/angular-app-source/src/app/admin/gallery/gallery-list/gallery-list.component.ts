@@ -26,6 +26,10 @@ export class GalleryListComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 10;
 
+  // Image preview modal
+  showModal = false;
+  modalImageUrl = '';
+
   constructor(
     private galleryService: GalleryService,
     private router: Router,
@@ -296,5 +300,21 @@ export class GalleryListComponent implements OnInit {
     if (this.currentPage < this.getTotalPages()) {
       this.currentPage++;
     }
+  }
+
+  /**
+   * Open image preview modal
+   */
+  openImageModal(filename: string): void {
+    this.modalImageUrl = this.getImageUrl(filename);
+    this.showModal = true;
+  }
+
+  /**
+   * Close image preview modal
+   */
+  closeModal(): void {
+    this.showModal = false;
+    this.modalImageUrl = '';
   }
 }

@@ -1,0 +1,119 @@
+<div class="content-header">
+  <h1>Email Settings</h1>
+  <p>Configure email notifications for contact form submissions</p>
+</div>
+
+<div class="action-bar">
+  <button class="btn btn-secondary" (click)="goBack()">
+    ← Back to Contact Submissions
+  </button>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="loading" class="loading-container">
+  <p>Loading email settings...</p>
+</div>
+
+<!-- Error Message -->
+<div *ngIf="error" class="alert alert-danger">
+  {{ error }}
+</div>
+
+<!-- Success Message -->
+<div *ngIf="success" class="alert alert-success">
+  {{ success }}
+</div>
+
+<!-- Main Content -->
+<div class="email-settings-container">
+<div *ngIf="!loading">
+  <!-- Info Box -->
+  <div class="info-box">
+    <div class="info-icon">ℹ️</div>
+    <div class="info-content">
+      <h3>How Email Notifications Work</h3>
+      <p>
+        When someone submits a contact form, all <strong>active</strong> email recipients below will receive a notification.
+        The primary recipient cannot be deactivated or deleted.
+      </p>
+    </div>
+  </div>
+
+  <!-- Add New Recipient Section -->
+  <div class="section">
+    <h2>Add New Recipient</h2>
+    <div class="add-recipient-form">
+      <input
+        type="email"
+        [(ngModel)]="newEmail"
+        placeholder="Enter email address..."
+        class="email-input"
+        [disabled]="addingRecipient">
+      <button
+        class="btn btn-primary"
+        (click)="addRecipient()"
+        [disabled]="addingRecipient || !newEmail">
+        {{ addingRecipient ? 'Adding...' : '+ Add Recipient' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Email Recipients Table -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Email Recipients ({{ recipients.length }})</h2>
+    </div>
+
+    <div *ngIf="recipients.length === 0" class="no-results">
+      <p>No email recipients configured yet.</p>
+    </div>
+
+    <div class="table-container" *ngIf="recipients.length > 0">
+      <table class="data-table email-recipients-table">
+        <thead>
+          <tr>
+            <th>Email Address</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Added On</th>
+            <th class="actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let recipient of recipients">
+            <td>
+              <a [href]="'mailto:' + recipient.email" class="email-link">{{ recipient.email }}</a>
+            </td>
+            <td>
+              <span *ngIf="recipient.is_primary" class="badge badge-primary">Primary</span>
+              <span *ngIf="!recipient.is_primary" class="badge badge-secondary">Secondary</span>
+            </td>
+            <td>
+              <span [ngClass]="recipient.is_active ? 'badge-active' : 'badge-inactive'">
+                {{ recipient.is_active ? '✓ Active' : '✗ Inactive' }}
+              </span>
+            </td>
+            <td>{{ formatDate(recipient.created_at) }}</td>
+            <td class="actions">
+              <button
+                class="btn btn-sm btn-toggle"
+                [title]="recipient.is_active ? 'Deactivate' : 'Activate'"
+                (click)="toggleStatus(recipient)"
+                [disabled]="recipient.is_primary">
+                {{ recipient.is_active ? '🔕' : '🔔' }}
+              </button>
+              <button
+                class="btn btn-sm btn-delete"
+                title="Delete"
+                (click)="deleteRecipient(recipient)"
+                [disabled]="recipient.is_primary">
+                🗑️
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>

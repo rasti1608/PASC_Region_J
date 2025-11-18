@@ -68,7 +68,7 @@
             <div class="gallery-grid">
                 @for (image of images(); track image.id; let i = $index) {
                     <div class="gallery-item">
-                        <img [src]="image.fullPath"
+                        <img [src]="image.fullpath"
                              [alt]="image.title"
                              (click)="openModal(i)"
                              loading="lazy">
@@ -107,7 +107,7 @@
 @if (modalOpen()) {
     <div id="imageModal" class="modal" (click)="closeModal()">
         <span class="close" (click)="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage" [src]="images()[modalIndex()]?.fullPath" (click)="$event.stopPropagation()">
+        <img class="modal-content" id="modalImage" [src]="images()[modalIndex()]?.fullpath" (click)="$event.stopPropagation()">
 
         <div class="modal-arrows">
             <button class="arrow-left" id="prevModalBtn" (click)="previousModalImage($event)" [disabled]="modalIndex() === 0">◀</button>

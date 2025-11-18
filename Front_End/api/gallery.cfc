@@ -51,14 +51,13 @@ Version: 1.0
             <cfset var images = []>
 
             <cfloop query="qImages">
-                <cfset var image = {
-                    "id" = qImages.id,
-                    "title" = qImages.title,
-                    "filename" = qImages.filename,
-                    "fileExtension" = qImages.file_extension,
-                    "displayOrder" = qImages.display_order,
-                    "fullPath" = "/assets/img/gallery/" & qImages.filename
-                }>
+                <cfset var image = {}>
+                <cfset image["id"] = qImages.id>
+                <cfset image["title"] = qImages.title>
+                <cfset image["filename"] = qImages.filename>
+                <cfset image["fileExtension"] = qImages.file_extension>
+                <cfset image["displayOrder"] = qImages.display_order>
+                <cfset image["fullPath"] = "/assets/img/Gallery/" & qImages.filename>
                 <cfset arrayAppend(images, image)>
             </cfloop>
 
@@ -85,7 +84,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -131,7 +130,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -207,7 +206,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -277,7 +276,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -319,7 +318,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -420,7 +419,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -470,7 +469,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -525,7 +524,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 
@@ -565,7 +564,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 </cfcomponent>

@@ -44,6 +44,7 @@ import { DocumentDeleteComponent } from './documents/document-delete/document-de
 
 // Contacts
 import { ContactListComponent } from './contacts/contact-list/contact-list';
+import { EmailSettingsComponent } from './contacts/email-settings/email-settings.component';
 
 // Users
 import { UserListComponent } from './users/user-list/user-list.component';
@@ -102,6 +103,7 @@ import { EmptyStateComponent } from './shared/empty-state/empty-state.component'
 
     // Contacts
     ContactListComponent,
+    EmailSettingsComponent,
 
     // Users
     UserListComponent,

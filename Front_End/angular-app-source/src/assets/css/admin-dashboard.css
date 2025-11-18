@@ -425,6 +425,107 @@
     background: #ee3b4a;
 }
 
+/* Data Table Action Buttons - Override global .btn styles */
+.data-table .actions .btn,
+table .actions .btn,
+.table-container .actions .btn {
+  padding: 4px 6px !important;
+  font-size: 22px !important;
+  min-width: auto !important;
+  width: auto !important;
+  margin: 0 4px !important;
+  background: none !important;
+  border: none !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.data-table .actions .btn:hover,
+table .actions .btn:hover,
+.table-container .actions .btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(255, 87, 34, 0.15) !important;
+  border-radius: 8px !important;
+  padding: 8px 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Contact Submissions - Single icon right alignment */
+.data-table .actions {
+  text-align: right;
+}
+
+/* Contact Submissions Table - Column widths */
+.contact-submissions-table th:nth-child(1),
+.contact-submissions-table td:nth-child(1) {
+  width: 10%;  /* Status */
+}
+
+.contact-submissions-table th:nth-child(2),
+.contact-submissions-table td:nth-child(2) {
+  width: 10%;  /* Date & Time */
+}
+
+.contact-submissions-table th:nth-child(3),
+.contact-submissions-table td:nth-child(3) {
+  width: 15%;  /* Name */
+}
+
+.contact-submissions-table th:nth-child(4),
+.contact-submissions-table td:nth-child(4) {
+  width: 30%;  /* Email */
+}
+
+.contact-submissions-table th:nth-child(5),
+.contact-submissions-table td:nth-child(5) {
+  width: 10%;  /* Subject */
+}
+
+.contact-submissions-table th:nth-child(6),
+.contact-submissions-table td:nth-child(6) {
+  width: 20%;  /* Preview */
+}
+
+.contact-submissions-table th:nth-child(7),
+.contact-submissions-table td:nth-child(7) {
+  width: 5%;  /* Actions */
+  text-align: right;
+}
+
+/* Email Settings Table - Column widths */
+.email-recipients-table th:nth-child(1),
+.email-recipients-table td:nth-child(1) {
+  width: 35%;  /* Email Address */
+}
+
+.email-recipients-table th:nth-child(2),
+.email-recipients-table td:nth-child(2) {
+  width: 15%;  /* Type */
+}
+
+.email-recipients-table th:nth-child(3),
+.email-recipients-table td:nth-child(3) {
+  width: 15%;  /* Status */
+}
+
+.email-recipients-table th:nth-child(4),
+.email-recipients-table td:nth-child(4) {
+  width: 25%;  /* Added On */
+}
+
+.email-recipients-table th:nth-child(5),
+.email-recipients-table td:nth-child(5) {
+  width: 10%;  /* Actions */
+  text-align: right;
+}
+
+/* Email Settings - Narrow page width (like other admin forms) */
+.email-settings-container {
+  max-width: 900px;
+  margin: 0;
+}
+
 /* Form Styles */
 .admin-form {
     background: #ffffff;

@@ -290,4 +290,204 @@ Version: 1.0
         <cfreturn serializeJSON(result, false, false)>
     </cffunction>
 
+
+    <!--- ================================================================== --->
+    <!--- GET EMAIL RECIPIENTS --->
+    <!--- Returns all email recipients for notifications --->
+    <!--- ================================================================== --->
+    <cffunction name="getEmailRecipients" access="remote" returntype="String" output="false" returnformat="json">
+
+        <cfset var result = {}>
+        <cfset var qRecipients = "">
+
+        <cftry>
+            <!--- Query all recipients --->
+            <cfquery name="qRecipients" datasource="pasc_regionj">
+                SELECT
+                    id,
+                    email,
+                    is_primary,
+                    is_active,
+                    created_at
+                FROM dbo.contact_email_recipients
+                ORDER BY is_primary DESC, created_at ASC
+            </cfquery>
+
+            <!--- Convert query to array of structs --->
+            <cfset var recipients = []>
+
+            <cfloop query="qRecipients">
+                <cfset var recipient = {
+                    "id" = qRecipients.id,
+                    "email" = qRecipients.email,
+                    "is_primary" = qRecipients.is_primary,
+                    "is_active" = qRecipients.is_active,
+                    "created_at" = dateFormat(qRecipients.created_at, "yyyy-mm-dd") & " " & timeFormat(qRecipients.created_at, "HH:mm:ss")
+                }>
+                <cfset arrayAppend(recipients, recipient)>
+            </cfloop>
+
+            <!--- Build success response --->
+            <cfset result = {
+                "success" = true,
+                "data" = recipients,
+                "message" = "Recipients retrieved successfully"
+            }>
+
+            <cfcatch type="any">
+                <!--- Build error response --->
+                <cfset result = {
+                    "success" = false,
+                    "data" = [],
+                    "error" = cfcatch.message,
+                    "detail" = cfcatch.detail,
+                    "message" = "Error retrieving recipients"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- ADD EMAIL RECIPIENT --->
+    <!--- Add new email recipient for notifications --->
+    <!--- ================================================================== --->
+    <cffunction name="addEmailRecipient" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="email" type="string" required="true">
+
+        <cfset var result = {}>
+
+        <cftry>
+            <!--- Validate email format --->
+            <cfif NOT isValid("email", trim(arguments.email))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Invalid email format"
+                }>
+                <cfreturn serializeJSON(result, false, false)>
+            </cfif>
+
+            <!--- Check if email already exists --->
+            <cfquery name="qCheck" datasource="pasc_regionj">
+                SELECT id FROM dbo.contact_email_recipients
+                WHERE email = <cfqueryparam value="#trim(arguments.email)#" cfsqltype="cf_sql_nvarchar">
+            </cfquery>
+
+            <cfif qCheck.recordCount GT 0>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "This email is already in the recipient list"
+                }>
+                <cfreturn serializeJSON(result, false, false)>
+            </cfif>
+
+            <!--- Insert new recipient --->
+            <cfquery datasource="pasc_regionj">
+                INSERT INTO dbo.contact_email_recipients (email, is_primary, is_active)
+                VALUES (
+                    <cfqueryparam value="#trim(arguments.email)#" cfsqltype="cf_sql_nvarchar">,
+                    0,
+                    1
+                )
+            </cfquery>
+
+            <!--- Get all recipients to return --->
+            <cfset result = deserializeJSON(getEmailRecipients())>
+            <cfset result.message = "Recipient added successfully">
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error adding recipient"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- TOGGLE RECIPIENT STATUS --->
+    <!--- Toggle active/inactive status for recipient --->
+    <!--- ================================================================== --->
+    <cffunction name="toggleRecipientStatus" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="id" type="numeric" required="true">
+
+        <cfset var result = {}>
+
+        <cftry>
+            <!--- Toggle the is_active status --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.contact_email_recipients
+                SET is_active = CASE WHEN is_active = 1 THEN 0 ELSE 1 END
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Get all recipients to return --->
+            <cfset result = deserializeJSON(getEmailRecipients())>
+            <cfset result.message = "Recipient status updated successfully">
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error updating recipient status"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
+    <!--- DELETE EMAIL RECIPIENT --->
+    <!--- Delete an email recipient --->
+    <!--- ================================================================== --->
+    <cffunction name="deleteEmailRecipient" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="id" type="numeric" required="true">
+
+        <cfset var result = {}>
+
+        <cftry>
+            <!--- Check if this is the primary recipient --->
+            <cfquery name="qCheck" datasource="pasc_regionj">
+                SELECT is_primary FROM dbo.contact_email_recipients
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <cfif qCheck.recordCount GT 0 AND qCheck.is_primary EQ 1>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Cannot delete the primary recipient"
+                }>
+                <cfreturn serializeJSON(result, false, false)>
+            </cfif>
+
+            <!--- Delete the recipient --->
+            <cfquery datasource="pasc_regionj">
+                DELETE FROM dbo.contact_email_recipients
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Get all recipients to return --->
+            <cfset result = deserializeJSON(getEmailRecipients())>
+            <cfset result.message = "Recipient deleted successfully">
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error deleting recipient"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
 </cfcomponent>

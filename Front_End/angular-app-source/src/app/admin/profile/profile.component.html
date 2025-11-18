@@ -119,21 +119,31 @@
   <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="admin-form profile-form">
     <div class="form-group">
       <label for="current_password">Current Password *</label>
-      <input type="password"
-             id="current_password"
-             formControlName="current_password"
-             [class.error]="passwordForm.get('current_password')?.invalid && passwordForm.get('current_password')?.touched"
-             autocomplete="current-password">
+      <div class="password-input-wrapper">
+        <input [type]="showCurrentPassword ? 'text' : 'password'"
+               id="current_password"
+               formControlName="current_password"
+               [class.error]="passwordForm.get('current_password')?.invalid && passwordForm.get('current_password')?.touched"
+               autocomplete="current-password">
+        <button type="button" class="password-toggle" (click)="togglePasswordVisibility('current')">
+          <span class="toggle-icon">{{ showCurrentPassword ? '🙈' : '👁️' }}</span>
+        </button>
+      </div>
       <small>Enter your current password for security verification.</small>
     </div>
 
     <div class="form-group">
       <label for="new_password">New Password *</label>
-      <input type="password"
-             id="new_password"
-             formControlName="new_password"
-             [class.error]="passwordForm.get('new_password')?.invalid && passwordForm.get('new_password')?.touched"
-             autocomplete="new-password">
+      <div class="password-input-wrapper">
+        <input [type]="showNewPassword ? 'text' : 'password'"
+               id="new_password"
+               formControlName="new_password"
+               [class.error]="passwordForm.get('new_password')?.invalid && passwordForm.get('new_password')?.touched"
+               autocomplete="new-password">
+        <button type="button" class="password-toggle" (click)="togglePasswordVisibility('new')">
+          <span class="toggle-icon">{{ showNewPassword ? '🙈' : '👁️' }}</span>
+        </button>
+      </div>
       <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*).</small>
       <div *ngIf="passwordForm.get('new_password')?.invalid && passwordForm.get('new_password')?.touched" class="error-message">
         {{ getPasswordErrorMessage() }}
@@ -142,11 +152,16 @@
 
     <div class="form-group">
       <label for="confirm_new_password">Confirm New Password *</label>
-      <input type="password"
-             id="confirm_new_password"
-             formControlName="confirm_new_password"
-             [class.error]="passwordForm.get('confirm_new_password')?.invalid && passwordForm.get('confirm_new_password')?.touched"
-             autocomplete="new-password">
+      <div class="password-input-wrapper">
+        <input [type]="showConfirmNewPassword ? 'text' : 'password'"
+               id="confirm_new_password"
+               formControlName="confirm_new_password"
+               [class.error]="passwordForm.get('confirm_new_password')?.invalid && passwordForm.get('confirm_new_password')?.touched"
+               autocomplete="new-password">
+        <button type="button" class="password-toggle" (click)="togglePasswordVisibility('confirm')">
+          <span class="toggle-icon">{{ showConfirmNewPassword ? '🙈' : '👁️' }}</span>
+        </button>
+      </div>
       <div *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirm_new_password')?.touched" class="error-message">
         Passwords do not match
       </div>

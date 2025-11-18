@@ -12,21 +12,28 @@
 
 .password-toggle {
   position: absolute;
-  right: 8px;
-  background: transparent;
-  border: none;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent !important;
+  border: none !important;
+  color: #666;
   cursor: pointer;
   font-size: 18px;
   padding: 5px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  transition: color 0.3s ease;
+  outline: none;
 }
 
 .password-toggle:hover {
-  background-color: #f0f0f0;
+  color: #4fc3f7;
+}
+
+.password-toggle:focus {
+  outline: none;
 }
 
 .toggle-icon {
