@@ -1,0 +1,139 @@
+/*******************************************************************************
+* File: mobile-menu.css
+* Created: October 26, 2025
+* Author: Rastislav Toscak
+* Purpose: Mobile menu styles for hamburger navigation
+* Project: PASC Region J Conference 2026 Website
+*******************************************************************************/
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+    position: relative;
+}
+
+.mobile-menu-toggle span {
+    width: 100%;
+    height: 3px;
+    background: #4fc3f7;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+/* Hamburger Animation to X */
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Mobile Styles - Show hamburger on mobile */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    /* Hide desktop menu by default on mobile */
+    .nav-menu {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 39, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+        gap: 20px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        border-top: 2px solid rgba(79, 195, 247, 0.3);
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+        z-index: 1000;
+    }
+    
+    /* Show menu when active */
+    .nav-menu.active {
+        transform: translateX(0);
+    }
+    
+    /* Menu items on mobile */
+    .nav-menu li {
+        width: 100%;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+    }
+    
+    /* Animate menu items when menu opens */
+    .nav-menu.active li {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Stagger animation for menu items */
+    .nav-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+    .nav-menu.active li:nth-child(2) { transition-delay: 0.15s; }
+    .nav-menu.active li:nth-child(3) { transition-delay: 0.2s; }
+    .nav-menu.active li:nth-child(4) { transition-delay: 0.25s; }
+    .nav-menu.active li:nth-child(5) { transition-delay: 0.3s; }
+    .nav-menu.active li:nth-child(6) { transition-delay: 0.35s; }
+    .nav-menu.active li:nth-child(7) { transition-delay: 0.4s; }
+    
+    /* Menu links on mobile */
+    .nav-menu a {
+        display: block;
+        width: 100%;
+        padding: 15px 20px;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-menu a:hover,
+    .nav-menu a.active {
+        background: rgba(79, 195, 247, 0.1);
+        transform: translateX(5px);
+    }
+    
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+        overflow: hidden;
+    }
+}
+
+/* Desktop - ensure menu is always visible */
+@media (min-width: 769px) {
+    .nav-menu {
+        display: flex !important;
+        position: static;
+        transform: none !important;
+        flex-direction: row;
+        background: transparent;
+        padding: 0;
+    }
+    
+    .nav-menu li {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
