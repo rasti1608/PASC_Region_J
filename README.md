@@ -2,7 +2,25 @@
 
 **Lead Beyond Limits - February 13, 2026**
 
-A custom-built website for the Pennsylvania Association of Student Councils (PASC) Region J Leadership Conference, featuring an easy-to-use admin system for managing announcements and conference updates.
+## 🌐 Live Versions
+
+This project demonstrates the same web application built with different frameworks and technologies:
+
+**🔷 Angular Version (Default):** [pascregionj.com](https://pascregionj.com)  
+Modern frontend using Angular with ColdFusion backend APIs
+
+**🔶 ColdFusion Version:** [pascregionj.com?cf=1](https://pascregionj.com?cf=1)  
+Original full-stack ColdFusion implementation
+
+**🔷 React Version:** Coming soon  
+Next framework conversion (in development)
+
+**🔄 Future:** Multiple backend API implementations (PHP, Node.js, Java, .NET) with dynamic switching
+
+**Source Code:**
+- [Angular Implementation →](https://github.com/rasti1608/PASC_Region_J/tree/main/Front_End/angular-app-source)
+
+---
 
 ![Live Site](https://img.shields.io/badge/status-live-brightgreen)
 ![Conference](https://img.shields.io/badge/event-Feb%2013%202026-blue)
@@ -54,7 +72,7 @@ The admin panel (at `/admin/`) lets conference organizers:
 - Mark important announcements with a star
 - Drag-and-drop style ordering (via dropdowns)
 
-## 🏗️ How Was This Built?
+## 🗂️ How Was This Built?
 
 **Development Time:** ~25 hours (over one weekend)  
 **Purpose:** Built by a dad for his son's school conference  
@@ -68,11 +86,11 @@ This was a learning project that became a real, production-ready website. It pro
 - ColdFusion (backend programming)
 - Microsoft SQL Server (database)
 - HTML/CSS/JavaScript (frontend)
+- Angular (modern frontend framework)
 - Responsive design (mobile-friendly)
 
 **Code Stats:**
-- ~2,300 lines of code
-- 22 files
+- Multiple framework implementations
 - Custom CMS from scratch
 - Fully secure with HTTPS
 
@@ -116,5 +134,4 @@ Visit: [pascregionj.com/contact.cfm](https://pascregionj.com/contact.cfm)
 
 **⭐ Like this project? Star it on GitHub!**
 
-*Last Updated: October 27, 2025*
-
+*Last Updated: November 19, 2025*
