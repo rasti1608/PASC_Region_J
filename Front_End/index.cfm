@@ -1,5 +1,4 @@
 <cfprocessingdirective pageencoding="utf-8">
-<cfsilent>
 <!---
 *******************************************************************************
 * File:        /index.cfm
@@ -19,6 +18,44 @@
 *******************************************************************************
 --->
 
+<!--- ============================================================================
+    ROUTING LOGIC - Frontend Version Selector
+    ============================================================================
+    Purpose: Redirect visitors to the appropriate frontend version of the site
+    
+    Default Behavior: 
+    - pascregionj.com redirects to /angular-app/ (Angular version)
+    
+    Override Parameters (use in URL):
+    - ?cf=1       → Shows original ColdFusion homepage (legacy version)
+    - ?angular=1  → Explicitly redirects to Angular version
+    - ?react=1    → Future: redirects to React version (when implemented)
+    
+    Examples:
+    - pascregionj.com              → /angular-app/ (default)
+    - pascregionj.com?cf=1         → Shows this CF page
+    - pascregionj.com?angular=1    → /angular-app/
+    - pascregionj.com?react=1      → /react-app/ (future)
+    
+    Note: All other site functionality (/admin/, /api/, .cfm files) remains
+    accessible at their original URLs regardless of this redirect logic.
+    
+    Created: November 19, 2025
+    Author: Rastislav Toscak
+    ============================================================================ --->
+
+<cfparam name="url.cf" default="0">
+<cfparam name="url.angular" default="0">
+<cfparam name="url.react" default="0">
+
+<cfif url.cf NEQ "1" AND url.angular NEQ "1" AND url.react NEQ "1">
+    <cflocation url="/angular-app/" addtoken="false">
+</cfif>
+
+<!--- Include database configuration --->
+<cfinclude template="includes/db_config.cfm">
+
+<cfsilent>
 <!--- Include database configuration --->
 <cfinclude template="includes/db_config.cfm">
 
