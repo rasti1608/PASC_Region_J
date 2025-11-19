@@ -411,7 +411,7 @@ Version: 1.0
 
     <!--- ================================================================== --->
     <!--- DELETE DOCUMENT --->
-    <!--- Delete document and its file from server --->
+    <!--- Delete document and its file from server, then resequence remaining items --->
     <!--- ================================================================== --->
     <cffunction name="deleteDocument" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="id" type="numeric" required="true">
@@ -422,16 +422,25 @@ Version: 1.0
         <cftry>
             <!--- Get document details before deleting --->
             <cfquery name="qDocument" datasource="pasc_regionj">
-                SELECT filename
+                SELECT filename, display_order
                 FROM dbo.documents
                 WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
             </cfquery>
 
             <cfif qDocument.recordCount GT 0>
+                <cfset var deletedOrder = qDocument.display_order>
+
                 <!--- Delete from database --->
                 <cfquery datasource="pasc_regionj">
                     DELETE FROM dbo.documents
                     WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                </cfquery>
+
+                <!--- Shift remaining items up to fill the gap --->
+                <cfquery datasource="pasc_regionj">
+                    UPDATE dbo.documents
+                    SET display_order = display_order - 1
+                    WHERE display_order > <cfqueryparam value="#deletedOrder#" cfsqltype="cf_sql_integer">
                 </cfquery>
 
                 <!--- Delete physical file --->
@@ -508,23 +517,59 @@ Version: 1.0
 
     <!--- ================================================================== --->
     <!--- UPDATE ORDER --->
-    <!--- Update display order for a document --->
+    <!--- Update display order for a document with proper shift logic --->
     <!--- ================================================================== --->
     <cffunction name="updateOrder" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="id" type="numeric" required="true">
         <cfargument name="newOrder" type="numeric" required="true">
 
         <cfset var result = {}>
+        <cfset var qMoving = "">
+        <cfset var oldOrder = 0>
 
         <cftry>
-            <!--- Update the display order --->
-            <cfquery datasource="pasc_regionj">
-                UPDATE dbo.documents
-                SET
-                    display_order = <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">,
-                    updated_at = GETDATE()
+            <!--- Get current order of the document being moved --->
+            <cfquery name="qMoving" datasource="pasc_regionj">
+                SELECT display_order
+                FROM dbo.documents
                 WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
             </cfquery>
+
+            <cfif qMoving.recordCount EQ 0>
+                <cfthrow type="NotFound" message="Document not found">
+            </cfif>
+
+            <cfset oldOrder = qMoving.display_order>
+
+            <!--- Only proceed if order is actually changing --->
+            <cfif oldOrder NEQ arguments.newOrder>
+                <!--- Determine direction and shift other documents --->
+                <cfif arguments.newOrder LT oldOrder>
+                    <!--- Moving UP - shift others down --->
+                    <cfquery datasource="pasc_regionj">
+                        UPDATE dbo.documents
+                        SET display_order = display_order + 1
+                        WHERE display_order >= <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">
+                        AND display_order < <cfqueryparam value="#oldOrder#" cfsqltype="cf_sql_integer">
+                    </cfquery>
+                <cfelse>
+                    <!--- Moving DOWN - shift others up --->
+                    <cfquery datasource="pasc_regionj">
+                        UPDATE dbo.documents
+                        SET display_order = display_order - 1
+                        WHERE display_order > <cfqueryparam value="#oldOrder#" cfsqltype="cf_sql_integer">
+                        AND display_order <= <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">
+                    </cfquery>
+                </cfif>
+
+                <!--- Set the document to its new position --->
+                <cfquery datasource="pasc_regionj">
+                    UPDATE dbo.documents
+                    SET display_order = <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">,
+                        updated_at = GETDATE()
+                    WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                </cfquery>
+            </cfif>
 
             <cfset result = {
                 "success" = true,

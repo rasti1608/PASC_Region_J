@@ -475,7 +475,7 @@ Version: 1.0
 
     <!--- ================================================================== --->
     <!--- DELETE IMAGE --->
-    <!--- Delete image and its file from server --->
+    <!--- Delete image and its file from server, then resequence remaining items --->
     <!--- ================================================================== --->
     <cffunction name="deleteImage" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="id" type="numeric" required="true">
@@ -486,16 +486,27 @@ Version: 1.0
         <cftry>
             <!--- Get image details before deleting --->
             <cfquery name="qImage" datasource="pasc_regionj">
-                SELECT filename
+                SELECT filename, display_order, page_location
                 FROM dbo.gallery
                 WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
             </cfquery>
 
             <cfif qImage.recordCount GT 0>
+                <cfset var deletedOrder = qImage.display_order>
+                <cfset var deletedLocation = qImage.page_location>
+
                 <!--- Delete from database --->
                 <cfquery datasource="pasc_regionj">
                     DELETE FROM dbo.gallery
                     WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                </cfquery>
+
+                <!--- Shift remaining items up to fill the gap --->
+                <cfquery datasource="pasc_regionj">
+                    UPDATE dbo.gallery
+                    SET display_order = display_order - 1
+                    WHERE page_location = <cfqueryparam value="#deletedLocation#" cfsqltype="cf_sql_varchar">
+                        AND display_order > <cfqueryparam value="#deletedOrder#" cfsqltype="cf_sql_integer">
                 </cfquery>
 
                 <!--- Delete physical file --->
@@ -530,7 +541,10 @@ Version: 1.0
 
     <!--- ================================================================== --->
     <!--- UPDATE ORDER --->
-    <!--- Update display order for an image --->
+    <!--- Update display order for an image with proper shift logic --->
+    <!--- When moving from position A to position B: --->
+    <!--- - If B < A (moving up): shift items B to A-1 down by 1 --->
+    <!--- - If B > A (moving down): shift items A+1 to B up by 1 --->
     <!--- ================================================================== --->
     <cffunction name="updateOrder" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="id" type="numeric" required="true">
@@ -538,17 +552,64 @@ Version: 1.0
         <cfargument name="location" type="string" required="true">
 
         <cfset var result = {}>
+        <cfset var qCurrentOrder = "">
+        <cfset var currentOrder = 0>
 
         <cftry>
-            <!--- Update the display order --->
-            <cfquery datasource="pasc_regionj">
-                UPDATE dbo.gallery
-                SET
-                    display_order = <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">,
-                    updated_at = GETDATE()
+            <!--- Get current order of the item being moved --->
+            <cfquery name="qCurrentOrder" datasource="pasc_regionj">
+                SELECT display_order
+                FROM dbo.gallery
                 WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
                     AND page_location = <cfqueryparam value="#arguments.location#" cfsqltype="cf_sql_varchar">
             </cfquery>
+
+            <cfif qCurrentOrder.recordCount EQ 0>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Image not found"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <cfset currentOrder = qCurrentOrder.display_order>
+
+            <!--- Only update if the order is actually changing --->
+            <cfif currentOrder NEQ arguments.newOrder>
+
+                <!--- Shift other items to make room --->
+                <cfif arguments.newOrder LT currentOrder>
+                    <!--- Moving UP: shift items from newOrder to currentOrder-1 DOWN by 1 --->
+                    <cfquery datasource="pasc_regionj">
+                        UPDATE dbo.gallery
+                        SET display_order = display_order + 1
+                        WHERE page_location = <cfqueryparam value="#arguments.location#" cfsqltype="cf_sql_varchar">
+                            AND display_order >= <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">
+                            AND display_order < <cfqueryparam value="#currentOrder#" cfsqltype="cf_sql_integer">
+                            AND id != <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                    </cfquery>
+                <cfelse>
+                    <!--- Moving DOWN: shift items from currentOrder+1 to newOrder UP by 1 --->
+                    <cfquery datasource="pasc_regionj">
+                        UPDATE dbo.gallery
+                        SET display_order = display_order - 1
+                        WHERE page_location = <cfqueryparam value="#arguments.location#" cfsqltype="cf_sql_varchar">
+                            AND display_order > <cfqueryparam value="#currentOrder#" cfsqltype="cf_sql_integer">
+                            AND display_order <= <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">
+                            AND id != <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                    </cfquery>
+                </cfif>
+
+                <!--- Now set the item's new order --->
+                <cfquery datasource="pasc_regionj">
+                    UPDATE dbo.gallery
+                    SET
+                        display_order = <cfqueryparam value="#arguments.newOrder#" cfsqltype="cf_sql_integer">,
+                        updated_at = GETDATE()
+                    WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                        AND page_location = <cfqueryparam value="#arguments.location#" cfsqltype="cf_sql_varchar">
+                </cfquery>
+            </cfif>
 
             <cfset result = {
                 "success" = true,
