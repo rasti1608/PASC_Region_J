@@ -72,13 +72,24 @@
   <!-- Publish End Date -->
   <div class="form-group">
     <label for="publish_end">Publish End Date</label>
-    <input
-      type="date"
-      id="publish_end"
-      name="publish_end"
-      class="form-control"
-      [(ngModel)]="formData.publish_end"
-    />
+    <div class="date-input-wrapper">
+      <input
+        type="date"
+        id="publish_end"
+        name="publish_end"
+        class="form-control"
+        [(ngModel)]="formData.publish_end"
+      />
+      <button
+        type="button"
+        class="btn-clear-date"
+        *ngIf="formData.publish_end"
+        (click)="formData.publish_end = ''"
+        title="Clear date"
+      >
+        ×
+      </button>
+    </div>
     <small class="form-help">Leave empty for no end date</small>
   </div>
 

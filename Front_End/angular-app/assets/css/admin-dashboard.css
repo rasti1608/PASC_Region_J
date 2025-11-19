@@ -634,6 +634,49 @@ table .actions .btn:hover,
     user-select: none;
 }
 
+/* Date Input Clear Button */
+.date-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.date-input-wrapper input[type="date"] {
+    flex: 1;
+    padding-right: 40px;
+}
+
+.btn-clear-date {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #dc3545;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.btn-clear-date:hover {
+    background: #c82333;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.btn-clear-date:focus {
+    outline: 2px solid #dc3545;
+    outline-offset: 2px;
+}
+
 .checkbox-label {
     display: flex;
     align-items: center;
