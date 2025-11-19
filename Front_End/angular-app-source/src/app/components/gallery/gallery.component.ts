@@ -80,7 +80,7 @@ export class GalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     this.apiService.getGalleryCount('gallery').subscribe({
       next: (response) => {
         if (response.success) {
-          this.totalImages.set(response.totalCount);
+          this.totalImages.set(response.totalcount);
         }
       },
       error: (err) => {

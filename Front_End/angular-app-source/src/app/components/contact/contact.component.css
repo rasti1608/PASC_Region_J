@@ -99,24 +99,40 @@
 .form-textarea {
   width: 100%;
   padding: 12px 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 5px;
-  color: #fff;
+  color: #333;
   font-size: 1rem;
   transition: all 0.3s ease;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #888;
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
   border-color: #4fc3f7;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 1);
 }
 
 .form-input.invalid,
 .form-textarea.invalid {
   border-color: #f44336;
+}
+
+/* Select dropdown styling */
+select.form-input {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+}
+
+select.form-input option {
+  background: #1a1f3a;
+  color: #fff;
 }
 
 .form-textarea {

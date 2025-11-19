@@ -49,13 +49,13 @@
     @if (!loading() && announcements().length > 0) {
       <div class="announcements-grid">
         @for (announcement of announcements(); track announcement.id) {
-          <div class="announcement-card" [class.featured]="announcement.isFeatured">
-            @if (announcement.isFeatured) {
+          <div class="announcement-card" [class.featured]="announcement.isfeatured">
+            @if (announcement.isfeatured) {
               <span class="featured-badge">⭐ Featured</span>
             }
             <h3>{{ announcement.title }}</h3>
             <p>{{ announcement.content }}</p>
-            <span class="announcement-date">{{ announcement.publishStart }}</span>
+            <span class="announcement-date">{{ announcement.publishstart }}</span>
           </div>
         }
       </div>

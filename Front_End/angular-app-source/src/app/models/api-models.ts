@@ -19,10 +19,10 @@ export interface Announcement {
   id: number;
   title: string;
   content: string;
-  publishStart: string;
-  publishEnd: string | null;
-  isFeatured: boolean;
-  displayOrder: number;
+  publishstart: string;
+  publishend: string | null;
+  isfeatured: boolean;
+  displayorder: number;
 }
 
 // Gallery
@@ -42,7 +42,7 @@ export interface GalleryResponse extends ApiResponse<GalleryImage[]> {
 }
 
 export interface GalleryCountResponse extends ApiResponse<never> {
-  totalCount: number;
+  totalcount: number;
   location?: string;
 }
 
@@ -65,10 +65,10 @@ export interface Document {
 // Workshops/Forms
 export interface WorkshopForm {
   id: number;
-  formName: string;
-  formDescription: string;
-  embedCode: string;
-  displayOrder: number;
+  formname: string;
+  formdescription: string;
+  embedcode: string;
+  displayorder: number;
 }
 
 // Contact

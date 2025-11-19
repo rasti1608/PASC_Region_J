@@ -82,9 +82,9 @@
                                 [attr.aria-controls]="'collapse' + form.id"
                                 (click)="toggleForm(i)">
                                 <div class="accordion-header-content">
-                                    <div class="form-title">{{ form.formName }}</div>
-                                    @if (form.formDescription && form.formDescription.trim()) {
-                                        <div class="form-description-preview">{{ form.formDescription }}</div>
+                                    <div class="form-title">{{ form.formname }}</div>
+                                    @if (form.formdescription && form.formdescription.trim()) {
+                                        <div class="form-description-preview">{{ form.formdescription }}</div>
                                     }
                                 </div>
                             </button>

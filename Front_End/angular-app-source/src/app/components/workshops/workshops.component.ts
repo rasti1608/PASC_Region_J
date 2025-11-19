@@ -98,7 +98,7 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
           // Pre-sanitize all embed codes to prevent iframe reloading
           const formsWithSanitized = response.data.map(form => ({
             ...form,
-            sanitizedEmbedCode: this.sanitizer.bypassSecurityTrustHtml(form.embedCode)
+            sanitizedEmbedCode: this.sanitizer.bypassSecurityTrustHtml(form.embedcode)
           }));
 
           this.forms.set(formsWithSanitized);
