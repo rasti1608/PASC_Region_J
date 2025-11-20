@@ -18,6 +18,17 @@ export class AuthGuard implements CanActivate {
   ): boolean {
     // Check if user is authenticated
     if (this.authService.isAuthenticated()) {
+      // Check if user must change password
+      const user = this.authService.getCurrentUser();
+      if (user?.must_change_password) {
+        // Allow access to change-password page
+        if (state.url === '/admin/change-password') {
+          return true;
+        }
+        // Redirect to change-password for any other page
+        this.router.navigate(['/admin/change-password']);
+        return false;
+      }
       return true;
     }
 

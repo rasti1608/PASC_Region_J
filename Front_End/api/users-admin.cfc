@@ -196,6 +196,7 @@ Version: 1.0
                     email,
                     role_id,
                     is_active,
+                    must_change_password,
                     created_at
                 )
                 VALUES (
@@ -205,6 +206,7 @@ Version: 1.0
                     <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_nvarchar">,
                     <cfqueryparam value="#arguments.role_id#" cfsqltype="cf_sql_integer">,
                     <cfqueryparam value="#arguments.is_active#" cfsqltype="cf_sql_bit">,
+                    1,
                     GETDATE()
                 );
                 SELECT SCOPE_IDENTITY() AS newId

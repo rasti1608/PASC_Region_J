@@ -11,21 +11,22 @@
 
 <div class="section">
   <!-- Success Message with Temp Password -->
-  <div *ngIf="successMessage" class="alert alert-success" style="margin-bottom: 20px;">
-    <strong>✓ {{ successMessage }}</strong>
-    <div *ngIf="tempPassword" style="margin-top: 15px; padding: 15px; background: #fff; border-left: 4px solid #4fc3f7; border-radius: 4px;">
-      <strong style="color: #2d3561;">Temporary Password:</strong>
-      <code style="display: block; margin-top: 10px; padding: 10px; background: #f5f7fa; border-radius: 4px; font-size: 1.1rem; font-family: 'Courier New', monospace; color: #2d3561;">
-        {{ tempPassword }}
-      </code>
-      <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+  <div *ngIf="successMessage" class="success-container">
+    <div class="alert alert-success">
+      <strong>✓ {{ successMessage }}</strong>
+    </div>
+
+    <div *ngIf="tempPassword" class="temp-password-box">
+      <strong class="temp-password-label">Temporary Password:</strong>
+      <code class="temp-password-code">{{ tempPassword }}</code>
+      <p class="temp-password-warning">
         ⚠️ <strong>Important:</strong> Share this password securely with the user.
         They will be required to change it upon first login.
       </p>
     </div>
-    <div style="margin-top: 15px;">
-      <a routerLink="/admin/users/add" class="btn btn-primary">Add Another User</a>
-      <a routerLink="/admin/users" class="btn btn-secondary">Back to User List</a>
+
+    <div class="success-actions">
+      <button type="button" class="btn btn-primary" (click)="addAnotherUser()">Add Another User</button>
     </div>
   </div>
 
@@ -166,7 +167,7 @@
         {{ loading ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update User' : 'Create User') }}
       </button>
       <a routerLink="/admin/users" class="btn btn-secondary">Cancel</a>
-      <a *ngIf="isEditMode && userId" [routerLink]="['/admin/users/delete', userId]" class="btn btn-danger" style="margin-left: auto;">Delete User</a>
+      <a *ngIf="isEditMode && userId" [routerLink]="['/admin/users/delete', userId]" class="btn btn-danger btn-delete-right">Delete User</a>
     </div>
   </form>
 </div>

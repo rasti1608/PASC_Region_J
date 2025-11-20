@@ -56,6 +56,8 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'reset-password', component: ResetPasswordComponent },
+      // Standalone change password (required after first login - no admin layout)
+      { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
 
       // Protected routes with admin layout
       {
@@ -65,9 +67,6 @@ const routes: Routes = [
         children: [
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
           { path: 'dashboard', component: DashboardComponent },
-
-          // Change password (required after first login)
-          { path: 'change-password', component: ChangePasswordComponent },
 
           // Announcements
           { path: 'announcements', component: AnnouncementListComponent },

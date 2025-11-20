@@ -69,6 +69,7 @@ Version: 1.0
                     u.is_active,
                     u.role_id,
                     u.profile_picture,
+                    u.must_change_password,
                     r.role_name
                 FROM dbo.admin_users u
                 LEFT JOIN dbo.roles r ON u.role_id = r.id
@@ -157,7 +158,8 @@ Version: 1.0
                     "role_id" = qUser.role_id,
                     "role_name" = qUser.role_name,
                     "is_active" = qUser.is_active,
-                    "profile_picture" = qUser.profile_picture
+                    "profile_picture" = qUser.profile_picture,
+                    "must_change_password" = qUser.must_change_password
                 }
             }>
 
@@ -311,6 +313,238 @@ Version: 1.0
                     "success" = false,
                     "authenticated" = false,
                     "message" = "Auth check error: #cfcatch.message#"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result)>
+    </cffunction>
+
+    <!--- ================================================================== --->
+    <!--- REQUEST PASSWORD RESET --->
+    <!--- Sends password reset email to user --->
+    <!--- ================================================================== --->
+    <cffunction name="requestPasswordReset" access="remote" returntype="String" output="false" returnformat="json">
+
+        <cfset var result = {}>
+        <cfset var qUser = "">
+        <cfset var resetToken = "">
+        <cfset var requestBody = "">
+        <cfset var data = {}>
+
+        <cftry>
+            <!--- Get JSON body --->
+            <cfset requestBody = toString(getHttpRequestData().content)>
+
+            <!--- Parse JSON --->
+            <cftry>
+                <cfset data = deserializeJSON(requestBody, false)>
+                <cfcatch type="any">
+                    <cfset result = {
+                        "success" = false,
+                        "message" = "Invalid JSON format in request"
+                    }>
+                    <cfreturn serializeJSON(result)>
+                </cfcatch>
+            </cftry>
+
+            <!--- Validate email --->
+            <cfif NOT structKeyExists(data, "email") OR NOT len(trim(data.email))>
+                <cfset result = {
+                    "success" = true,
+                    "message" = "If that email exists in our system, a reset link has been sent."
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Query user by email --->
+            <cfquery name="qUser" datasource="pasc_regionj">
+                SELECT id, username, email, full_name
+                FROM dbo.admin_users
+                WHERE email = <cfqueryparam value="#trim(data.email)#" cfsqltype="cf_sql_varchar">
+                AND is_active = 1
+            </cfquery>
+
+            <!--- Always return success to prevent email enumeration --->
+            <cfif qUser.recordCount GT 0>
+                <!--- Generate reset token --->
+                <cfset resetToken = hash(createUUID() & now() & qUser.email, "SHA-256")>
+
+                <!--- Store token in database --->
+                <cfquery datasource="pasc_regionj">
+                    UPDATE dbo.admin_users
+                    SET
+                        reset_token = <cfqueryparam value="#resetToken#" cfsqltype="cf_sql_varchar">,
+                        reset_token_expires = DATEADD(hour, 1, GETDATE())
+                    WHERE id = <cfqueryparam value="#qUser.id#" cfsqltype="cf_sql_integer">
+                </cfquery>
+
+                <!--- Send reset email --->
+                <cfset var resetUrl = "http://pascregionj.com/admin/reset-password.cfm?token=#resetToken#">
+
+                <cfmail
+                    to="#qUser.email#"
+                    from="info@pascregionj.com"
+                    subject="Password Reset Request - PASC Region J Admin"
+                    type="html">
+                    <html>
+                    <head>
+                        <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; color: ##333; }
+                            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                            .header { background: linear-gradient(135deg, ##0a0e27 0%, ##1a1f3a 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                            .header h1 { margin: 0; font-size: 24px; }
+                            .content { background: ##f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+                            .button { display: inline-block; background: ##4fc3f7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+                            .footer { text-align: center; margin-top: 20px; color: ##666; font-size: 12px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>🔐 Password Reset Request</h1>
+                            </div>
+                            <div class="content">
+                                <p>Hello #qUser.full_name#,</p>
+                                <p>We received a request to reset the password for your PASC Region J admin account.</p>
+                                <p>Click the button below to reset your password:</p>
+                                <p style="text-align: center;">
+                                    <a href="#resetUrl#" class="button">Reset Password</a>
+                                </p>
+                                <p>Or copy and paste this link into your browser:</p>
+                                <p style="word-break: break-all; background: ##fff; padding: 10px; border-radius: 5px;">#resetUrl#</p>
+                                <p><strong>This link will expire in 1 hour.</strong></p>
+                                <p>If you did not request this password reset, please ignore this email.</p>
+                            </div>
+                            <div class="footer">
+                                <p>Best regards,<br>PASC Region J Conference Team</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                </cfmail>
+            </cfif>
+
+            <!--- Always return success --->
+            <cfset result = {
+                "success" = true,
+                "message" = "If that email exists in our system, a reset link has been sent."
+            }>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = true,
+                    "message" = "If that email exists in our system, a reset link has been sent."
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result)>
+    </cffunction>
+
+    <!--- ================================================================== --->
+    <!--- CHANGE REQUIRED PASSWORD --->
+    <!--- Changes password and clears must_change_password flag --->
+    <!--- ================================================================== --->
+    <cffunction name="changeRequiredPassword" access="remote" returntype="String" output="false" returnformat="json">
+
+        <cfset var result = {}>
+        <cfset var requestBody = "">
+        <cfset var data = {}>
+
+        <cftry>
+            <!--- Check if user is logged in --->
+            <cfif NOT structKeyExists(session, "admin_logged_in") OR NOT session.admin_logged_in>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Not authenticated"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Get JSON body --->
+            <cfset requestBody = toString(getHttpRequestData().content)>
+
+            <!--- Parse JSON --->
+            <cftry>
+                <cfset data = deserializeJSON(requestBody, false)>
+                <cfcatch type="any">
+                    <cfset result = {
+                        "success" = false,
+                        "message" = "Invalid JSON format in request"
+                    }>
+                    <cfreturn serializeJSON(result)>
+                </cfcatch>
+            </cftry>
+
+            <!--- Validate new password --->
+            <cfif NOT structKeyExists(data, "newPassword") OR NOT len(trim(data.newPassword))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "New password is required"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Validate password requirements --->
+            <cfset var pwd = data.newPassword>
+            <cfif len(pwd) LT 8>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must be at least 8 characters"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check for uppercase --->
+            <cfif NOT reFind("[A-Z]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one uppercase letter"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check for number --->
+            <cfif NOT reFind("[0-9]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one number"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check for special character --->
+            <cfif NOT reFind("[!@##$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one special character"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Hash the new password --->
+            <cfset var hashedPassword = hash(pwd, "SHA-256")>
+
+            <!--- Update password and clear must_change_password flag --->
+            <cfquery datasource="#application.datasource#">
+                UPDATE dbo.admin_users
+                SET
+                    password_hash = <cfqueryparam value="#hashedPassword#" cfsqltype="cf_sql_varchar">,
+                    must_change_password = 0,
+                    updated_at = GETDATE()
+                WHERE id = <cfqueryparam value="#session.admin_user_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <cfset result = {
+                "success" = true,
+                "message" = "Password changed successfully"
+            }>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Error changing password: #cfcatch.message#"
                 }>
             </cfcatch>
         </cftry>

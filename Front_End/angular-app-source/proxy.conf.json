@@ -1,18 +1,12 @@
 {
   "/api": {
-    "target": "http://localhost",
+    "target": "http://pascregionj.com",
     "secure": false,
-    "changeOrigin": false,
-    "logLevel": "debug",
-    "cookieDomainRewrite": "localhost",
-    "onProxyReq": function(proxyReq, req, res) {
-      if (req.headers.cookie) {
-        proxyReq.setHeader('cookie', req.headers.cookie);
-      }
-    }
+    "changeOrigin": true,
+    "logLevel": "debug"
   },
   "/assets": {
-    "target": "http://localhost",
+    "target": "http://pascregionj.com",
     "secure": false,
     "changeOrigin": true
   }

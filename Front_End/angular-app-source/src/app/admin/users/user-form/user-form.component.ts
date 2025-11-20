@@ -260,4 +260,18 @@ export class UserFormComponent implements OnInit {
   cancel(): void {
     this.router.navigate(['/admin/users']);
   }
+
+  addAnotherUser(): void {
+    // Reset form for new user
+    this.successMessage = null;
+    this.tempPassword = null;
+    this.error = null;
+    this.username = '';
+    this.password = '';
+    this.confirmPassword = '';
+    this.fullName = '';
+    this.email = '';
+    this.isActive = true;
+    // Keep the selected role
+  }
 }

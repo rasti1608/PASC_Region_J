@@ -109,7 +109,7 @@ Version: 1.0
         <cfset application.logsPath = expandPath("./logs/")>
         
         <!--- Email settings (configure as needed) --->
-        <cfset application.fromEmail = "noreply@pascregionj.com">
+        <cfset application.fromEmail = "info@pascregionj.com">
         <cfset application.adminEmail = "admin@pascregionj.com">
         <cfset application.supportEmail = "support@pascregionj.com">
         

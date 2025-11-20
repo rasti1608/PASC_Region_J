@@ -55,8 +55,13 @@ export class LoginComponent implements OnInit {
     this.authService.login(credentials).subscribe({
       next: (response) => {
         if (response.success) {
-          // Redirect to return URL or dashboard
-          this.router.navigate([this.returnUrl]);
+          // Check if user must change password
+          if (response.user?.must_change_password) {
+            this.router.navigate(['/admin/change-password']);
+          } else {
+            // Redirect to return URL or dashboard
+            this.router.navigate([this.returnUrl]);
+          }
         } else {
           this.errorMessage = response.message || 'Login failed. Please try again.';
           this.loading = false;

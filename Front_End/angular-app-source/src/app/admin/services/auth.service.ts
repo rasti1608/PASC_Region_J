@@ -18,6 +18,7 @@ export interface AdminUser {
   role_name: string;
   is_active: boolean;
   profile_picture?: string;
+  must_change_password?: boolean;
 }
 
 export interface LoginResponse {
@@ -128,5 +129,48 @@ export class AuthService {
    */
   public get currentUserValue(): AdminUser | null {
     return this.currentUserSubject.value;
+  }
+
+  /**
+   * Request password reset email
+   */
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}?method=requestPasswordReset`,
+      { email },
+      { withCredentials: true }
+    ).pipe(
+      catchError(error => {
+        return throwError(() => ({
+          success: false,
+          message: error.error?.message || 'Failed to send reset email.'
+        }));
+      })
+    );
+  }
+
+  /**
+   * Change required password (first-time login)
+   */
+  changeRequiredPassword(newPassword: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}?method=changeRequiredPassword`,
+      { newPassword },
+      { withCredentials: true }
+    ).pipe(
+      tap(response => {
+        if (response.success && this.currentUserSubject.value) {
+          // Update user to clear must_change_password flag
+          const updatedUser = { ...this.currentUserSubject.value, must_change_password: false };
+          this.currentUserSubject.next(updatedUser);
+        }
+      }),
+      catchError(error => {
+        return throwError(() => ({
+          success: false,
+          message: error.error?.message || 'Failed to change password.'
+        }));
+      })
+    );
   }
 }

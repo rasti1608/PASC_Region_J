@@ -83,3 +83,69 @@
   background: #fafafa;
   color: #666;
 }
+
+/* Success container styling - matches .admin-form width */
+.success-container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+}
+
+.success-container .alert {
+  margin: 0 0 20px 0;
+}
+
+.temp-password-box {
+  padding: 20px;
+  background: #f8f9fa;
+  border-left: 4px solid #4fc3f7;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.temp-password-label {
+  color: #2d3561;
+  font-size: 1rem;
+}
+
+.temp-password-code {
+  display: block;
+  margin-top: 12px;
+  padding: 12px 15px;
+  background: #ffffff;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-family: 'Courier New', Courier, monospace;
+  color: #2d3561;
+  letter-spacing: 0.5px;
+  border: 1px solid #e0e0e0;
+}
+
+.temp-password-warning {
+  margin-top: 12px;
+  margin-bottom: 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.success-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.success-actions .btn {
+  width: 50%;
+  max-width: 300px;
+  text-align: center;
+}
+
+/* Restore normal hover effect */
+.success-actions .btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
+}
