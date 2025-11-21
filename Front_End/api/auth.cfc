@@ -396,7 +396,7 @@ Version: 1.0
                 <cfif findNoCase("localhost", cgi.http_host)>
                     <cfset var resetUrl = "#baseUrl#/admin/reset-password?token=#resetToken#">
                 <cfelse>
-                    <cfset var resetUrl = "#baseUrl#/angular-app/##/admin/reset-password?token=#resetToken#">
+                    <cfset var resetUrl = "#baseUrl#/angular-app/admin/reset-password?token=#resetToken#">
                 </cfif>
 
                 <cfmail
