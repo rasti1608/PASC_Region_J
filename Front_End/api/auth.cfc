@@ -391,13 +391,7 @@ Version: 1.0
                 </cfquery>
 
                 <!--- Send reset email --->
-                <!--- Detect if we're on HTTPS --->
-                <cfset var protocol = "http">
-                <cfif (structKeyExists(cgi, "server_port_secure") AND cgi.server_port_secure EQ 1) OR (structKeyExists(cgi, "https") AND cgi.https EQ "on")>
-                    <cfset protocol = "https">
-                </cfif>
-
-                <cfset var baseUrl = "#protocol#://#cgi.http_host#">
+                <cfset var baseUrl = "http://#cgi.http_host#">
                 <!--- For localhost, skip /angular-app path. For production, include it --->
                 <cfif findNoCase("localhost", cgi.http_host)>
                     <cfset var resetUrl = "#baseUrl#/admin/reset-password?token=#resetToken#">
