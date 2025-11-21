@@ -150,6 +150,24 @@ export class AuthService {
   }
 
   /**
+   * Reset password using token from email
+   */
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}?method=resetPassword`,
+      { token, newPassword },
+      { withCredentials: true }
+    ).pipe(
+      catchError(error => {
+        return throwError(() => ({
+          success: false,
+          message: error.error?.message || 'Failed to reset password.'
+        }));
+      })
+    );
+  }
+
+  /**
    * Change required password (first-time login)
    */
   changeRequiredPassword(newPassword: string): Observable<any> {

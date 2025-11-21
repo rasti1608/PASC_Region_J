@@ -370,17 +370,34 @@ Version: 1.0
                 <!--- Generate reset token --->
                 <cfset resetToken = hash(createUUID() & now() & qUser.email, "SHA-256")>
 
-                <!--- Store token in database --->
+                <!--- Store token in password_reset_tokens table --->
                 <cfquery datasource="pasc_regionj">
-                    UPDATE dbo.admin_users
-                    SET
-                        reset_token = <cfqueryparam value="#resetToken#" cfsqltype="cf_sql_varchar">,
-                        reset_token_expires = DATEADD(hour, 1, GETDATE())
-                    WHERE id = <cfqueryparam value="#qUser.id#" cfsqltype="cf_sql_integer">
+                    INSERT INTO dbo.password_reset_tokens (
+                        user_id,
+                        token,
+                        created_at,
+                        expires_at,
+                        ip_address,
+                        user_agent
+                    )
+                    VALUES (
+                        <cfqueryparam value="#qUser.id#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#resetToken#" cfsqltype="cf_sql_varchar">,
+                        GETDATE(),
+                        DATEADD(hour, 12, GETDATE()),
+                        <cfqueryparam value="#cgi.REMOTE_ADDR#" cfsqltype="cf_sql_varchar" null="#NOT len(trim(cgi.REMOTE_ADDR))#">,
+                        <cfqueryparam value="#cgi.HTTP_USER_AGENT#" cfsqltype="cf_sql_varchar" null="#NOT len(trim(cgi.HTTP_USER_AGENT))#">
+                    )
                 </cfquery>
 
                 <!--- Send reset email --->
-                <cfset var resetUrl = "http://pascregionj.com/admin/reset-password.cfm?token=#resetToken#">
+                <cfset var baseUrl = "http://#cgi.http_host#">
+                <!--- For localhost, skip /angular-app path. For production, include it --->
+                <cfif findNoCase("localhost", cgi.http_host)>
+                    <cfset var resetUrl = "#baseUrl#/admin/reset-password?token=#resetToken#">
+                <cfelse>
+                    <cfset var resetUrl = "#baseUrl#/angular-app/##/admin/reset-password?token=#resetToken#">
+                </cfif>
 
                 <cfmail
                     to="#qUser.email#"
@@ -402,7 +419,7 @@ Version: 1.0
                     <body>
                         <div class="container">
                             <div class="header">
-                                <h1>🔐 Password Reset Request</h1>
+                                <h1>Password Reset Request</h1>
                             </div>
                             <div class="content">
                                 <p>Hello #qUser.full_name#,</p>
@@ -413,7 +430,14 @@ Version: 1.0
                                 </p>
                                 <p>Or copy and paste this link into your browser:</p>
                                 <p style="word-break: break-all; background: ##fff; padding: 10px; border-radius: 5px;">#resetUrl#</p>
-                                <p><strong>This link will expire in 1 hour.</strong></p>
+                                <div style="background: ##fef3cd; border-left: 4px solid ##f0ad4e; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                                    <p style="margin: 0; color: ##8a6d3b; font-size: 16px;">
+                                        <strong>&##9888; Security Notice:</strong>
+                                    </p>
+                                    <p style="margin: 10px 0 0 0; color: ##8a6d3b;">
+                                        This link will expire in <strong>12 hours</strong> and can only be used once.
+                                    </p>
+                                </div>
                                 <p>If you did not request this password reset, please ignore this email.</p>
                             </div>
                             <div class="footer">
@@ -435,6 +459,163 @@ Version: 1.0
                 <cfset result = {
                     "success" = true,
                     "message" = "If that email exists in our system, a reset link has been sent."
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result)>
+    </cffunction>
+
+    <!--- ================================================================== --->
+    <!--- RESET PASSWORD WITH TOKEN --->
+    <!--- Resets user password using token from email link --->
+    <!--- ================================================================== --->
+    <cffunction name="resetPassword" access="remote" returntype="String" output="false" returnformat="json">
+
+        <cfset var result = {}>
+        <cfset var qToken = "">
+        <cfset var requestBody = "">
+        <cfset var data = {}>
+
+        <cftry>
+            <!--- Get JSON body --->
+            <cfset requestBody = toString(getHttpRequestData().content)>
+
+            <!--- Parse JSON --->
+            <cftry>
+                <cfset data = deserializeJSON(requestBody, false)>
+                <cfcatch type="any">
+                    <cfset result = {
+                        "success" = false,
+                        "message" = "Invalid JSON format in request"
+                    }>
+                    <cfreturn serializeJSON(result)>
+                </cfcatch>
+            </cftry>
+
+            <!--- Validate token --->
+            <cfif NOT structKeyExists(data, "token") OR NOT len(trim(data.token))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Reset token is required"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Validate new password --->
+            <cfif NOT structKeyExists(data, "newPassword") OR NOT len(trim(data.newPassword))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "New password is required"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Validate password requirements --->
+            <cfset var pwd = trim(data.newPassword)>
+            <cfif len(pwd) LT 8>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must be at least 8 characters"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <cfif NOT reFind("[A-Z]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one uppercase letter"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <cfif NOT reFind("[0-9]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one number"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <cfif NOT reFind("[!@##$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one special character"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Query token --->
+            <cfquery name="qToken" datasource="pasc_regionj">
+                SELECT
+                    t.id,
+                    t.user_id,
+                    t.expires_at,
+                    t.used_at,
+                    u.username,
+                    u.email
+                FROM dbo.password_reset_tokens t
+                INNER JOIN dbo.admin_users u ON t.user_id = u.id
+                WHERE t.token = <cfqueryparam value="#trim(data.token)#" cfsqltype="cf_sql_varchar">
+                AND u.is_active = 1
+            </cfquery>
+
+            <!--- Check if token exists --->
+            <cfif qToken.recordCount EQ 0>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Invalid or expired reset token"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check if token has been used --->
+            <cfif len(trim(qToken.used_at))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "This reset link has already been used"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check if token has expired --->
+            <cfif now() GT qToken.expires_at>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "This reset link has expired. Please request a new one."
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Hash the new password --->
+            <cfset var hashedPassword = hash(pwd, "SHA-256")>
+
+            <!--- Update user password --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.admin_users
+                SET
+                    password_hash = <cfqueryparam value="#hashedPassword#" cfsqltype="cf_sql_varchar">,
+                    password_changed_at = GETDATE(),
+                    updated_at = GETDATE()
+                WHERE id = <cfqueryparam value="#qToken.user_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Mark token as used --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.password_reset_tokens
+                SET used_at = GETDATE()
+                WHERE id = <cfqueryparam value="#qToken.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <cfset result = {
+                "success" = true,
+                "message" = "Password reset successfully"
+            }>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "message" = "An error occurred while resetting your password. Please try again."
                 }>
             </cfcatch>
         </cftry>
