@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/admin/layout/admin-header/admin-header.component.css"],
+  "sourcesContent": ["/* Header avatar image styling */\n.header-avatar-img {\n  width: 35px;\n  height: 35px;\n  border-radius: 50%;\n  object-fit: cover;\n  border: 2px solid #4fc3f7;\n  display: inline-block;\n}\n"],
+  "mappings": ";AACA,CAAC;AACC,SAAO;AACP,UAAQ;AACR,iBAAe;AACf,cAAY;AACZ,UAAQ,IAAI,MAAM;AAClB,WAAS;AACX;",
+  "names": []
+}

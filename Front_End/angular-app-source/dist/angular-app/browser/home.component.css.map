@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/home/home.component.css"],
+  "sourcesContent": ["/* Home Component Styles - Will be enhanced with space theme */\n\n.loading-spinner {\n  text-align: center;\n  padding: 40px;\n}\n\n.spinner {\n  border: 4px solid rgba(255, 255, 255, 0.1);\n  border-top: 4px solid #4fc3f7;\n  border-radius: 50%;\n  width: 50px;\n  height: 50px;\n  animation: spin 1s linear infinite;\n  margin: 0 auto 20px;\n}\n\n@keyframes spin {\n  0% { transform: rotate(0deg); }\n  100% { transform: rotate(360deg); }\n}\n\n.no-announcements {\n  text-align: center;\n  padding: 40px;\n  color: #aaa;\n}\n\n.announcement-card.featured {\n  border: 2px solid #ffd700;\n}\n\n.featured-badge {\n  background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);\n  color: #000;\n  padding: 5px 15px;\n  border-radius: 20px;\n  font-size: 0.85rem;\n  font-weight: bold;\n  display: inline-block;\n  margin-bottom: 10px;\n}\n"],
+  "mappings": ";AAEA,CAAC;AACC,cAAY;AACZ,WAAS;AACX;AAEA,CAAC;AACC,UAAQ,IAAI,MAAM,KAAK,GAAG,EAAE,GAAG,EAAE,GAAG,EAAE;AACtC,cAAY,IAAI,MAAM;AACtB,iBAAe;AACf,SAAO;AACP,UAAQ;AACR,aAAW,KAAK,GAAG,OAAO;AAC1B,UAAQ,EAAE,KAAK;AACjB;AAEA,WAJa;AAKX;AAAK,eAAW,OAAO;AAAO;AAC9B;AAAO,eAAW,OAAO;AAAS;AACpC;AAEA,CAAC;AACC,cAAY;AACZ,WAAS;AACT,SAAO;AACT;AAEA,CAAC,iBAAiB,CAAC;AACjB,UAAQ,IAAI,MAAM;AACpB;AAEA,CAAC;AACC;AAAA,IAAY;AAAA,MAAgB,MAAhB;AAAA,MAAwB,QAAQ,EAAhC;AAAA,MAAoC,QAAQ;AACxD,SAAO;AACP,WAAS,IAAI;AACb,iBAAe;AACf,aAAW;AACX,eAAa;AACb,WAAS;AACT,iBAAe;AACjB;",
+  "names": []
+}
