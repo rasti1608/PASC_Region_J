@@ -35,7 +35,7 @@ jobs:
           server-dir: /httpdocs/
 
           # Security and performance settings
-          protocol: ftps
+          protocol: ftp
           port: 21
 
           # Exclude unnecessary files from deployment
