@@ -52,7 +52,7 @@ jobs:
             **/*.psd
             **/.env
             **/.env.*
-            **/angular-app-source/**
+            angular-app-source/**
 
           # Logging
           log-level: standard
