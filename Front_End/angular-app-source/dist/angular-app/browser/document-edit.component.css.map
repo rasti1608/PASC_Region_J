@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/admin/documents/document-edit/document-edit.component.css"],
-  "sourcesContent": ["/* Document Info Display */\n.document-info {\n    display: flex;\n    align-items: center;\n    gap: 15px;\n    padding: 15px;\n    background: #f8f9fa;\n    border-radius: 8px;\n    border: 2px solid #e0e0e0;\n}\n\n.doc-icon {\n    width: 60px;\n    height: 60px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background: #f0f0f0;\n    border-radius: 6px;\n    font-size: 28px;\n    border: 2px solid #e0e0e0;\n    flex-shrink: 0;\n}\n\n.doc-icon.pdf {\n    background: #ffebee;\n    border-color: #ef5350;\n}\n\n.doc-icon.doc,\n.doc-icon.docx {\n    background: #e3f2fd;\n    border-color: #42a5f5;\n}\n\n.doc-icon.xls,\n.doc-icon.xlsx {\n    background: #e8f5e9;\n    border-color: #66bb6a;\n}\n\n.doc-icon.ppt,\n.doc-icon.pptx {\n    background: #fff3e0;\n    border-color: #ff9800;\n}\n\n.file-info {\n    font-size: 12px;\n    color: #999;\n}\n"],
-  "mappings": ";AACA,CAAC;AACG,WAAS;AACT,eAAa;AACb,OAAK;AACL,WAAS;AACT,cAAY;AACZ,iBAAe;AACf,UAAQ,IAAI,MAAM;AACtB;AAEA,CAAC;AACG,SAAO;AACP,UAAQ;AACR,WAAS;AACT,eAAa;AACb,mBAAiB;AACjB,cAAY;AACZ,iBAAe;AACf,aAAW;AACX,UAAQ,IAAI,MAAM;AAClB,eAAa;AACjB;AAEA,CAbC,QAaQ,CAAC;AACN,cAAY;AACZ,gBAAc;AAClB;AAEA,CAlBC,QAkBQ,CAAC;AACV,CAnBC,QAmBQ,CAAC;AACN,cAAY;AACZ,gBAAc;AAClB;AAEA,CAxBC,QAwBQ,CAAC;AACV,CAzBC,QAyBQ,CAAC;AACN,cAAY;AACZ,gBAAc;AAClB;AAEA,CA9BC,QA8BQ,CAAC;AACV,CA/BC,QA+BQ,CAAC;AACN,cAAY;AACZ,gBAAc;AAClB;AAEA,CAAC;AACG,aAAW;AACX,SAAO;AACX;",
-  "names": []
-}
