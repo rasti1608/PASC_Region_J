@@ -114,19 +114,28 @@ This one requires a conversation between us.
 **Your Request:** Remove the Conference Anthem/song entirely
 - Your reasoning: It's blocking access to files and not needed
 
-**My Request:** Keep the song as part of the site
+**My Position:** I disagree with removing it - I think the anthem actually fits perfectly where it is
 - My reasoning: 
   - This is an original composition I created specifically for this project
   - It integrates beautifully with the space-themed background animations
   - It demonstrates multimedia capabilities beyond standard web development
   - **Most importantly:** Since I built this entire $8-12k website for free, I'd like to use it as a portfolio piece to showcase my work to potential clients. The song + video background combination is a unique differentiator that shows I can deliver custom multimedia solutions, not just code.
 
-**Proposed Compromise:**
-- Could we keep the anthem but move it to a less prominent position so it doesn't block file access?
-- Or make it collapsible/toggleable?
-- Or add it to a separate "Media" section?
+**Proposed Compromise (if the current placement is the only obstacle):**
 
-I completely understand if it's truly not wanted, but I wanted to explain why I'd like to keep it as part of my portfolio demonstration. What do you think?
+If your concern is that the anthem is blocking access to documents/files, we could rearrange the Resources page like this:
+
+**New Resources Page Order:**
+1. Conference Schedule (prominent at top)
+2. Documents/Files (easy access)
+3. Conference Anthem (moved lower on the page)
+
+This way:
+- ✅ Files are easily accessible and not blocked
+- ✅ Schedule is highly visible as requested
+- ✅ Anthem remains on the site for portfolio purposes
+
+**However**, I still believe the anthem works well in its current position and enhances the site's multimedia experience. If the only issue is file accessibility, the compromise above solves that. What do you think?
 
 ---
 
