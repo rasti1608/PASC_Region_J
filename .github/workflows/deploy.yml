@@ -21,7 +21,33 @@ jobs:
         with:
           fetch-depth: 1
 
-      # Step 2: Deploy Front_End folder to FTP server
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Front_End/angular-app-source/package-lock.json
+
+      # Step 3: Install Angular dependencies
+      - name: Install dependencies
+        run: |
+          cd Front_End/angular-app-source
+          npm ci
+
+      # Step 4: Build Angular application
+      - name: Build Angular app
+        run: |
+          cd Front_End/angular-app-source
+          npm run build -- --base-href /angular-app/ --configuration production
+
+      # Step 5: Copy built files to deployment directory
+      - name: Copy built files
+        run: |
+          rm -rf Front_End/angular-app/*
+          cp -r Front_End/angular-app-source/dist/angular-app/browser/* Front_End/angular-app/
+
+      # Step 6: Deploy Front_End folder to FTP server
       - name: Deploy to DigitalRazor FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -50,6 +76,14 @@ jobs:
             **/*.psd
             **/.env
             **/.env.*
+            **/angular-app-source/**
+            **/package.json
+            **/package-lock.json
+            **/tsconfig.json
+            **/angular.json
+            **/*.ts
+            **/*.spec.ts
+            **/README.md
 
           # Logging
           log-level: standard
@@ -58,12 +92,13 @@ jobs:
           dangerous-clean-slate: false
           state-name: "sync-state"
 
-      # Step 3: Deployment summary
+      # Step 7: Deployment summary
       - name: Deployment summary
         if: success()
         run: |
           echo "✅ Deployment successful!"
-          echo "📁 Deployed: Front_End folder"
+          echo "📦 Built Angular app with production configuration"
+          echo "📁 Deployed: Front_End folder (production build)"
           echo "🌐 Server: ftp.pascregionj.com"
           echo "📂 Remote path: /httpdocs/"
           echo "🕒 Timestamp: $(date)"
