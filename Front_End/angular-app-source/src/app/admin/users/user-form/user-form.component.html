@@ -38,8 +38,11 @@
     <!-- Username (Add Mode Only) -->
     <div class="form-group" *ngIf="!isEditMode">
       <label for="username">Username *</label>
-      <input type="text" id="username" [(ngModel)]="username" name="username" required maxlength="50" autocomplete="off">
-      <small>Username for logging into the admin panel. Must be unique.</small>
+      <input type="text" id="username" [(ngModel)]="username" name="username" required maxlength="50" autocomplete="off" [class.error]="username && hasSpaces(username)">
+      <small>Username for logging into the admin panel. Must be unique and cannot contain spaces.</small>
+      <div *ngIf="username && hasSpaces(username)" class="error-message" style="color: #dc3545; margin-top: 5px;">
+        ⚠ Username cannot contain spaces
+      </div>
     </div>
 
     <!-- Username (Edit Mode - Read Only) -->
@@ -53,10 +56,17 @@
     <div class="form-group" *ngIf="!isEditMode">
       <label for="password">Password *</label>
       <div class="password-input-wrapper">
-        <input type="password" id="password" [(ngModel)]="password" name="password" required minlength="8" autocomplete="new-password">
+        <input type="password" id="password" [(ngModel)]="password" name="password" required minlength="8" autocomplete="new-password" (ngModelChange)="onPasswordChange()">
         <button type="button" class="password-toggle" (click)="togglePasswordVisibility('password')" aria-label="Toggle password visibility">
           <span class="toggle-icon">{{ showPassword ? '🙈' : '👁️' }}</span>
         </button>
+      </div>
+      <!-- Password Strength Indicator -->
+      <div *ngIf="passwordStrength > 0" class="password-strength" style="margin-top: 8px;">
+        <div class="strength-bar-container" style="width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
+          <div class="strength-bar" [style.width.%]="passwordStrength" [style.background]="passwordStrengthColor" style="height: 100%; transition: width 0.3s ease, background 0.3s ease;"></div>
+        </div>
+        <span class="strength-label" [style.color]="passwordStrengthColor" style="font-size: 12px; font-weight: 600; margin-top: 4px; display: inline-block;">{{ passwordStrengthLabel }}</span>
       </div>
       <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*). User will be required to change this on first login.</small>
     </div>
@@ -123,10 +133,17 @@
         <div class="form-group">
           <label for="newPassword">New Password</label>
           <div class="password-input-wrapper">
-            <input type="password" id="newPassword" [(ngModel)]="newPassword" name="newPassword" minlength="8" [required]="changePassword" autocomplete="new-password">
+            <input type="password" id="newPassword" [(ngModel)]="newPassword" name="newPassword" minlength="8" [required]="changePassword" autocomplete="new-password" (ngModelChange)="onNewPasswordChange()">
             <button type="button" class="password-toggle" (click)="togglePasswordVisibility('newPassword')" aria-label="Toggle password visibility">
               <span class="toggle-icon">{{ showNewPassword ? '🙈' : '👁️' }}</span>
             </button>
+          </div>
+          <!-- Password Strength Indicator -->
+          <div *ngIf="newPasswordStrength > 0" class="password-strength" style="margin-top: 8px;">
+            <div class="strength-bar-container" style="width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
+              <div class="strength-bar" [style.width.%]="newPasswordStrength" [style.background]="newPasswordStrengthColor" style="height: 100%; transition: width 0.3s ease, background 0.3s ease;"></div>
+            </div>
+            <span class="strength-label" [style.color]="newPasswordStrengthColor" style="font-size: 12px; font-weight: 600; margin-top: 4px; display: inline-block;">{{ newPasswordStrengthLabel }}</span>
           </div>
           <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*). User will NOT be required to change this password.</small>
         </div>

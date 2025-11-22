@@ -71,13 +71,17 @@
   <!-- Sidebar Footer (User Info) -->
   <div class="sidebar-footer">
     <div class="user-info">
-      <!-- Profile Picture Placeholder (40px for sidebar) -->
-      <div class="profile-placeholder" style="width: 40px; height: 40px; font-size: 20px; margin: 0 auto 10px auto;">
+      <!-- Profile Picture or Placeholder (40px for sidebar) -->
+      <img *ngIf="getProfilePictureUrl()"
+           [src]="getProfilePictureUrl()"
+           alt="Profile"
+           (error)="onImageError()"
+           style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px auto; display: block; border: 2px solid #4fc3f7;">
+      <div *ngIf="!getProfilePictureUrl()" class="profile-placeholder" style="width: 40px; height: 40px; font-size: 20px; margin: 0 auto 10px auto;">
         👤
       </div>
-      <!-- TODO: Replace with actual user data from session in Phase 2 -->
-      <strong>Admin User</strong><br>
-      <small style="color: #b0b8d4;">Administrator</small>
+      <strong>{{ currentUser?.full_name || 'Admin User' }}</strong><br>
+      <small style="color: #b0b8d4;">{{ currentUser?.role_name || 'Administrator' }}</small>
     </div>
 
     <!-- My Profile Link -->

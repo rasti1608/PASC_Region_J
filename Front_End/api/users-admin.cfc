@@ -242,7 +242,7 @@ Version: 1.0
 
     <!--- ================================================================== --->
     <!--- UPDATE USER --->
-    <!--- Update existing user (without password) --->
+    <!--- Update existing user (with optional password) --->
     <!--- ================================================================== --->
     <cffunction name="updateUser" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="id" type="numeric" required="true">
@@ -250,10 +250,17 @@ Version: 1.0
         <cfargument name="email" type="string" required="true">
         <cfargument name="role_id" type="numeric" required="true">
         <cfargument name="is_active" type="boolean" required="true">
+        <cfargument name="password" type="string" required="false" default="">
 
         <cfset var result = {}>
+        <cfset var hashedPassword = "">
 
         <cftry>
+            <!--- Hash password if provided --->
+            <cfif len(trim(arguments.password))>
+                <cfset hashedPassword = hash(arguments.password, "SHA-256")>
+            </cfif>
+
             <!--- Update the user --->
             <cfquery datasource="pasc_regionj">
                 UPDATE dbo.admin_users
@@ -262,6 +269,10 @@ Version: 1.0
                     email = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_nvarchar">,
                     role_id = <cfqueryparam value="#arguments.role_id#" cfsqltype="cf_sql_integer">,
                     is_active = <cfqueryparam value="#arguments.is_active#" cfsqltype="cf_sql_bit">,
+                    <cfif len(trim(hashedPassword))>
+                        password_hash = <cfqueryparam value="#hashedPassword#" cfsqltype="cf_sql_nvarchar">,
+                        must_change_password = 0,
+                    </cfif>
                     updated_at = GETDATE()
                 WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
             </cfquery>

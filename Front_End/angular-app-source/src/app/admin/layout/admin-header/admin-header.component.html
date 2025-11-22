@@ -8,8 +8,13 @@
   <div class="header-right">
     <!-- Profile Link with Avatar and Settings Icon -->
     <a routerLink="/admin/profile" class="header-profile-link" title="Profile & Settings">
-      <!-- Profile Avatar -->
-      <span class="header-avatar">👤</span>
+      <!-- Profile Avatar (Dynamic) -->
+      <img *ngIf="getProfilePictureUrl()"
+           [src]="getProfilePictureUrl()"
+           alt="Profile"
+           (error)="onImageError()"
+           class="header-avatar-img">
+      <span *ngIf="!getProfilePictureUrl()" class="header-avatar">👤</span>
       <!-- Settings Gear Icon -->
       <span class="header-settings-icon">⚙️</span>
     </a>

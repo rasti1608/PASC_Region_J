@@ -70,7 +70,8 @@
       <img *ngIf="getProfilePictureUrl()"
            [src]="getProfilePictureUrl()"
            alt="Profile Picture"
-           class="profile-picture-preview">
+           class="profile-picture-preview"
+           (error)="onImageError()">
       <div *ngIf="!getProfilePictureUrl()" class="profile-placeholder">
         👤
       </div>
@@ -143,6 +144,13 @@
         <button type="button" class="password-toggle" (click)="togglePasswordVisibility('new')">
           <span class="toggle-icon">{{ showNewPassword ? '🙈' : '👁️' }}</span>
         </button>
+      </div>
+      <!-- Password Strength Indicator -->
+      <div *ngIf="passwordStrength > 0" class="password-strength" style="margin-top: 8px;">
+        <div class="strength-bar-container" style="width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
+          <div class="strength-bar" [style.width.%]="passwordStrength" [style.background]="passwordStrengthColor" style="height: 100%; transition: width 0.3s ease, background 0.3s ease;"></div>
+        </div>
+        <span class="strength-label" [style.color]="passwordStrengthColor" style="font-size: 12px; font-weight: 600; margin-top: 4px; display: inline-block;">{{ passwordStrengthLabel }}</span>
       </div>
       <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*).</small>
       <div *ngIf="passwordForm.get('new_password')?.invalid && passwordForm.get('new_password')?.touched" class="error-message">

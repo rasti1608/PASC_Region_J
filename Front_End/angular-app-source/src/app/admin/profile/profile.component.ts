@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileService } from '../services/profile.service';
+import { AuthService } from '../services/auth.service';
 import { User } from '../models/user.model';
 
 @Component({
@@ -33,15 +34,22 @@ export class ProfileComponent implements OnInit {
   // Profile picture
   selectedPictureFile: File | null = null;
   picturePreviewUrl: string | null = null;
+  imageLoadError = false;
 
   // Password visibility toggles
   showCurrentPassword = false;
   showNewPassword = false;
   showConfirmNewPassword = false;
 
+  // Password strength indicator
+  passwordStrength = 0;
+  passwordStrengthLabel = '';
+  passwordStrengthColor = '';
+
   constructor(
     private fb: FormBuilder,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private authService: AuthService
   ) {
     // Initialize profile form
     this.profileForm = this.fb.group({
@@ -59,6 +67,11 @@ export class ProfileComponent implements OnInit {
       ]],
       confirm_new_password: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+
+    // Subscribe to password changes for strength indicator
+    this.passwordForm.get('new_password')?.valueChanges.subscribe(value => {
+      this.calculatePasswordStrength(value);
+    });
   }
 
   ngOnInit(): void {
@@ -70,6 +83,7 @@ export class ProfileComponent implements OnInit {
    */
   loadProfile(): void {
     this.loading = true;
+    this.imageLoadError = false; // Reset image error flag
     this.profileService.getProfile().subscribe({
       next: (user) => {
         this.user = user;
@@ -193,6 +207,7 @@ export class ProfileComponent implements OnInit {
         this.picturePreviewUrl = null;
         this.pictureLoading = false;
         this.loadProfile(); // Reload profile to get new picture
+        this.authService.checkAuthStatus(); // Update auth service to refresh avatars everywhere
 
         // Clear file input
         const fileInput = document.getElementById('profile_picture') as HTMLInputElement;
@@ -222,6 +237,7 @@ export class ProfileComponent implements OnInit {
         this.pictureSuccess = response.message || 'Profile picture removed successfully';
         this.pictureLoading = false;
         this.loadProfile(); // Reload profile
+        this.authService.checkAuthStatus(); // Update auth service to refresh avatars everywhere
       },
       error: (err) => {
         this.pictureError = err.message || 'Failed to remove profile picture';
@@ -234,6 +250,9 @@ export class ProfileComponent implements OnInit {
    * Get profile picture URL
    */
   getProfilePictureUrl(): string {
+    if (this.imageLoadError) {
+      return '';
+    }
     if (this.picturePreviewUrl) {
       return this.picturePreviewUrl;
     }
@@ -241,6 +260,13 @@ export class ProfileComponent implements OnInit {
       return `/assets/img/profiles/${this.user.profile_picture}?v=${new Date().getTime()}`;
     }
     return '';
+  }
+
+  /**
+   * Handle image load error
+   */
+  onImageError(): void {
+    this.imageLoadError = true;
   }
 
   /**
@@ -302,5 +328,56 @@ export class ProfileComponent implements OnInit {
       minute: '2-digit',
       hour12: true
     });
+  }
+
+  /**
+   * Calculate password strength
+   */
+  calculatePasswordStrength(password: string): void {
+    if (!password) {
+      this.passwordStrength = 0;
+      this.passwordStrengthLabel = '';
+      this.passwordStrengthColor = '';
+      return;
+    }
+
+    let strength = 0;
+
+    // Length checks
+    if (password.length >= 8) strength += 20;
+    if (password.length >= 12) strength += 10;
+    if (password.length >= 16) strength += 10;
+
+    // Character type checks
+    if (/[a-z]/.test(password)) strength += 10;
+    if (/[A-Z]/.test(password)) strength += 15;
+    if (/[0-9]/.test(password)) strength += 15;
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) strength += 20;
+
+    // Bonus for variety
+    const types = [/[a-z]/, /[A-Z]/, /[0-9]/, /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/];
+    const typeCount = types.filter(regex => regex.test(password)).length;
+    if (typeCount >= 4) strength += 10;
+
+    // Cap at 100
+    this.passwordStrength = Math.min(strength, 100);
+
+    // Set label and color based on strength
+    if (this.passwordStrength < 20) {
+      this.passwordStrengthLabel = 'Weak';
+      this.passwordStrengthColor = '#dc3545'; // Red
+    } else if (this.passwordStrength < 40) {
+      this.passwordStrengthLabel = 'Fair';
+      this.passwordStrengthColor = '#fd7e14'; // Orange
+    } else if (this.passwordStrength < 60) {
+      this.passwordStrengthLabel = 'Medium';
+      this.passwordStrengthColor = '#ffc107'; // Yellow
+    } else if (this.passwordStrength < 80) {
+      this.passwordStrengthLabel = 'Good';
+      this.passwordStrengthColor = '#90EE90'; // Light Green
+    } else {
+      this.passwordStrengthLabel = 'Strong';
+      this.passwordStrengthColor = '#28a745'; // Dark Green
+    }
   }
 }

@@ -40,7 +40,7 @@ export class ProfileService {
    */
   changePassword(data: ChangePasswordRequest): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(
-      `${this.apiUrl}?method=changePassword`,
+      `${this.apiUrl}?method=updatePassword`,
       data
     ).pipe(
       catchError(this.handleError)
@@ -66,8 +66,9 @@ export class ProfileService {
    * Remove profile picture
    */
   removeProfilePicture(): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(
-      `${this.apiUrl}?method=removeProfilePicture`
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}?method=removeProfilePicture`,
+      {}
     ).pipe(
       catchError(this.handleError)
     );

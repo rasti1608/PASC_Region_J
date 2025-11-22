@@ -66,6 +66,12 @@ export class UsersService {
       role_id: user.role_id.toString(),
       is_active: user.is_active ? '1' : '0'
     });
+
+    // Add password if provided
+    if (user.password) {
+      params.append('password', user.password);
+    }
+
     return this.http.get<{ data: User }>(`${this.apiUrl}?${params.toString()}`)
       .pipe(
         map(response => response.data),

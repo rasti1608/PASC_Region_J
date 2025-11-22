@@ -39,6 +39,16 @@ export class UserFormComponent implements OnInit {
   showNewPassword = false;
   showConfirmNewPassword = false;
 
+  // Password strength indicators (for create mode)
+  passwordStrength = 0;
+  passwordStrengthLabel = '';
+  passwordStrengthColor = '';
+
+  // Password strength indicators (for edit mode)
+  newPasswordStrength = 0;
+  newPasswordStrengthLabel = '';
+  newPasswordStrengthColor = '';
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -133,6 +143,12 @@ export class UserFormComponent implements OnInit {
       // Add mode - validate password
       if (!this.username || !this.password) {
         this.error = 'Username and password are required';
+        return;
+      }
+
+      // Validate username - no spaces allowed
+      if (/\s/.test(this.username)) {
+        this.error = 'Username cannot contain spaces';
         return;
       }
 
@@ -273,5 +289,84 @@ export class UserFormComponent implements OnInit {
     this.email = '';
     this.isActive = true;
     // Keep the selected role
+  }
+
+  onPasswordChange(): void {
+    this.calculatePasswordStrength(this.password, 'create');
+  }
+
+  onNewPasswordChange(): void {
+    this.calculatePasswordStrength(this.newPassword, 'edit');
+  }
+
+  hasSpaces(value: string): boolean {
+    return /\s/.test(value);
+  }
+
+  calculatePasswordStrength(password: string, mode: 'create' | 'edit'): void {
+    if (!password) {
+      if (mode === 'create') {
+        this.passwordStrength = 0;
+        this.passwordStrengthLabel = '';
+        this.passwordStrengthColor = '';
+      } else {
+        this.newPasswordStrength = 0;
+        this.newPasswordStrengthLabel = '';
+        this.newPasswordStrengthColor = '';
+      }
+      return;
+    }
+
+    let strength = 0;
+
+    // Length checks
+    if (password.length >= 8) strength += 20;
+    if (password.length >= 12) strength += 10;
+    if (password.length >= 16) strength += 10;
+
+    // Character type checks
+    if (/[a-z]/.test(password)) strength += 10;
+    if (/[A-Z]/.test(password)) strength += 15;
+    if (/[0-9]/.test(password)) strength += 15;
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) strength += 20;
+
+    // Bonus for variety
+    const types = [/[a-z]/, /[A-Z]/, /[0-9]/, /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/];
+    const typeCount = types.filter(regex => regex.test(password)).length;
+    if (typeCount >= 4) strength += 10;
+
+    // Cap at 100
+    strength = Math.min(strength, 100);
+
+    // Set label and color based on strength
+    let label = '';
+    let color = '';
+
+    if (strength < 20) {
+      label = 'Weak';
+      color = '#dc3545'; // Red
+    } else if (strength < 40) {
+      label = 'Fair';
+      color = '#fd7e14'; // Orange
+    } else if (strength < 60) {
+      label = 'Medium';
+      color = '#ffc107'; // Yellow
+    } else if (strength < 80) {
+      label = 'Good';
+      color = '#90EE90'; // Light Green
+    } else {
+      label = 'Strong';
+      color = '#28a745'; // Dark Green
+    }
+
+    if (mode === 'create') {
+      this.passwordStrength = strength;
+      this.passwordStrengthLabel = label;
+      this.passwordStrengthColor = color;
+    } else {
+      this.newPasswordStrength = strength;
+      this.newPasswordStrengthLabel = label;
+      this.newPasswordStrengthColor = color;
+    }
   }
 }

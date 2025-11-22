@@ -35,6 +35,7 @@ export interface UpdateUserRequest {
   email: string;
   role_id: number;
   is_active: boolean;
+  password?: string;
 }
 
 export interface UpdateProfileRequest {
