@@ -52,6 +52,7 @@ jobs:
             **/*.psd
             **/.env
             **/.env.*
+            **/angular-app-source/**
 
           # Logging
           log-level: standard
@@ -63,10 +64,7 @@ jobs:
       - name: Deployment summary
         run: |
           echo "✅ Deployment completed!"
-          echo "📁 Deployed: Front_End folder"
+          echo "📁 Deployed: Front_End folder (excluding angular-app-source)"
           echo "🌐 Server: ftp.pascregionj.com"
           echo "📂 Remote path: /httpdocs/"
           echo "🕒 Timestamp: $(date)"
-          if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
-            echo "⚠️  Note: Some cleanup operations failed, but files were uploaded successfully"
-          fi
