@@ -56,6 +56,7 @@ jobs:
 
           # Safety options
           dangerous-clean-slate: false
+          state-name: "sync-state"
 
       # Step 3: Deployment summary
       - name: Deployment summary
