@@ -155,11 +155,10 @@ Version: 1.0
 
     <!--- ================================================================== --->
     <!--- CREATE USER --->
-    <!--- Create new admin user --->
+    <!--- Create new admin user with automatic password generation and email activation --->
     <!--- ================================================================== --->
     <cffunction name="createUser" access="remote" returntype="String" output="false" returnformat="json">
         <cfargument name="username" type="string" required="true">
-        <cfargument name="password" type="string" required="true">
         <cfargument name="full_name" type="string" required="true">
         <cfargument name="email" type="string" required="true">
         <cfargument name="role_id" type="numeric" required="true">
@@ -167,6 +166,8 @@ Version: 1.0
 
         <cfset var result = {}>
         <cfset var newUserId = 0>
+        <cfset var generatedPassword = "">
+        <cfset var activationToken = "">
 
         <cftry>
             <!--- Check if username already exists --->
@@ -184,8 +185,53 @@ Version: 1.0
                 <cfreturn serializeJSON(result, false, false)>
             </cfif>
 
+            <!--- Check if email already exists --->
+            <cfquery name="qCheckEmail" datasource="pasc_regionj">
+                SELECT id
+                FROM dbo.admin_users
+                WHERE email = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
+            </cfquery>
+
+            <cfif qCheckEmail.recordCount GT 0>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Email address already exists"
+                }>
+                <cfreturn serializeJSON(result, false, false)>
+            </cfif>
+
+            <!--- Generate secure random password that meets all requirements --->
+            <!--- Must have: 8+ chars, uppercase, number, special char --->
+            <cfset var upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ">
+            <cfset var lowerChars = "abcdefghijklmnopqrstuvwxyz">
+            <cfset var numbers = "0123456789">
+            <cfset var specialChars = "!@##$%^&*()_+-=[]{};">
+
+            <!--- Start with required characters --->
+            <cfset generatedPassword = "">
+            <cfset generatedPassword = generatedPassword & mid(upperChars, randRange(1, len(upperChars)), 1)>
+            <cfset generatedPassword = generatedPassword & mid(lowerChars, randRange(1, len(lowerChars)), 1)>
+            <cfset generatedPassword = generatedPassword & mid(numbers, randRange(1, len(numbers)), 1)>
+            <cfset generatedPassword = generatedPassword & mid(specialChars, randRange(1, len(specialChars)), 1)>
+
+            <!--- Fill remaining characters (total 12 chars) --->
+            <cfset var allChars = upperChars & lowerChars & numbers & specialChars>
+            <cfloop from="1" to="8" index="i">
+                <cfset generatedPassword = generatedPassword & mid(allChars, randRange(1, len(allChars)), 1)>
+            </cfloop>
+
+            <!--- Shuffle the password to randomize positions --->
+            <cfset var passwordArray = listToArray(generatedPassword, "")>
+            <cfset var shuffledPassword = "">
+            <cfloop condition="arrayLen(passwordArray) GT 0">
+                <cfset var randomIndex = randRange(1, arrayLen(passwordArray))>
+                <cfset shuffledPassword = shuffledPassword & passwordArray[randomIndex]>
+                <cfset arrayDeleteAt(passwordArray, randomIndex)>
+            </cfloop>
+            <cfset generatedPassword = shuffledPassword>
+
             <!--- Hash password --->
-            <cfset var hashedPassword = hash(arguments.password, "SHA-256")>
+            <cfset var hashedPassword = hash(generatedPassword, "SHA-256")>
 
             <!--- Insert new user --->
             <cfquery name="qInsert" datasource="pasc_regionj">
@@ -212,13 +258,98 @@ Version: 1.0
                 SELECT SCOPE_IDENTITY() AS newId
             </cfquery>
 
-            <!--- Get the newly created user --->
+            <!--- Get the newly created user ID --->
             <cfset newUserId = qInsert.newId>
+
+            <!--- Generate activation token --->
+            <cfset activationToken = hash(createUUID() & now() & arguments.email, "SHA-256")>
+
+            <!--- Store token in user_activation_tokens table --->
+            <cfquery datasource="pasc_regionj">
+                INSERT INTO dbo.user_activation_tokens (
+                    user_id,
+                    token,
+                    created_at,
+                    expires_at,
+                    ip_address,
+                    user_agent
+                )
+                VALUES (
+                    <cfqueryparam value="#newUserId#" cfsqltype="cf_sql_integer">,
+                    <cfqueryparam value="#activationToken#" cfsqltype="cf_sql_varchar">,
+                    GETDATE(),
+                    DATEADD(hour, 24, GETDATE()),
+                    <cfqueryparam value="#cgi.REMOTE_ADDR#" cfsqltype="cf_sql_varchar" null="#NOT len(trim(cgi.REMOTE_ADDR))#">,
+                    <cfqueryparam value="#cgi.HTTP_USER_AGENT#" cfsqltype="cf_sql_varchar" null="#NOT len(trim(cgi.HTTP_USER_AGENT))#">
+                )
+            </cfquery>
+
+            <!--- Send activation email --->
+            <cfset var baseUrl = "http://#cgi.http_host#">
+            <!--- For localhost, skip /angular-app path. For production, include it --->
+            <cfif findNoCase("localhost", cgi.http_host)>
+                <cfset var activationUrl = "#baseUrl#/admin/activate?token=#activationToken#">
+            <cfelse>
+                <cfset var activationUrl = "#baseUrl#/angular-app/admin/activate?token=#activationToken#">
+            </cfif>
+
+            <cfmail
+                to="#arguments.email#"
+                from="info@pascregionj.com"
+                subject="Activate Your PASC Region J Admin Account"
+                type="html">
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: ##333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background: linear-gradient(135deg, ##0a0e27 0%, ##1a1f3a 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .header h1 { margin: 0; font-size: 24px; }
+                        .content { background: ##f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+                        .button { display: inline-block; background: ##4fc3f7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+                        .footer { text-align: center; margin-top: 20px; color: ##666; font-size: 12px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Welcome to PASC Region J Admin</h1>
+                        </div>
+                        <div class="content">
+                            <p>Hello #arguments.full_name#,</p>
+                            <p>An admin account has been created for you for the PASC Region J Conference admin panel.</p>
+                            <p>Click the button below to activate your account and set your password:</p>
+                            <p style="text-align: center;">
+                                <a href="#activationUrl#" class="button">Activate Account</a>
+                            </p>
+                            <p>Or copy and paste this link into your browser:</p>
+                            <p style="word-break: break-all; background: ##fff; padding: 10px; border-radius: 5px;">#activationUrl#</p>
+                            <div style="background: ##fef3cd; border-left: 4px solid ##f0ad4e; padding: 20px; margin: 30px 0; border-radius: 4px;">
+                                <p style="margin: 0; color: ##8a6d3b; font-size: 16px;">
+                                    <strong>&##9888; Security Notice:</strong>
+                                </p>
+                                <p style="margin: 10px 0 0 0; color: ##8a6d3b;">
+                                    This activation link will expire in <strong>24 hours</strong> and can only be used once.
+                                </p>
+                            </div>
+                            <p>If you did not expect this account creation, please ignore this email.</p>
+                        </div>
+                        <div class="footer">
+                            <p>Best regards,<br>PASC Region J Conference Team</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            </cfmail>
+
+            <!--- Get the newly created user --->
             <cfset var getUserResult = deserializeJSON(getUser(newUserId))>
 
             <cfif getUserResult.success>
                 <cfset result = getUserResult>
-                <cfset result.message = "User created successfully">
+                <cfset result.message = "User created successfully. Activation email sent.">
+                <cfset result.generatedPassword = generatedPassword>
+                <cfset result.activationEmailSent = true>
             <cfelse>
                 <cfset result = {
                     "success" = false,
@@ -452,6 +583,66 @@ Version: 1.0
         </cftry>
 
         <cfreturn serializeJSON(result, false, false)>
+    </cffunction>
+
+    <!--- ================================================================== --->
+    <!--- CHECK USERNAME AVAILABILITY --->
+    <!--- Checks if a username is available (for real-time validation) --->
+    <!--- ================================================================== --->
+    <cffunction name="checkUsernameAvailability" access="remote" returntype="String" output="false" returnformat="json">
+        <cfargument name="username" type="string" required="true">
+        <cfargument name="excludeUserId" type="numeric" required="false" default="0">
+
+        <cfset var result = {}>
+        <cfset var qCheck = "">
+
+        <cftry>
+            <!--- Validate username is provided --->
+            <cfif NOT len(trim(arguments.username))>
+                <cfset result = {
+                    "success" = false,
+                    "available" = false,
+                    "message" = "Username is required"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check if username exists (excluding current user if editing) --->
+            <cfquery name="qCheck" datasource="pasc_regionj">
+                SELECT id
+                FROM dbo.admin_users
+                WHERE username = <cfqueryparam value="#trim(arguments.username)#" cfsqltype="cf_sql_varchar">
+                <cfif arguments.excludeUserId GT 0>
+                    AND id != <cfqueryparam value="#arguments.excludeUserId#" cfsqltype="cf_sql_integer">
+                </cfif>
+            </cfquery>
+
+            <!--- Build response based on availability --->
+            <cfif qCheck.recordCount EQ 0>
+                <cfset result = {
+                    "success" = true,
+                    "available" = true,
+                    "message" = "Username is available"
+                }>
+            <cfelse>
+                <cfset result = {
+                    "success" = true,
+                    "available" = false,
+                    "message" = "Username is already taken"
+                }>
+            </cfif>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "available" = false,
+                    "error" = cfcatch.message,
+                    "message" = "Error checking username availability"
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result)>
     </cffunction>
 
 </cfcomponent>

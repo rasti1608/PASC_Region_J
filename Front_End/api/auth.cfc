@@ -624,6 +624,237 @@ Version: 1.0
     </cffunction>
 
     <!--- ================================================================== --->
+    <!--- ACTIVATE ACCOUNT WITH TOKEN --->
+    <!--- Activates user account using token from email link --->
+    <!--- ================================================================== --->
+    <cffunction name="activateAccountWithToken" access="remote" returntype="String" output="false" returnformat="json">
+
+        <cfset var result = {}>
+        <cfset var qToken = "">
+        <cfset var requestBody = "">
+        <cfset var data = {}>
+
+        <cftry>
+            <!--- Get JSON body --->
+            <cfset requestBody = toString(getHttpRequestData().content)>
+
+            <!--- Parse JSON --->
+            <cftry>
+                <cfset data = deserializeJSON(requestBody, false)>
+                <cfcatch type="any">
+                    <cfset result = {
+                        "success" = false,
+                        "message" = "Invalid JSON format in request"
+                    }>
+                    <cfreturn serializeJSON(result)>
+                </cfcatch>
+            </cftry>
+
+            <!--- Validate token --->
+            <cfif NOT structKeyExists(data, "token") OR NOT len(trim(data.token))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Activation token is required"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Validate new password --->
+            <cfif NOT structKeyExists(data, "newPassword") OR NOT len(trim(data.newPassword))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "New password is required"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Validate password requirements --->
+            <cfset var pwd = trim(data.newPassword)>
+            <cfif len(pwd) LT 8>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must be at least 8 characters"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <cfif NOT reFind("[A-Z]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one uppercase letter"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <cfif NOT reFind("[0-9]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one number"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <cfif NOT reFind("[!@##$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]", pwd)>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Password must contain at least one special character"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Query token --->
+            <cfquery name="qToken" datasource="pasc_regionj">
+                SELECT
+                    t.id,
+                    t.user_id,
+                    t.expires_at,
+                    t.activated_at,
+                    u.username,
+                    u.email,
+                    u.full_name
+                FROM dbo.user_activation_tokens t
+                INNER JOIN dbo.admin_users u ON t.user_id = u.id
+                WHERE t.token = <cfqueryparam value="#trim(data.token)#" cfsqltype="cf_sql_varchar">
+                AND u.is_active = 1
+            </cfquery>
+
+            <!--- Check if token exists --->
+            <cfif qToken.recordCount EQ 0>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Invalid or expired activation token"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check if token has been used --->
+            <cfif len(trim(qToken.activated_at))>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "This activation link has already been used"
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Check if token has expired --->
+            <cfif now() GT qToken.expires_at>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "This activation link has expired. Please contact the administrator."
+                }>
+                <cfreturn serializeJSON(result)>
+            </cfif>
+
+            <!--- Hash the new password --->
+            <cfset var hashedPassword = hash(pwd, "SHA-256")>
+
+            <!--- Update user password --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.admin_users
+                SET
+                    password_hash = <cfqueryparam value="#hashedPassword#" cfsqltype="cf_sql_varchar">,
+                    must_change_password = 0,
+                    password_changed_at = GETDATE(),
+                    updated_at = GETDATE()
+                WHERE id = <cfqueryparam value="#qToken.user_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Mark token as activated --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.user_activation_tokens
+                SET activated_at = GETDATE()
+                WHERE id = <cfqueryparam value="#qToken.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Auto-login: Create session for the user after successful activation --->
+            <!--- Query user details for session --->
+            <cfquery name="qUser" datasource="pasc_regionj">
+                SELECT
+                    u.id,
+                    u.username,
+                    u.email,
+                    u.full_name,
+                    u.role_id,
+                    u.profile_picture,
+                    r.role_name
+                FROM dbo.admin_users u
+                LEFT JOIN dbo.roles r ON u.role_id = r.id
+                WHERE u.id = <cfqueryparam value="#qToken.user_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Set session variables (auto-login) --->
+            <cfset session.admin_logged_in = true>
+            <cfset session.admin_user_id = qUser.id>
+            <cfset session.admin_username = qUser.username>
+            <cfset session.admin_full_name = qUser.full_name>
+            <cfset session.admin_email = qUser.email>
+            <cfset session.role_id = qUser.role_id>
+            <cfset session.role_name = qUser.role_name>
+            <cfset session.profile_picture = qUser.profile_picture>
+
+            <!--- Load user permissions --->
+            <cfquery name="getUserPermissions" datasource="pasc_regionj">
+                SELECT p.permission_name
+                FROM dbo.role_permissions rp
+                INNER JOIN dbo.permissions p ON rp.permission_id = p.id
+                WHERE rp.role_id = <cfqueryparam value="#qUser.role_id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfset session.permissions = ValueList(getUserPermissions.permission_name)>
+
+            <!--- Create unique session ID --->
+            <cfset session.unique_session_id = createUUID()>
+
+            <!--- Insert session tracking --->
+            <cftry>
+                <cfquery datasource="pasc_regionj">
+                    INSERT INTO dbo.admin_sessions (user_id, session_id, last_activity, created_at)
+                    VALUES (
+                        <cfqueryparam value="#qUser.id#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#session.unique_session_id#" cfsqltype="cf_sql_varchar">,
+                        GETDATE(),
+                        GETDATE()
+                    )
+                </cfquery>
+                <cfcatch type="any">
+                    <!--- Session tracking failure should not prevent activation --->
+                </cfcatch>
+            </cftry>
+
+            <!--- Update last login timestamp --->
+            <cfquery datasource="pasc_regionj">
+                UPDATE dbo.admin_users
+                SET last_login = GETDATE()
+                WHERE id = <cfqueryparam value="#qUser.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <cfset result = {
+                "success" = true,
+                "message" = "Account activated successfully. You are now logged in!",
+                "user" = {
+                    "id" = qUser.id,
+                    "username" = qUser.username,
+                    "email" = qUser.email,
+                    "full_name" = qUser.full_name,
+                    "role_id" = qUser.role_id,
+                    "role_name" = qUser.role_name,
+                    "profile_picture" = qUser.profile_picture,
+                    "is_active" = true,
+                    "must_change_password" = false
+                }
+            }>
+
+            <cfcatch type="any">
+                <cfset result = {
+                    "success" = false,
+                    "message" = "An error occurred while activating your account. Please try again."
+                }>
+            </cfcatch>
+        </cftry>
+
+        <cfreturn serializeJSON(result)>
+    </cffunction>
+
+    <!--- ================================================================== --->
     <!--- CHANGE REQUIRED PASSWORD --->
     <!--- Changes password and clears must_change_password flag --->
     <!--- ================================================================== --->

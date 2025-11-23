@@ -41,31 +41,43 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<AdminUser | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
+  // Track if initial auth check is complete (used by AuthGuard to prevent race condition)
+  private authCheckComplete = new BehaviorSubject<boolean>(false);
+  public authCheckComplete$ = this.authCheckComplete.asObservable();
+
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
     // Check authentication status on service initialization
-    this.checkAuthStatus();
+    // Subscribe to trigger the auth check (we don't need the result here)
+    this.checkAuthStatus().subscribe();
   }
 
   /**
    * Check current authentication status with backend
+   * Returns an Observable that completes when the check is done
    */
-  checkAuthStatus(): void {
-    this.http.get<AuthCheckResponse>(`${this.apiUrl}?method=checkAuth`, { withCredentials: true })
-      .subscribe({
-        next: (response) => {
+  checkAuthStatus(): Observable<boolean> {
+    return this.http.get<AuthCheckResponse>(`${this.apiUrl}?method=checkAuth`, { withCredentials: true })
+      .pipe(
+        tap(response => {
           if (response.success && response.authenticated && response.user) {
             this.currentUserSubject.next(response.user);
           } else {
             this.currentUserSubject.next(null);
           }
-        },
-        error: () => {
+          // Mark auth check as complete
+          this.authCheckComplete.next(true);
+        }),
+        catchError(() => {
           this.currentUserSubject.next(null);
-        }
-      });
+          // Mark auth check as complete even on error
+          this.authCheckComplete.next(true);
+          return of(false);
+        }),
+        map(() => this.currentUserSubject.value !== null)
+      );
   }
 
   /**
@@ -187,6 +199,24 @@ export class AuthService {
         return throwError(() => ({
           success: false,
           message: error.error?.message || 'Failed to change password.'
+        }));
+      })
+    );
+  }
+
+  /**
+   * Activate account using token from email
+   */
+  activateAccount(token: string, newPassword: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}?method=activateAccountWithToken`,
+      { token, newPassword },
+      { withCredentials: true }
+    ).pipe(
+      catchError(error => {
+        return throwError(() => ({
+          success: false,
+          message: error.error?.message || 'Failed to activate account.'
         }));
       })
     );

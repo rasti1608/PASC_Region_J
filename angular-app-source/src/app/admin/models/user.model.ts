@@ -22,7 +22,6 @@ export interface Role {
 
 export interface CreateUserRequest {
   username: string;
-  password: string;
   full_name: string;
   email: string;
   role_id: number;

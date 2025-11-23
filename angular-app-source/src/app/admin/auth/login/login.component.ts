@@ -22,10 +22,10 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    // If already logged in, redirect to dashboard
-    if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/admin/dashboard']);
-    }
+    // NOTE: Do not auto-redirect here. Allow users to see login page
+    // even if they have a lingering session. This prevents security issues
+    // where users navigating from error pages (activate/reset) get logged
+    // in automatically. The ngOnInit will handle proper redirect logic.
 
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -36,6 +36,16 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Get return URL from route parameters or default to dashboard
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin/dashboard';
+
+    // Check if user is already authenticated
+    // Only redirect if they're authenticated AND not coming from an auth error page
+    const fromActivate = this.route.snapshot.queryParams['from'] === 'activate';
+    const fromReset = this.route.snapshot.queryParams['from'] === 'reset';
+
+    if (this.authService.isAuthenticated() && !fromActivate && !fromReset) {
+      // User is already logged in and not coming from error page, redirect to dashboard
+      this.router.navigate(['/admin/dashboard']);
+    }
   }
 
   onSubmit(): void {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
+import { AdminRoleGuard } from './guards/admin-role.guard';
 
 // Layout
 import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
@@ -10,6 +11,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { ChangePasswordComponent } from './auth/change-password/change-password.component';
+import { ActivateComponent } from './auth/activate/activate.component';
 
 // Dashboard
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -56,6 +58,7 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'reset-password', component: ResetPasswordComponent },
+      { path: 'activate', component: ActivateComponent },
       // Standalone change password (required after first login - no admin layout)
       { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
 
@@ -96,11 +99,12 @@ const routes: Routes = [
           { path: 'contacts', component: ContactListComponent },
           { path: 'contacts/email-settings', component: EmailSettingsComponent },
 
-          // Users (admin only)
-          { path: 'users', component: UserListComponent },
-          { path: 'users/add', component: UserFormComponent },
-          { path: 'users/edit/:id', component: UserFormComponent },
-          { path: 'users/delete/:id', component: UserDeleteComponent },
+          // Users (Admin only - role_id = 1)
+          // AdminRoleGuard prevents Content Managers from accessing user management
+          { path: 'users', component: UserListComponent, canActivate: [AdminRoleGuard] },
+          { path: 'users/add', component: UserFormComponent, canActivate: [AdminRoleGuard] },
+          { path: 'users/edit/:id', component: UserFormComponent, canActivate: [AdminRoleGuard] },
+          { path: 'users/delete/:id', component: UserDeleteComponent, canActivate: [AdminRoleGuard] },
 
           // Profile
           { path: 'profile', component: ProfileComponent },

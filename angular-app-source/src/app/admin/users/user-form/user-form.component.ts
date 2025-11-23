@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users.service';
 import { User, Role, CreateUserRequest, UpdateUserRequest } from '../../models/user.model';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-form',
@@ -9,7 +11,7 @@ import { User, Role, CreateUserRequest, UpdateUserRequest } from '../../models/u
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css']
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit, OnDestroy {
   userId: number | null = null;
   isEditMode = false;
   user: User | null = null;
@@ -18,11 +20,16 @@ export class UserFormComponent implements OnInit {
   error: string | null = null;
   tempPassword: string | null = null;
   successMessage: string | null = null;
+  activationEmailSent = false;
+
+  // Username availability checker (like GitHub's username field)
+  usernameCheck$ = new Subject<string>();
+  usernameCheckSubscription: Subscription | null = null;
+  usernameAvailable: boolean | null = null;  // null = not checked, true = available, false = taken
+  usernameCheckInProgress = false;
 
   // Form fields
   username = '';
-  password = '';
-  confirmPassword = '';
   fullName = '';
   email = '';
   roleId = 0;
@@ -33,16 +40,9 @@ export class UserFormComponent implements OnInit {
   newPassword = '';
   confirmNewPassword = '';
 
-  // Password visibility toggles
-  showPassword = false;
-  showConfirmPassword = false;
+  // Password visibility toggles (edit mode only)
   showNewPassword = false;
   showConfirmNewPassword = false;
-
-  // Password strength indicators (for create mode)
-  passwordStrength = 0;
-  passwordStrengthLabel = '';
-  passwordStrengthColor = '';
 
   // Password strength indicators (for edit mode)
   newPasswordStrength = 0;
@@ -63,6 +63,52 @@ export class UserFormComponent implements OnInit {
       this.loadUser();
     }
     this.loadRoles();
+
+    // Setup real-time username availability checker with 500ms debounce
+    // This prevents API spam while user is typing
+    this.usernameCheckSubscription = this.usernameCheck$.pipe(
+      debounceTime(500),  // Wait 500ms after user stops typing
+      distinctUntilChanged(),  // Only check if username actually changed
+      switchMap(username => {
+        // Don't check empty usernames
+        if (!username || username.trim().length === 0) {
+          this.usernameAvailable = null;
+          this.usernameCheckInProgress = false;
+          return [];
+        }
+
+        // Don't check usernames with spaces
+        if (/\s/.test(username)) {
+          this.usernameAvailable = false;
+          this.usernameCheckInProgress = false;
+          return [];
+        }
+
+        // Start checking
+        this.usernameCheckInProgress = true;
+
+        // Call API to check availability
+        return this.usersService.checkUsernameAvailability(username, this.userId || undefined);
+      })
+    ).subscribe({
+      next: (result: any) => {
+        // Update availability status
+        this.usernameAvailable = result.available;
+        this.usernameCheckInProgress = false;
+      },
+      error: () => {
+        // On error, assume not available
+        this.usernameAvailable = false;
+        this.usernameCheckInProgress = false;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscription to prevent memory leaks
+    if (this.usernameCheckSubscription) {
+      this.usernameCheckSubscription.unsubscribe();
+    }
   }
 
   loadUser(): void {
@@ -106,12 +152,6 @@ export class UserFormComponent implements OnInit {
     if (!passwordField) return;
 
     switch (field) {
-      case 'password':
-        this.showPassword = !this.showPassword;
-        break;
-      case 'confirmPassword':
-        this.showConfirmPassword = !this.showConfirmPassword;
-        break;
       case 'newPassword':
         this.showNewPassword = !this.showNewPassword;
         break;
@@ -140,40 +180,15 @@ export class UserFormComponent implements OnInit {
     }
 
     if (!this.isEditMode) {
-      // Add mode - validate password
-      if (!this.username || !this.password) {
-        this.error = 'Username and password are required';
+      // Add mode - validate username only (password will be auto-generated)
+      if (!this.username) {
+        this.error = 'Username is required';
         return;
       }
 
       // Validate username - no spaces allowed
       if (/\s/.test(this.username)) {
         this.error = 'Username cannot contain spaces';
-        return;
-      }
-
-      if (this.password.length < 8) {
-        this.error = 'Password must be at least 8 characters long';
-        return;
-      }
-
-      if (!/[A-Z]/.test(this.password)) {
-        this.error = 'Password must contain at least one uppercase letter (A-Z)';
-        return;
-      }
-
-      if (!/[0-9]/.test(this.password)) {
-        this.error = 'Password must contain at least one number (0-9)';
-        return;
-      }
-
-      if (!/[^a-zA-Z0-9]/.test(this.password)) {
-        this.error = 'Password must contain at least one special character (e.g., !@#$%^&*)';
-        return;
-      }
-
-      if (this.password !== this.confirmPassword) {
-        this.error = 'Passwords do not match';
         return;
       }
 
@@ -219,7 +234,6 @@ export class UserFormComponent implements OnInit {
   createUser(): void {
     const newUser: CreateUserRequest = {
       username: this.username,
-      password: this.password,
       full_name: this.fullName,
       email: this.email,
       role_id: this.roleId,
@@ -228,9 +242,17 @@ export class UserFormComponent implements OnInit {
 
     this.loading = true;
     this.usersService.create(newUser).subscribe({
-      next: () => {
-        this.tempPassword = this.password;
-        this.successMessage = 'User created successfully!';
+      next: (response: any) => {
+        // Double-check that the API returned success (service should have already validated this)
+        if (response.success === true) {
+          // Extract generated password and activation email status from response
+          this.tempPassword = response.generatedPassword || null;
+          this.activationEmailSent = response.activationEmailSent || false;
+          this.successMessage = 'User created successfully!';
+        } else {
+          // This shouldn't happen (service should throw error), but handle it just in case
+          this.error = response.message || 'Failed to create user';
+        }
         this.loading = false;
       },
       error: (err) => {
@@ -277,22 +299,28 @@ export class UserFormComponent implements OnInit {
     this.router.navigate(['/admin/users']);
   }
 
+  /**
+   * Triggered when username field changes
+   * Emits the username to the debounced checker
+   */
+  onUsernameChange(): void {
+    // Only check in add mode (not when editing existing user)
+    if (!this.isEditMode) {
+      this.usernameCheck$.next(this.username);
+    }
+  }
+
   addAnotherUser(): void {
     // Reset form for new user
     this.successMessage = null;
     this.tempPassword = null;
+    this.activationEmailSent = false;
     this.error = null;
     this.username = '';
-    this.password = '';
-    this.confirmPassword = '';
     this.fullName = '';
     this.email = '';
     this.isActive = true;
     // Keep the selected role
-  }
-
-  onPasswordChange(): void {
-    this.calculatePasswordStrength(this.password, 'create');
   }
 
   onNewPasswordChange(): void {
@@ -303,17 +331,11 @@ export class UserFormComponent implements OnInit {
     return /\s/.test(value);
   }
 
-  calculatePasswordStrength(password: string, mode: 'create' | 'edit'): void {
+  calculatePasswordStrength(password: string, mode: 'edit'): void {
     if (!password) {
-      if (mode === 'create') {
-        this.passwordStrength = 0;
-        this.passwordStrengthLabel = '';
-        this.passwordStrengthColor = '';
-      } else {
-        this.newPasswordStrength = 0;
-        this.newPasswordStrengthLabel = '';
-        this.newPasswordStrengthColor = '';
-      }
+      this.newPasswordStrength = 0;
+      this.newPasswordStrengthLabel = '';
+      this.newPasswordStrengthColor = '';
       return;
     }
 
@@ -359,14 +381,8 @@ export class UserFormComponent implements OnInit {
       color = '#28a745'; // Dark Green
     }
 
-    if (mode === 'create') {
-      this.passwordStrength = strength;
-      this.passwordStrengthLabel = label;
-      this.passwordStrengthColor = color;
-    } else {
-      this.newPasswordStrength = strength;
-      this.newPasswordStrengthLabel = label;
-      this.newPasswordStrengthColor = color;
-    }
+    this.newPasswordStrength = strength;
+    this.newPasswordStrengthLabel = label;
+    this.newPasswordStrengthColor = color;
   }
 }

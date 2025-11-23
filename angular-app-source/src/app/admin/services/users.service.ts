@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { User, Role, CreateUserRequest, UpdateUserRequest } from '../models/user.model';
 
@@ -35,21 +35,26 @@ export class UsersService {
   }
 
   /**
-   * Create a new user
+   * Create a new user (password will be auto-generated)
    */
-  create(user: CreateUserRequest): Observable<User> {
+  create(user: CreateUserRequest): Observable<any> {
     const params = new URLSearchParams({
       method: 'createUser',
       username: user.username,
-      password: user.password,
       full_name: user.full_name,
       email: user.email,
       role_id: user.role_id.toString(),
       is_active: user.is_active ? '1' : '0'
     });
-    return this.http.get<{ data: User }>(`${this.apiUrl}?${params.toString()}`)
+    return this.http.get<any>(`${this.apiUrl}?${params.toString()}`)
       .pipe(
-        map(response => response.data),
+        map(response => {
+          // Check if API returned success:false (e.g., duplicate username/email)
+          if (response.success === false) {
+            throw new Error(response.message || 'Failed to create user');
+          }
+          return response;
+        }),
         catchError(this.handleError)
       );
   }
@@ -72,9 +77,15 @@ export class UsersService {
       params.append('password', user.password);
     }
 
-    return this.http.get<{ data: User }>(`${this.apiUrl}?${params.toString()}`)
+    return this.http.get<any>(`${this.apiUrl}?${params.toString()}`)
       .pipe(
-        map(response => response.data),
+        map(response => {
+          // Check if API returned success:false (e.g., duplicate email)
+          if (response.success === false) {
+            throw new Error(response.message || 'Failed to update user');
+          }
+          return response.data;
+        }),
         catchError(this.handleError)
       );
   }
@@ -113,6 +124,27 @@ export class UsersService {
   }
 
   /**
+   * Check if username is available (for real-time validation)
+   */
+  checkUsernameAvailability(username: string, excludeUserId?: number): Observable<{available: boolean, message: string}> {
+    let url = `${this.apiUrl}?method=checkUsernameAvailability&username=${encodeURIComponent(username)}`;
+    if (excludeUserId) {
+      url += `&excludeUserId=${excludeUserId}`;
+    }
+    return this.http.get<any>(url)
+      .pipe(
+        map(response => ({
+          available: response.available || false,
+          message: response.message || ''
+        })),
+        catchError(() => {
+          // On error, assume not available to be safe
+          return of({ available: false, message: 'Error checking availability' });
+        })
+      );
+  }
+
+  /**
    * Handle HTTP errors
    */
   private handleError(error: HttpErrorResponse) {
@@ -121,12 +153,15 @@ export class UsersService {
     if (error.error instanceof ErrorEvent) {
       // Client-side error
       errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
+    } else if (error.error && error.error.message) {
+      // Server returned an error with a message (e.g., duplicate username/email)
+      errorMessage = error.error.message;
+    } else if (error.message) {
+      // Error object with message (e.g., from thrown errors in map operators)
+      errorMessage = error.message;
+    } else if (error.status) {
+      // HTTP error with status code
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      if (error.error && error.error.message) {
-        errorMessage = error.error.message;
-      }
     }
 
     console.error('UsersService Error:', errorMessage);

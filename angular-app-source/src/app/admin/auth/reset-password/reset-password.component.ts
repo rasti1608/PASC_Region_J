@@ -18,6 +18,11 @@ export class ResetPasswordComponent implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
 
+  // Password strength indicator
+  passwordStrength = 0;
+  strengthLabel = '';
+  strengthColor = '';
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -27,6 +32,11 @@ export class ResetPasswordComponent implements OnInit {
     this.resetForm = this.fb.group({
       newPassword: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]]
+    });
+
+    // Subscribe to password changes for strength indicator
+    this.resetForm.get('newPassword')?.valueChanges.subscribe(value => {
+      this.calculatePasswordStrength(value);
     });
   }
 
@@ -95,6 +105,54 @@ export class ResetPasswordComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  calculatePasswordStrength(password: string): void {
+    if (!password) {
+      this.passwordStrength = 0;
+      this.strengthLabel = '';
+      this.strengthColor = '';
+      return;
+    }
+
+    let strength = 0;
+
+    // Length checks
+    if (password.length >= 8) strength += 20;
+    if (password.length >= 12) strength += 10;
+    if (password.length >= 16) strength += 10;
+
+    // Character type checks
+    if (/[a-z]/.test(password)) strength += 10;
+    if (/[A-Z]/.test(password)) strength += 15;
+    if (/[0-9]/.test(password)) strength += 15;
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) strength += 20;
+
+    // Bonus for variety
+    const types = [/[a-z]/, /[A-Z]/, /[0-9]/, /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/];
+    const typeCount = types.filter(regex => regex.test(password)).length;
+    if (typeCount >= 4) strength += 10;
+
+    // Cap at 100
+    this.passwordStrength = Math.min(strength, 100);
+
+    // Set label and color based on strength
+    if (this.passwordStrength < 20) {
+      this.strengthLabel = 'Weak';
+      this.strengthColor = '#dc3545'; // Red
+    } else if (this.passwordStrength < 40) {
+      this.strengthLabel = 'Fair';
+      this.strengthColor = '#fd7e14'; // Orange
+    } else if (this.passwordStrength < 60) {
+      this.strengthLabel = 'Medium';
+      this.strengthColor = '#ffc107'; // Yellow
+    } else if (this.passwordStrength < 80) {
+      this.strengthLabel = 'Good';
+      this.strengthColor = '#90EE90'; // Light Green
+    } else {
+      this.strengthLabel = 'Strong';
+      this.strengthColor = '#28a745'; // Dark Green
+    }
   }
 
   togglePasswordVisibility(field: string): void {

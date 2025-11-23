@@ -16,6 +16,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { ChangePasswordComponent } from './auth/change-password/change-password.component';
+import { ActivateComponent } from './auth/activate/activate.component';
 
 // Dashboard
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -75,6 +76,7 @@ import { EmptyStateComponent } from './shared/empty-state/empty-state.component'
     ForgotPasswordComponent,
     ResetPasswordComponent,
     ChangePasswordComponent,
+    ActivateComponent,
 
     // Dashboard
     DashboardComponent,

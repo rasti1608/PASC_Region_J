@@ -10,18 +10,31 @@
 </div>
 
 <div class="section">
-  <!-- Success Message with Temp Password -->
+  <!-- Success Message with Generated Password and Activation Email -->
   <div *ngIf="successMessage" class="success-container">
     <div class="alert alert-success">
       <strong>✓ {{ successMessage }}</strong>
     </div>
 
+    <div *ngIf="activationEmailSent" class="activation-email-box" style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 20px; margin: 20px 0; border-radius: 4px;">
+      <p style="margin: 0 0 10px 0; color: #2e7d32; font-size: 16px;">
+        <strong>📧 Activation Email Sent</strong>
+      </p>
+      <p style="margin: 0; color: #2e7d32;">
+        An activation email has been sent to <strong>{{ email }}</strong>.
+        The user will need to click the activation link to set their password and activate their account.
+      </p>
+      <p style="margin: 10px 0 0 0; color: #2e7d32; font-size: 14px;">
+        ⏱️ The activation link will expire in <strong>24 hours</strong>.
+      </p>
+    </div>
+
     <div *ngIf="tempPassword" class="temp-password-box">
-      <strong class="temp-password-label">Temporary Password:</strong>
+      <strong class="temp-password-label">Generated Password:</strong>
       <code class="temp-password-code">{{ tempPassword }}</code>
       <p class="temp-password-warning">
-        ⚠️ <strong>Important:</strong> Share this password securely with the user.
-        They will be required to change it upon first login.
+        ℹ️ <strong>Note:</strong> This password has been automatically generated and stored securely.
+        You can share it with the user if needed, but they will set their own password through the activation link.
       </p>
     </div>
 
@@ -38,10 +51,24 @@
     <!-- Username (Add Mode Only) -->
     <div class="form-group" *ngIf="!isEditMode">
       <label for="username">Username *</label>
-      <input type="text" id="username" [(ngModel)]="username" name="username" required maxlength="50" autocomplete="off" [class.error]="username && hasSpaces(username)">
+      <div style="position: relative;">
+        <input type="text" id="username" [(ngModel)]="username" name="username" required maxlength="50" autocomplete="off" (input)="onUsernameChange()" [class.error]="username && hasSpaces(username)" style="padding-right: 40px;">
+        <!-- Username availability indicator (like GitHub) -->
+        <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 18px;">
+          <span *ngIf="usernameCheckInProgress">⏳</span>
+          <span *ngIf="!usernameCheckInProgress && usernameAvailable === true" style="color: #28a745;">✓</span>
+          <span *ngIf="!usernameCheckInProgress && usernameAvailable === false" style="color: #dc3545;">✗</span>
+        </span>
+      </div>
       <small>Username for logging into the admin panel. Must be unique and cannot contain spaces.</small>
       <div *ngIf="username && hasSpaces(username)" class="error-message" style="color: #dc3545; margin-top: 5px;">
         ⚠ Username cannot contain spaces
+      </div>
+      <div *ngIf="!usernameCheckInProgress && usernameAvailable === true" style="color: #28a745; margin-top: 5px; font-size: 0.9em;">
+        ✓ Username is available
+      </div>
+      <div *ngIf="!usernameCheckInProgress && usernameAvailable === false && username && !hasSpaces(username)" style="color: #dc3545; margin-top: 5px; font-size: 0.9em;">
+        ✗ Username is already taken
       </div>
     </div>
 
@@ -52,35 +79,15 @@
       <small>Username cannot be changed.</small>
     </div>
 
-    <!-- Password (Add Mode Only) -->
-    <div class="form-group" *ngIf="!isEditMode">
-      <label for="password">Password *</label>
-      <div class="password-input-wrapper">
-        <input type="password" id="password" [(ngModel)]="password" name="password" required minlength="8" autocomplete="new-password" (ngModelChange)="onPasswordChange()">
-        <button type="button" class="password-toggle" (click)="togglePasswordVisibility('password')" aria-label="Toggle password visibility">
-          <span class="toggle-icon">{{ showPassword ? '🙈' : '👁️' }}</span>
-        </button>
-      </div>
-      <!-- Password Strength Indicator -->
-      <div *ngIf="passwordStrength > 0" class="password-strength" style="margin-top: 8px;">
-        <div class="strength-bar-container" style="width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
-          <div class="strength-bar" [style.width.%]="passwordStrength" [style.background]="passwordStrengthColor" style="height: 100%; transition: width 0.3s ease, background 0.3s ease;"></div>
-        </div>
-        <span class="strength-label" [style.color]="passwordStrengthColor" style="font-size: 12px; font-weight: 600; margin-top: 4px; display: inline-block;">{{ passwordStrengthLabel }}</span>
-      </div>
-      <small>Must be at least 8 characters with one uppercase letter (A-Z), one number (0-9), and one special character (e.g., !@#$%^&*). User will be required to change this on first login.</small>
-    </div>
-
-    <!-- Confirm Password (Add Mode Only) -->
-    <div class="form-group" *ngIf="!isEditMode">
-      <label for="confirmPassword">Confirm Password *</label>
-      <div class="password-input-wrapper">
-        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required minlength="8" autocomplete="new-password">
-        <button type="button" class="password-toggle" (click)="togglePasswordVisibility('confirmPassword')" aria-label="Toggle password visibility">
-          <span class="toggle-icon">{{ showConfirmPassword ? '🙈' : '👁️' }}</span>
-        </button>
-      </div>
-      <small>Re-enter the password to confirm.</small>
+    <!-- Password Notice (Add Mode Only) -->
+    <div *ngIf="!isEditMode" style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 20px 0; border-radius: 4px;">
+      <p style="margin: 0; color: #1565c0; font-size: 14px;">
+        <strong>🔐 Automatic Password Generation</strong>
+      </p>
+      <p style="margin: 8px 0 0 0; color: #1565c0; font-size: 14px;">
+        A secure password will be automatically generated for this user.
+        An activation email will be sent to the user's email address where they can set their own password.
+      </p>
     </div>
 
     <!-- Full Name -->

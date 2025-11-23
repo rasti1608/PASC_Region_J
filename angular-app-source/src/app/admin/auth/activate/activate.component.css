@@ -1,10 +1,11 @@
 /*******************************************************************************
-* File: reset-password.component.css
-* Purpose: Styles for Angular admin reset password component
+* File: activate.component.css
+* Purpose: Styles for account activation component (email activation link)
 * Project: PASC Region J Conference 2026 Website
+* Note: Matches change-password.component.css styling exactly
 *******************************************************************************/
 
-/* Component Host */
+/* Component Host - standalone auth page styling */
 :host {
   display: block;
   min-height: 100vh;
@@ -78,6 +79,7 @@
   color: #666;
   margin-bottom: 25px;
   line-height: 1.5;
+  text-align: center;
 }
 
 .form-group {
@@ -90,18 +92,6 @@
   font-weight: 600;
   color: #2d3561;
   font-size: 0.95rem;
-}
-
-/* Password Input Wrapper */
-.password-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-input-wrapper input {
-  flex: 1;
-  padding-right: 45px !important;
 }
 
 .form-group input,
@@ -122,35 +112,47 @@
   box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1) !important;
 }
 
-.form-group input.error,
-.form-control.error {
-  border-color: #c62828 !important;
+/* Password Visibility Toggle */
+.password-input-wrapper {
+  position: relative;
 }
 
-/* Password Toggle Button */
+.password-input-wrapper input[type="password"],
+.password-input-wrapper input[type="text"] {
+  padding-right: 50px !important;
+}
+
 .password-toggle {
   position: absolute;
-  right: 10px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
   cursor: pointer;
-  padding: 5px;
+  font-size: 1.2rem;
+  padding: 8px;
+  color: #666;
+  transition: color 0.2s ease;
+  min-width: 40px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.2s ease;
 }
 
 .password-toggle:hover {
-  opacity: 0.7;
+  color: #4fc3f7;
+}
+
+.password-toggle:focus {
+  outline: 2px solid #4fc3f7;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .toggle-icon {
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
+  display: inline-block;
   user-select: none;
 }
 
@@ -183,35 +185,64 @@
   text-align: right;
 }
 
-/* Password Requirements Box */
+/* Password Requirements */
 .password-requirements {
-  background: #e3f2fd;
-  border-left: 4px solid #2196f3;
-  border-radius: 6px;
-  padding: 15px 20px;
-  margin-bottom: 25px;
-  font-size: 0.9rem;
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #4fc3f7;
 }
 
-.password-requirements strong {
-  color: #1976d2;
+.requirements-title {
   display: block;
-  margin-bottom: 10px;
+  color: #2d3561;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
 }
 
-.password-requirements ul {
+.requirements-list {
   margin: 0;
   padding-left: 20px;
-  color: #555;
+  list-style-type: disc;
 }
 
-.password-requirements li {
-  margin-bottom: 5px;
-  line-height: 1.5;
+.requirements-list li {
+  color: #666;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 2px;
 }
 
-.password-requirements li:last-child {
+.requirements-list li:last-child {
   margin-bottom: 0;
+}
+
+/* Login Footer */
+.login-footer {
+  text-align: center;
+  padding: 15px 30px 20px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 0;
+}
+
+.back-link {
+  color: #666;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.back-link:hover {
+  color: #4fc3f7;
+  text-decoration: underline;
+}
+
+.back-link:focus {
+  outline: none;
 }
 
 /* Login Button */
@@ -258,35 +289,12 @@
 .alert-success {
   background: #e8f5e9 !important;
   color: #2e7d32 !important;
-  border-left: 4px solid #2e7d32 !important;
+  border-left: 4px solid #4caf50 !important;
 }
 
-/* Login Footer */
-.login-footer {
-  background: #f5f5f5;
-  padding: 20px 30px;
-  text-align: center;
-  border-top: 1px solid #e0e0e0;
-}
-
-/* Back Button */
-.btn-back {
-  display: inline-block;
-  padding: 10px 20px;
-  background: #6c757d;
-  color: #ffffff !important;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-back:hover {
-  background: #5a6268;
-  transform: translateY(-1px);
+/* Error state for inputs */
+input.error {
+  border-color: #c62828 !important;
 }
 
 /* Responsive Design */
@@ -309,14 +317,5 @@
 
   .alert {
     margin: 0 20px 15px 20px;
-  }
-
-  .password-requirements {
-    font-size: 0.85rem;
-    padding: 12px 15px;
-  }
-
-  .login-footer {
-    padding: 15px 20px;
   }
 }

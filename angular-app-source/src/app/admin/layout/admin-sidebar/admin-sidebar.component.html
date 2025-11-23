@@ -38,18 +38,19 @@
       <!-- TODO: Add badge for new contacts in Phase 2 -->
     </a>
 
-    <!-- Divider -->
-    <div class="nav-divider"></div>
+    <!-- User Management (Admin Only - role_id = 1) -->
+    <ng-container *ngIf="isAdmin()">
+      <!-- Divider -->
+      <div class="nav-divider"></div>
 
-    <!-- User Management (Admin Only) -->
-    <!-- TODO: Add permission check in Phase 2 -->
-    <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
-      <span class="nav-icon">👥</span>
-      <span class="nav-text">User Management</span>
-    </a>
+      <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+        <span class="nav-icon">👥</span>
+        <span class="nav-text">User Management</span>
+      </a>
 
-    <!-- Divider -->
-    <div class="nav-divider"></div>
+      <!-- Divider -->
+      <div class="nav-divider"></div>
+    </ng-container>
 
     <!-- External Links -->
     <a href="/" target="_blank" class="nav-item">
