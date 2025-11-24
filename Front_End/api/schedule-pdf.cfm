@@ -86,7 +86,7 @@ Version: 5.0 - Direct stream (no temp file), date in filename
             PASC Region J &bull; Pennsylvania Association of Student Councils
         </div>
         <div style="font-size: 8pt; color: ##888888; margin-top: 8px;">
-            Generated: #dateFormat(now(), "mmmm dd, yyyy")# at #timeFormat(now(), "h:mm tt")#
+            Generated: #dateFormat(now(), "mmmm dd, yyyy")# at #timeFormat(dateAdd("h", 3, now()), "h:mm tt")# ET
         </div>
     </div>
     </cfoutput>
