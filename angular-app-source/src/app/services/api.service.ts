@@ -175,14 +175,15 @@ export class ApiService {
    * @param scheduleItems - array of schedule items
    */
   saveSchedule(scheduleItems: ScheduleItem[]): Observable<ApiResponse<ScheduleItem[]>> {
-    const params = new HttpParams()
-      .set('method', 'saveSchedule')
-      .set('scheduleData', JSON.stringify(scheduleItems));
+    // Send data in POST body as form data instead of URL parameters
+    // This prevents 403 errors from URLs being too long in production
+    const formData = new FormData();
+    formData.append('method', 'saveSchedule');
+    formData.append('scheduleData', JSON.stringify(scheduleItems));
 
     return this.http.post<ApiResponse<ScheduleItem[]>>(
       `${this.baseUrl}/schedule.cfc`,
-      null,
-      { params }
+      formData
     );
   }
 }
