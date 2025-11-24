@@ -1,0 +1,170 @@
+<!-- Hero Section -->
+<section class="page-hero">
+    <!-- Video Background - Desktop -->
+    <video #heroVideoDesktop id="scheduleVideo" class="hero-video hero-video-desktop" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
+
+    <!-- Video Background - Mobile -->
+    <video #heroVideoMobile id="scheduleVideoMobile" class="hero-video hero-video-mobile" muted loop playsinline>
+        <source src="/assets/video/space-background.mp4" type="video/mp4">
+    </video>
+
+    <div class="container">
+        <h1 class="hero-title" id="scheduleTitle">Conference Schedule</h1>
+        <p class="hero-subtitle" id="scheduleSubtitle">Plan your day of leadership and learning</p>
+    </div>
+</section>
+
+<!-- Schedule Timeline Section -->
+<section class="schedule-timeline-section">
+    <div class="container">
+        <h2 class="section-title">Schedule Timeline</h2>
+        <p class="section-description">
+            View the complete conference schedule below.
+            <button class="btn-download-pdf" (click)="downloadPDF()" title="Download Schedule PDF">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download PDF
+            </button>
+        </p>
+
+        @if (loading()) {
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading schedule...</p>
+            </div>
+        }
+
+        @if (error()) {
+            <div class="alert alert-error">
+                <p>{{ error() }}</p>
+            </div>
+        }
+
+        @if (!loading() && !error() && scheduleItems().length > 0) {
+            <div class="timeline">
+                @for (item of scheduleItems(); track item.schedule_id || $index) {
+                    <div class="timeline-item">
+                        <div class="timeline-connector"></div>
+                        <div class="timeline-content">
+                            <div class="time-range">
+                                {{ item.event_time }}@if (item.end_time) { - {{ item.end_time }} }
+                            </div>
+                            <div class="event-details">
+                                <div class="event-header">
+                                    @if (item.event_icon) {
+                                        <span class="event-icon">{{ item.event_icon }}</span>
+                                    }
+                                    <h3 class="event-name">{{ item.event_name }}</h3>
+                                </div>
+                                @if (item.event_description) {
+                                    <p class="event-description">{{ item.event_description }}</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (!loading() && !error() && scheduleItems().length === 0) {
+            <div class="no-schedule">
+                <div class="message-icon">📅</div>
+                <h3>Schedule Coming Soon</h3>
+                <p>Our conference schedule will be available shortly. Check back soon!</p>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Workshop Rotation Explanation Section -->
+<section class="rotation-section">
+    <div class="container">
+        <h2 class="section-title">Workshop Rotation Groups</h2>
+        <p class="section-description">
+            Conference attendees will be assigned to rotation groups for the workshop sessions.
+            Each group follows a different sequence to ensure optimal learning experiences.
+        </p>
+
+        <div class="rotation-grid">
+            <div class="rotation-card">
+                <div class="rotation-header group-a">
+                    <h3>Group A</h3>
+                </div>
+                <div class="rotation-sequence">
+                    <div class="sequence-item">
+                        <div class="sequence-number">1</div>
+                        <div class="sequence-text">Workshop 1</div>
+                    </div>
+                    <div class="sequence-arrow">→</div>
+                    <div class="sequence-item">
+                        <div class="sequence-number">2</div>
+                        <div class="sequence-text">Lunch</div>
+                    </div>
+                    <div class="sequence-arrow">→</div>
+                    <div class="sequence-item">
+                        <div class="sequence-number">3</div>
+                        <div class="sequence-text">Workshop 2</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rotation-card">
+                <div class="rotation-header group-b">
+                    <h3>Group B</h3>
+                </div>
+                <div class="rotation-sequence">
+                    <div class="sequence-item">
+                        <div class="sequence-number">1</div>
+                        <div class="sequence-text">Workshop 1</div>
+                    </div>
+                    <div class="sequence-arrow">→</div>
+                    <div class="sequence-item">
+                        <div class="sequence-number">2</div>
+                        <div class="sequence-text">Workshop 2</div>
+                    </div>
+                    <div class="sequence-arrow">→</div>
+                    <div class="sequence-item">
+                        <div class="sequence-number">3</div>
+                        <div class="sequence-text">Lunch</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rotation-card">
+                <div class="rotation-header group-c">
+                    <h3>Group C</h3>
+                </div>
+                <div class="rotation-sequence">
+                    <div class="sequence-item">
+                        <div class="sequence-number">1</div>
+                        <div class="sequence-text">Lunch</div>
+                    </div>
+                    <div class="sequence-arrow">→</div>
+                    <div class="sequence-item">
+                        <div class="sequence-number">2</div>
+                        <div class="sequence-text">Workshop 1</div>
+                    </div>
+                    <div class="sequence-arrow">→</div>
+                    <div class="sequence-item">
+                        <div class="sequence-number">3</div>
+                        <div class="sequence-text">Workshop 2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rotation-note">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <p>Your rotation group will be assigned during registration. Please follow your group's schedule for the best experience.</p>
+        </div>
+    </div>
+</section>

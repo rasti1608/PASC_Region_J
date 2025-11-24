@@ -26,11 +26,12 @@ import { Subscription } from 'rxjs';
         <ul class="nav-menu" [class.active]="mobileMenuOpen()">
           <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">Home</a></li>
           <li><a routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">About</a></li>
-          <li><a routerLink="/gallery" routerLinkActive="active" (click)="closeMobileMenu()">Gallery</a></li>
           <li><a routerLink="/register" routerLinkActive="active" (click)="closeMobileMenu()">Registration</a></li>
           <li><a routerLink="/workshops" routerLinkActive="active" (click)="closeMobileMenu()">Workshops</a></li>
-          <li><a routerLink="/contact" routerLinkActive="active" (click)="closeMobileMenu()">Contact</a></li>
+          <li><a routerLink="/schedule" routerLinkActive="active" (click)="closeMobileMenu()">Schedule</a></li>
+          <li><a routerLink="/gallery" routerLinkActive="active" (click)="closeMobileMenu()">Gallery</a></li>
           <li><a routerLink="/resources" routerLinkActive="active" (click)="closeMobileMenu()">Resources</a></li>
+          <li><a routerLink="/contact" routerLinkActive="active" (click)="closeMobileMenu()">Contact</a></li>
         </ul>
 
         <!-- Mute Toggle Button -->

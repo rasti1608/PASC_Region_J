@@ -12,7 +12,8 @@ import {
   ContactSubmission,
   ContactResponse,
   ConferenceInfo,
-  PageContent
+  PageContent,
+  ScheduleItem
 } from '../models/api-models';
 
 /**
@@ -145,6 +146,42 @@ export class ApiService {
 
     return this.http.get<ApiResponse<PageContent>>(
       `${this.baseUrl}/pages.cfc`,
+      { params }
+    );
+  }
+
+  // ==================== SCHEDULE ====================
+
+  /**
+   * Get conference schedule (public)
+   */
+  getSchedule(): Observable<ApiResponse<ScheduleItem[]>> {
+    return this.http.get<ApiResponse<ScheduleItem[]>>(
+      `${this.baseUrl}/schedule.cfc?method=getSchedule`
+    );
+  }
+
+  /**
+   * Get conference schedule for admin
+   */
+  getScheduleAdmin(): Observable<ApiResponse<ScheduleItem[]>> {
+    return this.http.get<ApiResponse<ScheduleItem[]>>(
+      `${this.baseUrl}/schedule.cfc?method=getScheduleAdmin`
+    );
+  }
+
+  /**
+   * Save entire schedule (batch operation)
+   * @param scheduleItems - array of schedule items
+   */
+  saveSchedule(scheduleItems: ScheduleItem[]): Observable<ApiResponse<ScheduleItem[]>> {
+    const params = new HttpParams()
+      .set('method', 'saveSchedule')
+      .set('scheduleData', JSON.stringify(scheduleItems));
+
+    return this.http.post<ApiResponse<ScheduleItem[]>>(
+      `${this.baseUrl}/schedule.cfc`,
+      null,
       { params }
     );
   }

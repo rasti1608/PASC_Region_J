@@ -1,0 +1,34 @@
+/*******************************************************************************
+* File: animations.css
+* Created: October 30, 2025
+* Author: CSS Refactoring
+* Purpose: Music-synced animations and other keyframe animations
+* Project: PASC Region J Conference 2026 Website
+*******************************************************************************/
+
+/* Dancing titles when music plays */
+.hero-title.dancing {
+    animation: titleDance 1.5s ease-in-out infinite;
+}
+
+.hero-subtitle.dancing {
+    animation: subtitleDance 1.8s ease-in-out infinite;
+}
+
+@keyframes titleDance {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes subtitleDance {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+    50% {
+        transform: scale(1.03) translateY(-3px);
+    }
+}

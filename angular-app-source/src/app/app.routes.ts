@@ -6,6 +6,7 @@ import { AboutComponent } from './components/about/about.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { Register } from './components/register/register';
 import { WorkshopsComponent } from './components/workshops/workshops.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
 import { ResourcesComponent } from './components/resources/resources.component';
 import { ContactComponent } from './components/contact/contact.component';
 
@@ -15,9 +16,10 @@ export const routes: Routes = [
   { path: 'intro', component: IntroComponent, title: 'Welcome - PASC Region J' },
   { path: 'home', component: HomeComponent, title: 'Home - PASC Region J Conference 2026' },
   { path: 'about', component: AboutComponent, title: 'About - PASC Region J' },
-  { path: 'gallery', component: GalleryComponent, title: 'Gallery - PASC Region J' },
   { path: 'register', component: Register, title: 'Registration - PASC Region J' },
   { path: 'workshops', component: WorkshopsComponent, title: 'Workshops - PASC Region J' },
+  { path: 'schedule', component: ScheduleComponent, title: 'Schedule - PASC Region J' },
+  { path: 'gallery', component: GalleryComponent, title: 'Gallery - PASC Region J' },
   { path: 'resources', component: ResourcesComponent, title: 'Resources - PASC Region J' },
   { path: 'contact', component: ContactComponent, title: 'Contact - PASC Region J' },
 

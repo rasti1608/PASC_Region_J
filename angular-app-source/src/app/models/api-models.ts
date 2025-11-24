@@ -112,3 +112,15 @@ export interface PageContent {
   categories?: any[];
   requirements?: string[];
 }
+
+// Schedule
+export interface ScheduleItem {
+  schedule_id?: number;
+  event_time: string;
+  end_time?: string;
+  event_icon?: string;
+  event_name: string;
+  event_description?: string;
+  display_order: number;
+  is_active?: boolean;
+}

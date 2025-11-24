@@ -20,9 +20,9 @@ import { RouterModule } from '@angular/router';
             <h4>Quick Links</h4>
             <ul>
               <li><a routerLink="/">Home</a></li>
-              <li><a routerLink="/about">About</a></li>
-              <li><a routerLink="/gallery">Gallery</a></li>
+              <li><a routerLink="/register">Registration</a></li>
               <li><a routerLink="/workshops">Workshops</a></li>
+              <li><a routerLink="/schedule">Schedule</a></li>
             </ul>
           </div>
 
@@ -35,16 +35,16 @@ import { RouterModule } from '@angular/router';
           </div>
 
           <div class="footer-column">
-            <h4>Conference 2026</h4>
+            <h4>Conference Info</h4>
             <p><strong>Date:</strong> February 13, 2026</p>
-            <p><strong>Location:</strong> Neshaminy High School, Langhorne, PA</p>
-            <p><strong>Email:</strong> <a href="mailto:info@pascregionj.com">info@pascregionj.com</a></p>
+            <p><strong>Location:</strong> Neshaminy High School, Langhorne, PA 19047</p>
+            <p><strong>Email: </strong><a href="mailto:info@pascregionj.com">info@pascregionj.com</a></p>
           </div>
         </div>
 
         <div class="footer-bottom">
-          <p>&copy; {{ currentYear }} PASC Region J. All rights reserved. <a routerLink="/admin" class="admin-link" title="Admin Login">admin</a></p>
-          <p class="footer-credit">Powered by Angular & ColdFusion</p>
+          <p>Region J Conference presented by Neshaminy High School Student Council</p>
+          <p>&copy; 2025-2026 Created by Rastislav & Oliver Toscak <a routerLink="/admin" class="admin-link" title="Admin Login">admin</a></p>
         </div>
       </div>
     </footer>
@@ -54,7 +54,7 @@ import { RouterModule } from '@angular/router';
       background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
       color: #e0e0e0;
       padding: 60px 20px 20px;
-      border-top: 1px solid rgba(79, 195, 247, 0.3);
+      border-top: 1px solid rgba(255, 140, 0, 0.3);
     }
 
     .footer-grid {
@@ -65,13 +65,13 @@ import { RouterModule } from '@angular/router';
     }
 
     .footer-column h3 {
-      color: #4fc3f7;
+      color: #FF8C00;
       margin-bottom: 15px;
       font-size: 1.5rem;
     }
 
     .footer-column h4 {
-      color: #4fc3f7;
+      color: #FF8C00;
       margin-bottom: 15px;
       font-size: 1.1rem;
     }
@@ -103,23 +103,19 @@ import { RouterModule } from '@angular/router';
     }
 
     .footer-column a:hover {
-      color: #4fc3f7;
+      color: #FF8C00;
     }
 
     .footer-bottom {
       text-align: center;
       padding-top: 30px;
-      border-top: 1px solid rgba(79, 195, 247, 0.2);
+      border-top: 1px solid rgba(255, 140, 0, 0.2);
     }
 
     .footer-bottom p {
       margin: 5px 0;
-      color: #888;
+      color: #aaa;
       font-size: 0.9rem;
-    }
-
-    .footer-credit {
-      font-size: 0.85rem;
     }
 
     .admin-link {
@@ -131,7 +127,7 @@ import { RouterModule } from '@angular/router';
     }
 
     .admin-link:hover {
-      color: #4fc3f7;
+      color: #FF8C00;
     }
 
     @media (max-width: 768px) {

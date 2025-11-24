@@ -38,6 +38,9 @@ import { DocumentUploadComponent } from './documents/document-upload/document-up
 import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
 import { DocumentDeleteComponent } from './documents/document-delete/document-delete.component';
 
+// Schedule
+import { ScheduleManagementComponent } from './schedule/schedule-management/schedule-management.component';
+
 // Contacts
 import { ContactListComponent } from './contacts/contact-list/contact-list';
 import { EmailSettingsComponent } from './contacts/email-settings/email-settings.component';
@@ -94,6 +97,9 @@ const routes: Routes = [
           { path: 'documents/upload', component: DocumentUploadComponent },
           { path: 'documents/edit/:id', component: DocumentEditComponent },
           { path: 'documents/delete/:id', component: DocumentDeleteComponent },
+
+          // Schedule
+          { path: 'schedule', component: ScheduleManagementComponent },
 
           // Contacts
           { path: 'contacts', component: ContactListComponent },

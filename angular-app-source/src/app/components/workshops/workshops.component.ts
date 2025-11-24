@@ -102,6 +102,11 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
           }));
 
           this.forms.set(formsWithSanitized);
+
+          // Smart accordion behavior: auto-expand if only 1 form
+          if (formsWithSanitized.length === 1) {
+            this.activeFormIndex.set(0);
+          }
         } else {
           this.error.set('Failed to load workshop forms');
         }
@@ -116,6 +121,11 @@ export class WorkshopsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleForm(index: number) {
+    // Disable toggle if only one form (keep it always open)
+    if (this.forms().length === 1) {
+      return;
+    }
+
     this.activeFormIndex.set(this.activeFormIndex() === index ? null : index);
   }
 }

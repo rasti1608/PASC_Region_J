@@ -55,7 +55,7 @@
             }
             <h3>{{ announcement.title }}</h3>
             <p>{{ announcement.content }}</p>
-            <span class="announcement-date">{{ announcement.publishstart }}</span>
+            <span class="announcement-date">{{ announcement.publishstart | date:'MMMM d, yyyy' }}</span>
           </div>
         }
       </div>

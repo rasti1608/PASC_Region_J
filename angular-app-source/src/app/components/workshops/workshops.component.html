@@ -16,39 +16,15 @@
     </div>
 </section>
 
-<!-- Workshop Info Section -->
-<section class="workshop-intro">
+<!-- Workshop Info & Application Form Section - Merged -->
+<section class="workshop-forms-section">
     <div class="container">
+        <!-- Workshop Info -->
         <div class="intro-content">
             <h2>Present at Our Conference</h2>
             <p>We're looking for passionate leaders to share their knowledge and experience at the PASC Region J Conference 2026. Whether you're a student leader, advisor, or expert in student leadership, we want to hear from you!</p>
-
-            <div class="workshop-highlights">
-                <div class="highlight-item">
-                    <div class="highlight-icon">🎯</div>
-                    <h3>Share Your Expertise</h3>
-                    <p>Lead a workshop on topics that matter to student leaders and advisors.</p>
-                </div>
-
-                <div class="highlight-item">
-                    <div class="highlight-icon">🤝</div>
-                    <h3>Connect & Network</h3>
-                    <p>Meet fellow leaders and make lasting connections in the student council community.</p>
-                </div>
-
-                <div class="highlight-item">
-                    <div class="highlight-icon">🌟</div>
-                    <h3>Make an Impact</h3>
-                    <p>Help shape the next generation of student leaders across Region J.</p>
-                </div>
-            </div>
         </div>
-    </div>
-</section>
 
-<!-- Application Form Section -->
-<section class="form-section">
-    <div class="container">
         @if (loading()) {
             <div class="loading-spinner">
                 <div class="spinner"></div>
@@ -76,6 +52,7 @@
                             <button
                                 class="accordion-button"
                                 [class.collapsed]="activeFormIndex() !== i"
+                                [class.single-form-locked]="forms().length === 1"
                                 type="button"
                                 [attr.data-target]="'#collapse' + form.id"
                                 [attr.aria-expanded]="activeFormIndex() === i"
@@ -134,7 +111,7 @@
 
             <div class="guideline-card">
                 <h3>👥 Target Audience</h3>
-                <p>Workshops can be designed for students, advisors, or all attendees. We encourage interactive and engaging sessions.</p>
+                <p>Workshops are designed for student council members. We encourage interactive and engaging sessions.</p>
             </div>
         </div>
     </div>

@@ -1,5 +1,66 @@
 /* Workshops Component Styles */
 
+/* Merged Workshop Forms Section */
+.workshop-forms-section {
+  padding: 80px 0;
+  position: relative;
+  background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+  border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+}
+
+.workshop-forms-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/img/space-nebula.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: 0;
+}
+
+.workshop-forms-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.workshop-forms-section .intro-content {
+  max-width: 900px;
+  margin: 0 auto 60px;
+  text-align: center;
+}
+
+.workshop-forms-section .intro-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #FF8C00;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+}
+
+.workshop-forms-section .intro-content p {
+  font-size: 1.1rem;
+  color: #b0b8d4;
+  line-height: 1.8;
+}
+
+.workshop-forms-section .form-intro {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.workshop-forms-section .form-intro h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #FF8C00;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+}
+
 .workshops-intro {
   margin: 40px auto;
   max-width: 900px;
@@ -186,6 +247,16 @@
 
 .accordion-button:not(.collapsed) .form-description-preview {
   color: #8ab4d4;
+}
+
+/* Single form locked state - disable collapse functionality */
+.accordion-button.single-form-locked {
+  cursor: default;
+  pointer-events: none;
+}
+
+.accordion-button.single-form-locked::after {
+  display: none; /* Hide the collapse arrow when locked */
 }
 
 /* Mobile responsive */
