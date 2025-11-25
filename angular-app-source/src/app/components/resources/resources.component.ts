@@ -118,10 +118,10 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get download URL for a document using the download API endpoint
-   * This ensures proper Content-Type and filename headers
+   * Get download URL for a document using the download CFM endpoint
+   * Uses standalone CFM file as workaround for DailyRazor hosting restrictions
    */
   getDownloadUrl(documentId: number): string {
-    return `/api/documents.cfc?method=downloadDocument&id=${documentId}`;
+    return `/api/download.cfm?id=${documentId}`;
   }
 }

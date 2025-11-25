@@ -599,8 +599,8 @@ Version: 1.0
             </cfswitch>
 
             <!--- Build download filename using document title + extension --->
-            <cfset downloadFilename = qDocument.filename>
-			
+            <cfset downloadFilename = qDocument.title & '.' & qDocument.file_extension>
+
             <!--- Set response headers --->
             <cfheader name="Content-Type" value="#mimeType#">
             <cfheader name="Content-Disposition" value="attachment; filename=""#downloadFilename#""">
