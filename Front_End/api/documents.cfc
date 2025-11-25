@@ -557,40 +557,40 @@ Version: 1.0
 
             <!--- Determine MIME type based on file extension --->
             <cfswitch expression="#lcase(qDocument.file_extension)#">
-                <cfcase value=".pdf">
+                <cfcase value="pdf">
                     <cfset mimeType = "application/pdf">
                 </cfcase>
-                <cfcase value=".doc">
+                <cfcase value="doc">
                     <cfset mimeType = "application/msword">
                 </cfcase>
-                <cfcase value=".docx">
+                <cfcase value="docx">
                     <cfset mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                 </cfcase>
-                <cfcase value=".xls">
+                <cfcase value="xls">
                     <cfset mimeType = "application/vnd.ms-excel">
                 </cfcase>
-                <cfcase value=".xlsx">
+                <cfcase value="xlsx">
                     <cfset mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                 </cfcase>
-                <cfcase value=".ppt">
+                <cfcase value="ppt">
                     <cfset mimeType = "application/vnd.ms-powerpoint">
                 </cfcase>
-                <cfcase value=".pptx">
+                <cfcase value="pptx">
                     <cfset mimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation">
                 </cfcase>
-                <cfcase value=".zip">
+                <cfcase value="zip">
                     <cfset mimeType = "application/zip">
                 </cfcase>
-                <cfcase value=".rar">
+                <cfcase value="rar">
                     <cfset mimeType = "application/x-rar-compressed">
                 </cfcase>
-                <cfcase value=".jpg,.jpeg">
+                <cfcase value="jpg,.jpeg">
                     <cfset mimeType = "image/jpeg">
                 </cfcase>
-                <cfcase value=".png">
+                <cfcase value="png">
                     <cfset mimeType = "image/png">
                 </cfcase>
-                <cfcase value=".gif">
+                <cfcase value="gif">
                     <cfset mimeType = "image/gif">
                 </cfcase>
                 <cfdefaultcase>
