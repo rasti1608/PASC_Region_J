@@ -90,6 +90,9 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.apiService.getDocuments().subscribe({
       next: (response) => {
         if (response.success && response.data) {
+          console.log('Documents data:', response.data);
+          console.log('First document:', response.data[0]);
+          console.log('First document fileextension:', response.data[0]?.fileextension);
           this.documents.set(response.data);
         } else {
           this.error.set('Failed to load documents');
@@ -118,10 +121,10 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get download URL for a document using the download CFM endpoint
-   * Uses standalone CFM file as workaround for DailyRazor hosting restrictions
+   * Get direct download URL for a document
+   * Returns path to the physical file in /assets/documents/
    */
-  getDownloadUrl(documentId: number): string {
-    return `/api/download.cfm?id=${documentId}`;
+  getDownloadUrl(filename: string): string {
+    return `/assets/documents/${filename}`;
   }
 }

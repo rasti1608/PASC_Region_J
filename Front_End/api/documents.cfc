@@ -106,7 +106,7 @@ Version: 1.0
             </cfcatch>
         </cftry>
 
-        <cfreturn serializeJSON(result, false, false)>
+        <cfreturn serializeJSON(result, false, true)>
     </cffunction>
 
 

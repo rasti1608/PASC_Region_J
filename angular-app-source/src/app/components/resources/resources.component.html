@@ -43,13 +43,13 @@
                     <div class="document-card">
                         <!-- File Type Icon -->
                         <div class="document-icon">
-                            @if (doc.fileExtension === '.pdf') {
+                            @if (doc.fileextension === 'pdf') {
                                 <span class="icon-pdf">📄</span>
-                            } @else if (doc.fileExtension === '.doc' || doc.fileExtension === '.docx') {
+                            } @else if (doc.fileextension === 'doc' || doc.fileextension === 'docx') {
                                 <span class="icon-word">📘</span>
-                            } @else if (doc.fileExtension === '.xls' || doc.fileExtension === '.xlsx') {
+                            } @else if (doc.fileextension === 'xls' || doc.fileextension === 'xlsx') {
                                 <span class="icon-excel">📊</span>
-                            } @else if (doc.fileExtension === '.ppt' || doc.fileExtension === '.pptx') {
+                            } @else if (doc.fileextension === 'ppt' || doc.fileextension === 'pptx') {
                                 <span class="icon-powerpoint">📙</span>
                             } @else {
                                 <span class="icon-generic">📃</span>
@@ -65,15 +65,17 @@
                         }
 
                         <!-- Category Badge (if exists) -->
-                        @if (doc.documentType) {
-                            <span class="document-badge">{{ doc.documentType }}</span>
+                        @if (doc.documenttype) {
+                            <span class="document-badge">{{ doc.documenttype }}</span>
                         }
 
                         <!-- File Size -->
-                        <p class="document-size">{{ doc.fileSizeFormatted }}</p>
+                        <p class="document-size">{{ doc.filesizeformatted }}</p>
 
                         <!-- Download Button -->
-                        <a [href]="getDownloadUrl(doc.id)" class="btn btn-download-doc">
+                        <a [href]="getDownloadUrl(doc.filename)"
+                           [download]="doc.title + '.' + doc.fileextension"
+                           class="btn btn-download-doc">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                 <polyline points="7 10 12 15 17 10"/>

@@ -47,20 +47,7 @@ export interface GalleryCountResponse extends ApiResponse<never> {
 }
 
 // Documents
-export interface Document {
-  id: number;
-  title: string;
-  description: string;
-  filename: string;
-  originalFilename: string;
-  fileExtension: string;
-  fileSize: number;
-  fileSizeFormatted: string;
-  documentType: string;
-  displayOrder: number;
-  fileIcon: string;
-  downloadPath: string;
-}
+export interface Document {  id: number;  title: string;  description: string;  filename: string;  originalfilename: string;  fileextension: string;  filesize: number;  filesizeformatted: string;  documenttype: string;  displayorder: number;  fileicon: string;  downloadpath: string;}
 
 // Workshops/Forms
 export interface WorkshopForm {
