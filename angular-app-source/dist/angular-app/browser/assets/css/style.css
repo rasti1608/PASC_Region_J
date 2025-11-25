@@ -31,7 +31,7 @@
     --color-space-blue: #1a2332;
     --color-cosmic-purple: #5b4b8a;
     --color-nebula-pink: #c44c8e;
-    --color-star-yellow: #FFB300;
+    --color-star-yellow: #FF8C00;
     --color-moon-white: #f8f9fa;
     --color-planet-blue: #4a90e2;
     --color-orbit-gray: #b8c2cc;
@@ -1415,7 +1415,7 @@ a:hover {
 .hero-subtitle-accent {
     margin-top: 10px;
     font-size: 1rem;
-    color: #FFB300;
+    color: #FF8C00;
 }
 
 /* Primary Links */
