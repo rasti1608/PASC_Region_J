@@ -116,4 +116,12 @@ export class ResourcesComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
+  /**
+   * Get download URL for a document using the download API endpoint
+   * This ensures proper Content-Type and filename headers
+   */
+  getDownloadUrl(documentId: number): string {
+    return `/api/documents.cfc?method=downloadDocument&id=${documentId}`;
+  }
 }

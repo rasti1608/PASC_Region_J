@@ -1,8 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { ApiService } from '../../services/api.service';
 import { AudioService } from '../../services/audio.service';
+import { WorkshopForm, PageContent } from '../../models/api-models';
+
+interface RegistrationFormWithSanitized extends WorkshopForm {
+  sanitizedEmbedCode?: SafeHtml;
+}
 
 @Component({
   selector: 'app-register',
@@ -15,11 +22,21 @@ export class Register implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('heroVideoDesktop', { static: false }) heroVideoDesktop!: ElementRef<HTMLVideoElement>;
   @ViewChild('heroVideoMobile', { static: false }) heroVideoMobile!: ElementRef<HTMLVideoElement>;
 
+  private apiService = inject(ApiService);
+  private audioService = inject(AudioService);
+  private sanitizer = inject(DomSanitizer);
+
+  forms = signal<RegistrationFormWithSanitized[]>([]);
+  pageContent = signal<PageContent | null>(null);
+  loading = signal(true);
+  error = signal<string | null>(null);
+  activeFormIndex = signal<number | null>(null);
+
   private subscriptions: Subscription[] = [];
 
-  constructor(private audioService: AudioService) {}
-
   ngOnInit(): void {
+    this.loadPageContent();
+    this.loadRegistrationForms();
     this.setupAudioSubscription();
   }
 
@@ -34,49 +51,81 @@ export class Register implements OnInit, AfterViewInit, OnDestroy {
       this.heroVideoMobile.nativeElement.volume = 0;
     }
 
-    // Initial video control based on current audio state
     this.controlVideoPlayback(this.audioService.isPlaying());
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  /**
-   * Set up subscription to audio service to control video playback
-   */
   private setupAudioSubscription(): void {
-    // Subscribe to playing state only (mute state doesn't affect video)
     const playingSub = this.audioService.isPlaying$.subscribe(playing => {
       this.controlVideoPlayback(playing);
     });
-
     this.subscriptions.push(playingSub);
   }
 
-  /**
-   * Control hero video playback
-   */
   private controlVideoPlayback(shouldPlay: boolean): void {
-    if (this.heroVideoDesktop && this.heroVideoDesktop.nativeElement) {
-      if (shouldPlay) {
-        this.heroVideoDesktop.nativeElement.play().catch(err => {
-          console.log('Video autoplay prevented:', err);
-        });
-      } else {
-        this.heroVideoDesktop.nativeElement.pause();
+    [this.heroVideoDesktop, this.heroVideoMobile].forEach(videoRef => {
+      if (videoRef && videoRef.nativeElement) {
+        if (shouldPlay) {
+          videoRef.nativeElement.play().catch(() => {});
+        } else {
+          videoRef.nativeElement.pause();
+        }
       }
+    });
+  }
+
+  private loadPageContent() {
+    this.apiService.getPageContent('register').subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.pageContent.set(response.data);
+        }
+      },
+      error: (err) => {
+        console.error('Error loading page content:', err);
+      }
+    });
+  }
+
+  private loadRegistrationForms() {
+    this.loading.set(true);
+    this.apiService.getWorkshopForms('Registration').subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          // Pre-sanitize all embed codes to prevent iframe reloading
+          const formsWithSanitized = response.data.map(form => ({
+            ...form,
+            sanitizedEmbedCode: this.sanitizer.bypassSecurityTrustHtml(form.embedcode)
+          }));
+
+          this.forms.set(formsWithSanitized);
+
+          // Smart accordion behavior: auto-expand if only 1 form
+          if (formsWithSanitized.length === 1) {
+            this.activeFormIndex.set(0);
+          }
+        } else {
+          this.error.set('Failed to load registration forms');
+        }
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading registration forms:', err);
+        this.error.set('Failed to load registration forms');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  toggleForm(index: number) {
+    // Disable toggle if only one form (keep it always open)
+    if (this.forms().length === 1) {
+      return;
     }
 
-    if (this.heroVideoMobile && this.heroVideoMobile.nativeElement) {
-      if (shouldPlay) {
-        this.heroVideoMobile.nativeElement.play().catch(err => {
-          console.log('Video autoplay prevented:', err);
-        });
-      } else {
-        this.heroVideoMobile.nativeElement.pause();
-      }
-    }
+    this.activeFormIndex.set(this.activeFormIndex() === index ? null : index);
   }
 }

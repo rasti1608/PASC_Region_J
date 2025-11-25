@@ -12,51 +12,121 @@
 
     <div class="container">
         <h1 class="hero-title" id="registerTitle">Conference Registration</h1>
-        <p class="hero-subtitle" id="registerSubtitle">Coming Soon!</p>
+        <p class="hero-subtitle" id="registerSubtitle">Your Journey to Leadership Starts Here</p>
     </div>
 </section>
 
-<!-- Coming Soon Section -->
-<section class="coming-soon-section">
+<!-- Registration Info & Forms Section -->
+<section class="registration-forms-section">
     <div class="container">
-        <div class="coming-soon-content">
-            <div class="coming-soon-icon">
-                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="#4fc3f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M16 2V6" stroke="#4fc3f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M8 2V6" stroke="#4fc3f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M3 10H21" stroke="#4fc3f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+        <!-- Registration Info -->
+        <div class="intro-content">
+            <h2>Welcome, Student Leaders!</h2>
+            <p>This is your chance to connect with fellow student council members from across the region. Join us for a day of leadership development, inspiration, and building lasting friendships at the PASC Region J Conference 2026!</p>
+        </div>
+
+        @if (loading()) {
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading registration forms...</p>
             </div>
+        }
 
-            <h2>Registration Coming Soon</h2>
-
-            <p class="coming-soon-text">
-                Conference registration: <strong>January 5-23, 2026</strong>. We're excited to welcome student council members, leaders, and advisors to the PASC Region J Conference 2026!
-            </p>
-
-
-            <div class="coming-soon-details">
-                <div class="detail-item">
-                    <h3>Conference Date</h3>
-                    <p>February 13, 2026</p>
-                </div>
-
-                <div class="detail-item">
-                    <h3>Registration Opens</h3>
-                    <p>January 5-23, 2026</p>
-                </div>
-
-                <div class="detail-item">
-                    <h3>Slogan</h3>
-                    <p>Reach for the Stars, Lead Beyond Limits</p>
-                </div>
+        @if (error()) {
+            <div class="alert alert-error">
+                <p>{{ error() }}</p>
             </div>
+        }
 
-            <div class="cta-buttons">
+        @if (!loading() && !error() && forms().length > 1) {
+            <div class="form-intro">
+                <h2>Registration Forms</h2>
+                <p class="form-description">Select a form below to begin your registration.</p>
+            </div>
+        }
+
+        @if (!loading() && !error() && forms().length > 0) {
+            <!-- Bootstrap Accordion for Multiple Forms -->
+            <div class="accordion" id="registrationFormsAccordion">
+                @for (form of forms(); track form.id; let i = $index) {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" [id]="'heading' + form.id">
+                            <button
+                                class="accordion-button"
+                                [class.collapsed]="activeFormIndex() !== i"
+                                [class.single-form-locked]="forms().length === 1"
+                                type="button"
+                                [attr.data-target]="'#collapse' + form.id"
+                                [attr.aria-expanded]="activeFormIndex() === i"
+                                [attr.aria-controls]="'collapse' + form.id"
+                                (click)="toggleForm(i)">
+                                <div class="accordion-header-content">
+                                    <div class="form-title">{{ form.formname }}</div>
+                                    @if (form.formdescription && form.formdescription.trim()) {
+                                        <div class="form-description-preview">{{ form.formdescription }}</div>
+                                    }
+                                </div>
+                            </button>
+                        </h2>
+                        <div
+                            [id]="'collapse' + form.id"
+                            class="accordion-collapse collapse"
+                            [class.show]="activeFormIndex() === i"
+                            [attr.aria-labelledby]="'heading' + form.id"
+                            data-bs-parent="#registrationFormsAccordion">
+                            <div class="accordion-body">
+                                <div class="form-container" [innerHTML]="form.sanitizedEmbedCode"></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (!loading() && !error() && forms().length === 0) {
+            <!-- Fallback if no form is active -->
+            <div class="no-form-message">
+                <div class="message-icon">📋</div>
+                <h2>Registration Closed</h2>
+                <p>Registration is currently closed. Please check back when registration opens <strong>January 5-23, 2026</strong>.</p>
                 <a routerLink="/home" class="btn btn-primary">Return Home</a>
-                <a routerLink="/about" class="btn btn-secondary">Learn More About PASC</a>
             </div>
+        }
+    </div>
+</section>
+
+<!-- Conference Details Section -->
+<section class="details-section">
+    <div class="container">
+        <h2>Conference Details</h2>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3>📅 Conference Date</h3>
+                <p>February 13, 2026</p>
+            </div>
+
+            <div class="detail-card">
+                <h3>📝 Registration Period</h3>
+                <p>January 5-23, 2026</p>
+            </div>
+
+            <div class="detail-card">
+                <h3>🌟 Theme</h3>
+                <p>Reach for the Stars, Lead Beyond Limits</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <h2>Questions About Registration?</h2>
+        <p>We're here to help! Reach out if you have any questions about the registration process.</p>
+        <div class="cta-buttons">
+            <a routerLink="/about" class="btn btn-primary">Learn More About PASC Region J</a>
+            <a routerLink="/home" class="btn btn-secondary">Return Home</a>
         </div>
     </div>
 </section>

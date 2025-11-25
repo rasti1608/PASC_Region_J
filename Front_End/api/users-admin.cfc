@@ -387,6 +387,41 @@ Version: 1.0
         <cfset var hashedPassword = "">
 
         <cftry>
+            <!--- Security check: Get user being edited and check if it's admin account --->
+            <cfquery name="qUserCheck" datasource="pasc_regionj">
+                SELECT username
+                FROM dbo.admin_users
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <!--- Prevent non-admin users from editing the admin account --->
+            <cfif qUserCheck.recordCount GT 0 AND qUserCheck.username EQ "admin">
+                <!--- Check if logged-in user is not admin --->
+                <cfif NOT structKeyExists(session, "admin_user") OR session.admin_user.username NEQ "admin">
+                    <cfset result = {
+                        "success" = false,
+                        "message" = "Admin account can only be edited by admin"
+                    }>
+                    <cfreturn serializeJSON(result, false, false)>
+                </cfif>
+            </cfif>
+
+            <!--- Check if email already exists (excluding current user) --->
+            <cfquery name="qCheckEmail" datasource="pasc_regionj">
+                SELECT id
+                FROM dbo.admin_users
+                WHERE email = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">
+                AND id != <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+            </cfquery>
+
+            <cfif qCheckEmail.recordCount GT 0>
+                <cfset result = {
+                    "success" = false,
+                    "message" = "Email address already exists"
+                }>
+                <cfreturn serializeJSON(result, false, false)>
+            </cfif>
+
             <!--- Hash password if provided --->
             <cfif len(trim(arguments.password))>
                 <cfset hashedPassword = hash(arguments.password, "SHA-256")>

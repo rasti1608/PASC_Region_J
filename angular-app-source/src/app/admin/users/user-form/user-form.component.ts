@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../services/users.service';
+import { AuthService } from '../../services/auth.service';
 import { User, Role, CreateUserRequest, UpdateUserRequest } from '../../models/user.model';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
@@ -18,9 +19,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
   roles: Role[] = [];
   loading = false;
   error: string | null = null;
-  tempPassword: string | null = null;
-  successMessage: string | null = null;
-  activationEmailSent = false;
 
   // Username availability checker (like GitHub's username field)
   usernameCheck$ = new Subject<string>();
@@ -52,7 +50,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -117,6 +116,18 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.usersService.getById(this.userId).subscribe({
       next: (user) => {
+        // Security check: Prevent non-admin users from editing the admin account
+        const currentUser = this.authService.getCurrentUser();
+        if (user.username === 'admin' && currentUser?.username !== 'admin') {
+          this.error = 'Admin account can only be edited by admin';
+          this.loading = false;
+          // Redirect back to user list after showing error
+          setTimeout(() => {
+            this.router.navigate(['/admin/users']);
+          }, 2000);
+          return;
+        }
+
         this.user = user;
         this.username = user.username;
         this.fullName = user.full_name;
@@ -245,15 +256,13 @@ export class UserFormComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         // Double-check that the API returned success (service should have already validated this)
         if (response.success === true) {
-          // Extract generated password and activation email status from response
-          this.tempPassword = response.generatedPassword || null;
-          this.activationEmailSent = response.activationEmailSent || false;
-          this.successMessage = 'User created successfully!';
+          // Redirect back to user list
+          this.router.navigate(['/admin/users']);
         } else {
           // This shouldn't happen (service should throw error), but handle it just in case
           this.error = response.message || 'Failed to create user';
+          this.loading = false;
         }
-        this.loading = false;
       },
       error: (err) => {
         this.error = err.message || 'Failed to create user';
@@ -281,12 +290,8 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.usersService.update(updatedUser).subscribe({
       next: () => {
-        this.successMessage = 'User updated successfully';
-        this.changePassword = false;
-        this.newPassword = '';
-        this.confirmNewPassword = '';
-        this.loadUser(); // Reload user data
-        this.loading = false;
+        // Redirect back to user list
+        this.router.navigate(['/admin/users']);
       },
       error: (err) => {
         this.error = err.message || 'Failed to update user';
@@ -308,19 +313,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
     if (!this.isEditMode) {
       this.usernameCheck$.next(this.username);
     }
-  }
-
-  addAnotherUser(): void {
-    // Reset form for new user
-    this.successMessage = null;
-    this.tempPassword = null;
-    this.activationEmailSent = false;
-    this.error = null;
-    this.username = '';
-    this.fullName = '';
-    this.email = '';
-    this.isActive = true;
-    // Keep the selected role
   }
 
   onNewPasswordChange(): void {

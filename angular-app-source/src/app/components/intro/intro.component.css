@@ -239,15 +239,15 @@ body { overflow-x: hidden; }
 
 .intro-subtitle {
   font-size: 1.5rem;
-  color: #FFB300;
+  color: #FF8C00;
   opacity: 0;
   animation: fadeInUp 1s ease-out 1.5s forwards;
-  text-shadow: 0 0 10px rgba(255, 179, 0, 0.6);
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.6);
 }
 
 .intro-date {
   font-size: 1.2rem;
-  color: #FFB300;
+  color: #FF8C00;
   margin-top: 10px;
   opacity: 0;
   animation: fadeInUp 1s ease-out 2s forwards;

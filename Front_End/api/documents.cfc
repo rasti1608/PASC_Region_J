@@ -516,6 +516,108 @@ Version: 1.0
 
 
     <!--- ================================================================== --->
+    <!--- DOWNLOAD DOCUMENT --->
+    <!--- Serve document file with proper headers and filename --->
+    <!--- ================================================================== --->
+    <cffunction name="downloadDocument" access="remote" returntype="void" output="true">
+        <cfargument name="id" type="numeric" required="true">
+
+        <cfset var qDocument = "">
+        <cfset var filePath = "">
+        <cfset var mimeType = "">
+        <cfset var downloadFilename = "">
+
+        <cftry>
+            <!--- Get document details --->
+            <cfquery name="qDocument" datasource="pasc_regionj">
+                SELECT
+                    filename,
+                    title,
+                    file_extension
+                FROM dbo.documents
+                WHERE id = <cfqueryparam value="#arguments.id#" cfsqltype="cf_sql_integer">
+                AND is_active = 1
+            </cfquery>
+
+            <cfif qDocument.recordCount EQ 0>
+                <cfheader statuscode="404" statustext="Not Found">
+                <cfoutput>Document not found</cfoutput>
+                <cfabort>
+            </cfif>
+
+            <!--- Build file path --->
+            <cfset filePath = expandPath("/assets/documents/" & qDocument.filename)>
+
+            <!--- Check if file exists --->
+            <cfif NOT fileExists(filePath)>
+                <cfheader statuscode="404" statustext="Not Found">
+                <cfoutput>File not found on server</cfoutput>
+                <cfabort>
+            </cfif>
+
+            <!--- Determine MIME type based on file extension --->
+            <cfswitch expression="#lcase(qDocument.file_extension)#">
+                <cfcase value=".pdf">
+                    <cfset mimeType = "application/pdf">
+                </cfcase>
+                <cfcase value=".doc">
+                    <cfset mimeType = "application/msword">
+                </cfcase>
+                <cfcase value=".docx">
+                    <cfset mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                </cfcase>
+                <cfcase value=".xls">
+                    <cfset mimeType = "application/vnd.ms-excel">
+                </cfcase>
+                <cfcase value=".xlsx">
+                    <cfset mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                </cfcase>
+                <cfcase value=".ppt">
+                    <cfset mimeType = "application/vnd.ms-powerpoint">
+                </cfcase>
+                <cfcase value=".pptx">
+                    <cfset mimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation">
+                </cfcase>
+                <cfcase value=".zip">
+                    <cfset mimeType = "application/zip">
+                </cfcase>
+                <cfcase value=".rar">
+                    <cfset mimeType = "application/x-rar-compressed">
+                </cfcase>
+                <cfcase value=".jpg,.jpeg">
+                    <cfset mimeType = "image/jpeg">
+                </cfcase>
+                <cfcase value=".png">
+                    <cfset mimeType = "image/png">
+                </cfcase>
+                <cfcase value=".gif">
+                    <cfset mimeType = "image/gif">
+                </cfcase>
+                <cfdefaultcase>
+                    <cfset mimeType = "application/octet-stream">
+                </cfdefaultcase>
+            </cfswitch>
+
+            <!--- Build download filename using document title + extension --->
+            <cfset downloadFilename = qDocument.title & qDocument.file_extension>
+
+            <!--- Set response headers --->
+            <cfheader name="Content-Type" value="#mimeType#">
+            <cfheader name="Content-Disposition" value="attachment; filename=""#downloadFilename#""">
+
+            <!--- Serve the file --->
+            <cfcontent file="#filePath#" type="#mimeType#" deletefile="false" reset="true">
+
+            <cfcatch type="any">
+                <cfheader statuscode="500" statustext="Internal Server Error">
+                <cfoutput>Error downloading document: #cfcatch.message#</cfoutput>
+                <cfabort>
+            </cfcatch>
+        </cftry>
+    </cffunction>
+
+
+    <!--- ================================================================== --->
     <!--- UPDATE ORDER --->
     <!--- Update display order for a document with proper shift logic --->
     <!--- ================================================================== --->

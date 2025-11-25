@@ -1,259 +1,333 @@
 /*******************************************************************************
-* File: coming-soon.css
+* File: register.css
 * Created: October 26, 2025
+* Updated: November 24, 2025
 * Author: Rastislav Toscak
-* Purpose: Styles for "Coming Soon" placeholder pages
+* Purpose: Styles for Conference Registration page with form accordion
 * Project: PASC Region J Conference 2026 Website
 *******************************************************************************/
 
-/* Coming Soon Section */
-.coming-soon-section {
-    padding: 80px 20px;
-    position: relative;
-    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-    min-height: calc(100vh - 400px);
+/* Registration Forms Section */
+.registration-forms-section {
+  padding: 80px 0;
+  position: relative;
+  background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+  border-bottom: 1px solid rgba(79, 195, 247, 0.2);
 }
 
-.coming-soon-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('/assets/img/space-nebula.png');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.25;
-    z-index: 0;
+.registration-forms-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/img/space-nebula.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: 0;
 }
 
-.coming-soon-section > .container {
-    position: relative;
-    z-index: 1;
+.registration-forms-section > .container {
+  position: relative;
+  z-index: 1;
 }
 
-.coming-soon-content {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-    color: #ffffff;
+.registration-forms-section .intro-content {
+  max-width: 900px;
+  margin: 0 auto 60px;
+  text-align: center;
 }
 
-/* Coming Soon Icon */
-.coming-soon-icon {
-    margin: 0 auto 40px;
-    width: 120px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(79, 195, 247, 0.1);
-    border-radius: 50%;
-    border: 3px solid rgba(79, 195, 247, 0.3);
+.registration-forms-section .intro-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #FF8C00;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
 }
 
-.coming-soon-icon svg {
-    filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.5));
+.registration-forms-section .intro-content p {
+  font-size: 1.1rem;
+  color: #b0b8d4;
+  line-height: 1.8;
 }
 
-/* Typography */
-.coming-soon-content h2 {
-    font-size: 3rem;
-    color: #4fc3f7;
-    margin-bottom: 30px;
-    font-weight: 700;
+.registration-forms-section .form-intro {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  text-align: center;
 }
 
-.coming-soon-text {
-    font-size: 1.3rem;
-    line-height: 1.8;
-    color: #b0b8d4;
-    margin-bottom: 20px;
+.registration-forms-section .form-intro h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
 }
 
-.coming-soon-subtext {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #8892b0;
-    margin-bottom: 50px;
+/* Accordion Styles */
+.accordion-item {
+  margin-bottom: 15px;
+  background: rgba(26, 31, 58, 0.4);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-/* Details Section */
-.coming-soon-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 30px;
-    margin: 50px 0;
+/* Form Accordion Header */
+.accordion-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  width: 100%;
 }
 
-.detail-item {
-    background: rgba(26, 31, 58, 0.6);
-    border: 2px solid rgba(79, 195, 247, 0.3);
-    border-radius: 15px;
-    padding: 30px 20px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+.form-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
 }
 
-.detail-item:hover {
-    transform: translateY(-5px);
-    border-color: rgba(79, 195, 247, 0.6);
-    box-shadow: 0 15px 40px rgba(79, 195, 247, 0.2);
+.form-description-preview {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #b0b8d4;
+  line-height: 1.4;
+  opacity: 0.9;
 }
 
-.detail-item h3 {
-    color: #4fc3f7;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    font-weight: 600;
+/* Accordion button styling */
+.accordion-button {
+  padding: 1.25rem 1.5rem;
 }
 
-.detail-item p {
-    color: #ffffff;
-    font-size: 1rem;
-    margin: 0;
+.accordion-button:not(.collapsed) .form-title {
+  color: #4fc3f7;
 }
 
-/* Contact Info Box */
-.contact-info-box {
-    background: rgba(26, 31, 58, 0.6);
-    border: 2px solid rgba(79, 195, 247, 0.3);
-    border-radius: 15px;
-    padding: 40px;
-    margin: 50px 0;
-    backdrop-filter: blur(10px);
+.accordion-button:not(.collapsed) .form-description-preview {
+  color: #8ab4d4;
 }
 
-.contact-info-box h3 {
-    color: #4fc3f7;
-    font-size: 2rem;
-    margin-bottom: 30px;
+/* Single form locked state - disable collapse functionality */
+.accordion-button.single-form-locked {
+  cursor: default;
+  pointer-events: none;
 }
 
-.contact-methods {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    text-align: left;
+.accordion-button.single-form-locked::after {
+  display: none; /* Hide the collapse arrow when locked */
 }
 
-.contact-method strong {
-    display: block;
-    color: #4fc3f7;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+/* Loading Spinner */
+.loading-spinner {
+  text-align: center;
+  padding: 60px 20px;
+  color: #b0b8d4;
 }
 
-.contact-method p {
-    color: #b0b8d4;
-    font-size: 1rem;
-    margin: 0;
+.spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 4px solid rgba(79, 195, 247, 0.2);
+  border-top-color: #4fc3f7;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.contact-method a {
-    color: #4fc3f7;
-    text-decoration: none;
-    transition: all 0.3s ease;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-.contact-method a:hover {
-    color: #818cf8;
-    text-decoration: underline;
+/* Error Alert */
+.alert-error {
+  background: rgba(244, 67, 54, 0.1);
+  border: 2px solid rgba(244, 67, 54, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  color: #ff6b6b;
+  text-align: center;
 }
 
-/* Resources Preview */
-.resources-preview {
-    margin: 50px 0;
+/* No Form Message */
+.no-form-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #b0b8d4;
 }
 
-.resources-preview h3 {
-    color: #4fc3f7;
-    font-size: 2rem;
-    margin-bottom: 30px;
+.message-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
 }
 
-.preview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    text-align: left;
+.no-form-message h2 {
+  color: #FF8C00;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
-.preview-item {
-    background: rgba(26, 31, 58, 0.6);
-    border: 2px solid rgba(79, 195, 247, 0.3);
-    border-radius: 10px;
-    padding: 25px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+.no-form-message p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.8;
 }
 
-.preview-item:hover {
-    transform: translateY(-3px);
-    border-color: rgba(79, 195, 247, 0.6);
-    box-shadow: 0 10px 30px rgba(79, 195, 247, 0.2);
+/* Conference Details Section */
+.details-section {
+  padding: 80px 20px;
+  position: relative;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
 }
 
-.preview-item h4 {
-    color: #4fc3f7;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+.details-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/img/space-nebula.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  z-index: 0;
 }
 
-.preview-item p {
-    color: #8892b0;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin: 0;
+.details-section > .container {
+  position: relative;
+  z-index: 1;
 }
 
-/* CTA Buttons */
+.details-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #FF8C00;
+  margin-bottom: 50px;
+  font-weight: 700;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.detail-card {
+  background: rgba(26, 35, 50, 0.6);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  border-radius: 12px;
+  padding: 30px 20px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  text-align: center;
+}
+
+.detail-card:hover {
+  transform: scale(1.02);
+  border-color: #4A90E2;
+}
+
+.detail-card h3 {
+  color: #4A90E2;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.detail-card p {
+  color: #b0b8d4;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(26, 31, 58, 0.8) 100%);
+}
+
+.cta-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.cta-section p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: #b0b8d4;
+}
+
 .cta-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 50px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .coming-soon-content h2 {
-        font-size: 2.2rem;
-    }
+  .form-title {
+    font-size: 1rem;
+  }
 
-    .coming-soon-text {
-        font-size: 1.1rem;
-    }
+  .form-description-preview {
+    font-size: 0.85rem;
+  }
 
-    .coming-soon-details,
-    .contact-methods,
-    .preview-grid {
-        grid-template-columns: 1fr;
-    }
+  .accordion-button {
+    padding: 1rem 1.25rem;
+  }
 
-    .cta-buttons {
-        flex-direction: column;
-    }
+  .registration-forms-section .intro-content h2 {
+    font-size: 2rem;
+  }
 
-    .cta-buttons .btn {
-        width: 100%;
-    }
+  .details-section h2 {
+    font-size: 2rem;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
-    .coming-soon-section {
-        padding: 40px 15px;
-    }
+  .registration-forms-section {
+    padding: 40px 0;
+  }
 
-    .coming-soon-content h2 {
-        font-size: 1.8rem;
-    }
+  .details-section {
+    padding: 40px 15px;
+  }
 
-    .contact-info-box,
-    .detail-item,
-    .preview-item {
-        padding: 20px;
-    }
+  .registration-forms-section .intro-content h2 {
+    font-size: 1.8rem;
+  }
+
+  .details-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .detail-card {
+    padding: 20px;
+  }
 }

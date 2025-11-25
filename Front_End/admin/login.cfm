@@ -163,7 +163,7 @@
             </div>
 
             <div class="login-footer">
-                <p><small>Default credentials: devadmin / Welcome01!</small></p>
+                <!---<p><small>Default credentials: devadmin / Welcome01!</small></p>--->
                 <p><small>Please change default password after first login</small></p>
             </div>
         </div>

@@ -38,12 +38,14 @@
             </div>
         }
 
-        @if (!loading() && !error() && forms().length > 0) {
+        @if (!loading() && !error() && forms().length > 1) {
             <div class="form-intro">
                 <h2>Conference Forms</h2>
                 <p class="form-description">Select a form below to begin your submission.</p>
             </div>
+        }
 
+        @if (!loading() && !error() && forms().length > 0) {
             <!-- Bootstrap Accordion for Multiple Forms -->
             <div class="accordion" id="workshopFormsAccordion">
                 @for (form of forms(); track form.id; let i = $index) {

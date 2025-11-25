@@ -10,44 +10,11 @@
 </div>
 
 <div class="section">
-  <!-- Success Message with Generated Password and Activation Email -->
-  <div *ngIf="successMessage" class="success-container">
-    <div class="alert alert-success">
-      <strong>✓ {{ successMessage }}</strong>
-    </div>
-
-    <div *ngIf="activationEmailSent" class="activation-email-box" style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 20px; margin: 20px 0; border-radius: 4px;">
-      <p style="margin: 0 0 10px 0; color: #2e7d32; font-size: 16px;">
-        <strong>📧 Activation Email Sent</strong>
-      </p>
-      <p style="margin: 0; color: #2e7d32;">
-        An activation email has been sent to <strong>{{ email }}</strong>.
-        The user will need to click the activation link to set their password and activate their account.
-      </p>
-      <p style="margin: 10px 0 0 0; color: #2e7d32; font-size: 14px;">
-        ⏱️ The activation link will expire in <strong>24 hours</strong>.
-      </p>
-    </div>
-
-    <div *ngIf="tempPassword" class="temp-password-box">
-      <strong class="temp-password-label">Generated Password:</strong>
-      <code class="temp-password-code">{{ tempPassword }}</code>
-      <p class="temp-password-warning">
-        ℹ️ <strong>Note:</strong> This password has been automatically generated and stored securely.
-        You can share it with the user if needed, but they will set their own password through the activation link.
-      </p>
-    </div>
-
-    <div class="success-actions">
-      <button type="button" class="btn btn-primary" (click)="addAnotherUser()">Add Another User</button>
-    </div>
-  </div>
-
   <!-- Error Message -->
   <div *ngIf="error" class="alert alert-error">{{ error }}</div>
 
   <!-- User Form -->
-  <form *ngIf="!successMessage" (ngSubmit)="onSubmit()" class="admin-form">
+  <form (ngSubmit)="onSubmit()" class="admin-form">
     <!-- Username (Add Mode Only) -->
     <div class="form-group" *ngIf="!isEditMode">
       <label for="username">Username *</label>

@@ -8,19 +8,19 @@
 <div class="tabs">
   <button
     class="tab"
-    [class.active]="currentLocation === 'about_page'"
-    (click)="switchTab('about_page')"
-  >
-    📄 About Page
-    <span class="tab-badge">{{ aboutPageCount }}</span>
-  </button>
-  <button
-    class="tab"
     [class.active]="currentLocation === 'gallery'"
     (click)="switchTab('gallery')"
   >
     🖼️ Gallery
     <span class="tab-badge">{{ galleryCount }}</span>
+  </button>
+  <button
+    class="tab"
+    [class.active]="currentLocation === 'about_page'"
+    (click)="switchTab('about_page')"
+  >
+    📄 About Page
+    <span class="tab-badge">{{ aboutPageCount }}</span>
   </button>
 </div>
 
