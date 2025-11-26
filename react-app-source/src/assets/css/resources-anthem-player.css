@@ -1,0 +1,520 @@
+/*******************************************************************************
+* File:        /assets/css/resources-anthem-player.css
+* Created:     November 12, 2025
+* Author:      Rastislav Toscak
+*
+* Purpose:     Conference Anthem Player Styles for Resources Page
+*              Cinema theater effect, custom audio controls, purple gradient card
+*              Page-specific styles for the anthem player section only
+*
+* Project:     PASC Region J Conference 2026 Website
+*******************************************************************************/
+    /* ========================================
+       ANTHEM SECTION STYLES
+       ======================================== */
+    .anthem-section {
+        position: relative;
+        overflow: hidden;
+        background: transparent;
+        padding: 60px 0;
+        border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+    }
+
+    .anthem-section-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        opacity: 0.5;
+    }
+
+    .anthem-section .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .anthem-featured {
+        position: relative;
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(138, 43, 226, 0.15);
+        border: 2px solid rgba(138, 43, 226, 0.4);
+        border-radius: 20px;
+        padding: 40px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3);
+    }
+
+    .anthem-header {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .anthem-header h2 {
+        color: #ffffff;
+        font-size: 2rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .anthem-info {
+        margin-bottom: 20px;
+    }
+
+    .song-title {
+        color: var(--color-accent);
+        font-size: 1.5rem;
+        margin: 10px 0 5px;
+        font-weight: 600;
+    }
+
+    .song-artist {
+        color: #b0b8d4;
+        font-size: 1.1rem;
+        margin: 5px 0;
+        font-style: italic;
+    }
+
+    .song-description {
+        color: #e0e0e0;
+        font-size: 0.95rem;
+        margin: 10px 0;
+        line-height: 1.5;
+    }
+
+    /* Text shadows for readability over video background */
+    .anthem-header h2,
+    .song-title,
+    .song-artist,
+    .song-description {
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8),
+                     0 0 20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Custom Audio Player */
+    .custom-audio-player {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .anthem-player-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        border-radius: 20px;
+        opacity: 0.4;
+    }
+
+    .player-controls {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .play-pause-btn {
+        background: linear-gradient(135deg, #8a2be2, #9370db);
+        border: none;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+        flex-shrink: 0;
+    }
+
+    .play-pause-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(138, 43, 226, 0.6);
+    }
+
+    .play-pause-btn:active {
+        transform: scale(0.95);
+    }
+
+    .play-pause-btn svg {
+        color: #ffffff;
+    }
+
+    .player-info {
+        flex: 1;
+    }
+
+    .progress-container {
+        margin-bottom: 8px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #8a2be2, #9370db);
+        border-radius: 3px;
+        width: 0%;
+        transition: width 0.1s linear;
+    }
+
+    .time-display {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #b0b8d4;
+        font-size: 0.9rem;
+        font-family: monospace;
+    }
+
+    .time-separator {
+        color: #8a8a8a;
+    }
+
+    /* Download Buttons */
+    .anthem-download {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .btn-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #4a90e2, #357abd);
+        color: #ffffff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    }
+
+    .btn-download:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(74, 144, 226, 0.5);
+        background: linear-gradient(135deg, #357abd, #2868a8);
+    }
+
+    .btn-download svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Secondary Download Button (Instrumental) */
+    .btn-secondary-download {
+        font-size: 0.9rem;
+        opacity: 0.85;
+    }
+
+    .btn-secondary-download:hover {
+        opacity: 1;
+    }
+
+    /* ========================================
+       DOCUMENTS SECTION STYLES
+       ======================================== */
+    .documents-section {
+        position: relative;
+        padding: 60px 0 80px;
+        background: linear-gradient(180deg, rgba(10, 14, 39, 0.5) 0%, rgba(26, 35, 50, 0.7) 100%);
+    }
+
+    .documents-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('../img/space-nebula.png');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.25;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .section-header {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .section-header h2 {
+        color: #ffffff;
+        font-size: 2rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .section-description {
+        color: #b0b8d4;
+        font-size: 1.1rem;
+    }
+
+    /* Documents Grid */
+    .documents-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .document-card {
+        background: rgba(26, 31, 58, 0.6);
+        border: 2px solid rgba(79, 195, 247, 0.3);
+        border-radius: 12px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .document-card:hover {
+        transform: scale(1.02);
+        border-color: rgba(79, 195, 247, 0.6);
+        box-shadow: 0 6px 20px rgba(79, 195, 247, 0.15);
+    }
+
+    .document-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .icon-pdf { filter: hue-rotate(340deg); }
+    .icon-word { filter: hue-rotate(200deg); }
+    .icon-excel { filter: hue-rotate(100deg); }
+    .icon-powerpoint { filter: hue-rotate(20deg); }
+    .icon-generic { filter: grayscale(50%); }
+
+    .document-title {
+        color: #ffffff;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .document-description {
+        color: #b0b8d4;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        flex-grow: 1;
+    }
+
+    .document-badge {
+        display: inline-block;
+        background: rgba(74, 144, 226, 0.3);
+        color: #4fc3f7;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+        border: 1px solid rgba(79, 195, 247, 0.5);
+    }
+
+    .document-size {
+        color: #8a8a8a;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        font-family: monospace;
+    }
+
+    .btn-download-doc {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #5b4b8a, #7b6aa8);
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(91, 75, 138, 0.3);
+        margin-top: auto;
+    }
+
+    .btn-download-doc:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(91, 75, 138, 0.5);
+        background: linear-gradient(135deg, #7b6aa8, #9b8ac8);
+    }
+
+    .btn-download-doc svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* No Documents State */
+    .no-documents {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 60px 20px;
+        color: #b0b8d4;
+        font-size: 1.2rem;
+    }
+
+    /* ========================================
+       RESPONSIVE STYLES
+       ======================================== */
+    @media (max-width: 768px) {
+        .anthem-featured {
+            padding: 30px 20px;
+        }
+
+        .anthem-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .song-title {
+            font-size: 1.2rem;
+        }
+
+        .player-controls {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .play-pause-btn {
+            width: 50px;
+            height: 50px;
+        }
+
+        .documents-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .anthem-section {
+            padding: 40px 0;
+        }
+
+        .documents-section {
+            padding: 40px 0 60px;
+        }
+
+        .documents-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .document-card {
+            padding: 1.5rem;
+        }
+    }
+
+    /* ===========================
+       CINEMA THEATER EFFECT
+       =========================== */
+
+    /* Outer theater wrapper with static space background */
+    .cinema-theater-wrapper {
+        position: relative;
+        background: #000;
+        padding: 80px 0;
+        overflow: hidden;
+    }
+
+    /* Static space background - never moves */
+    .cinema-space-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.4;
+        z-index: 0;
+    }
+
+    /* Dark vignette creating theater edge effect */
+    .cinema-vignette {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Cinema screen frame wrapper */
+    .cinema-screen-frame {
+        position: relative;
+        z-index: 2;
+        max-width: 85%;
+        margin: 0 auto;
+        padding: 40px;
+        background: linear-gradient(135deg, rgba(91, 75, 138, 0.1) 0%, rgba(26, 35, 50, 0.3) 100%);
+        border-radius: 12px;
+        box-shadow:
+            0 0 60px rgba(138, 43, 226, 0.4),
+            inset 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Enhance anthem-featured for cinema effect */
+    .cinema-theater-wrapper .anthem-featured {
+        border: 2px solid rgba(138, 43, 226, 0.6);
+        box-shadow:
+            0 8px 32px rgba(138, 43, 226, 0.5),
+            0 0 80px rgba(138, 43, 226, 0.3),
+            inset 0 0 20px rgba(79, 195, 247, 0.1);
+    }
+
+    /* Mobile responsive adjustments for cinema */
+    @media (max-width: 768px) {
+        .cinema-theater-wrapper {
+            padding: 40px 0;
+        }
+
+        .cinema-screen-frame {
+            padding: 20px;
+            max-width: 100%;
+        }
+    }

@@ -1,0 +1,527 @@
+/* Schedule Component Styles */
+
+/* PDF Download Button - Transparent Professional Style */
+.btn-download-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  margin-left: 0.75rem;
+  background: transparent;
+  color: #4fc3f7;
+  border: 1px solid rgba(79, 195, 247, 0.4);
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-download-pdf:hover {
+  background: rgba(79, 195, 247, 0.1);
+  border-color: #4fc3f7;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-download-pdf:active {
+  transform: translateY(0);
+  background: rgba(79, 195, 247, 0.15);
+}
+
+/* Schedule Timeline Section */
+.schedule-timeline-section {
+  padding: 80px 0;
+  position: relative;
+  background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+  border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+}
+
+.schedule-timeline-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../img/space-nebula.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: 0;
+}
+
+.schedule-timeline-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #b0b8d4;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+/* Timeline */
+.timeline {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  padding: 2rem 0;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 3rem;
+  padding-left: 60px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Timeline Connector Line - Cosmic Glow */
+.timeline-connector {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: -3rem;
+  width: 4px;
+  background: linear-gradient(180deg, #5b4b8a 0%, #4fc3f7 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 20px rgba(91, 75, 138, 0.6),
+              0 0 40px rgba(79, 195, 247, 0.4),
+              0 0 60px rgba(79, 195, 247, 0.2);
+}
+
+.timeline-item:last-child .timeline-connector {
+  display: none;
+}
+
+/* Timeline Dot */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #FF8C00 0%, #FF6500 100%);
+  border: 4px solid rgba(10, 14, 39, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+  z-index: 2;
+}
+
+/* Timeline Content Card */
+.timeline-content {
+  background: rgba(26, 31, 58, 0.6);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  border-left: 4px solid #FF8C00;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.timeline-content:hover {
+  transform: translateX(5px);
+  border-left-color: #4fc3f7;
+  box-shadow: 0 6px 24px rgba(79, 195, 247, 0.2);
+}
+
+/* Time Range - Brand Orange */
+.time-range {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FF8C00;
+  margin-bottom: 0.75rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+/* Event Details */
+.event-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.event-name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.event-description {
+  font-size: 1rem;
+  color: #e0e0e0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #b0b8d4;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(79, 195, 247, 0.2);
+  border-top-color: #4fc3f7;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error Alert */
+.alert {
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.alert-error {
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid rgba(220, 53, 69, 0.5);
+  color: #ff6b6b;
+}
+
+/* No Schedule Message */
+.no-schedule {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #b0b8d4;
+}
+
+.message-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.no-schedule h3 {
+  font-size: 1.8rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.no-schedule p {
+  font-size: 1.1rem;
+  color: #b0b8d4;
+}
+
+/* Workshop Rotation Section */
+.rotation-section {
+  padding: 80px 0;
+  position: relative;
+  background: linear-gradient(135deg, rgba(91, 75, 138, 0.3) 0%, rgba(74, 144, 226, 0.2) 100%);
+}
+
+.rotation-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../img/intro-background.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: 0;
+}
+
+.rotation-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.rotation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Rotation Cards */
+.rotation-card {
+  background: rgba(26, 31, 58, 0.6);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.rotation-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(79, 195, 247, 0.2);
+}
+
+.rotation-header {
+  padding: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.rotation-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+/* Rotation Group Headers - Brand Colors */
+.group-a {
+  background: linear-gradient(135deg, #FF8C00 0%, #FF6500 100%);
+  box-shadow: 0 4px 16px rgba(255, 140, 0, 0.3);
+}
+
+.group-b {
+  background: linear-gradient(135deg, #4fc3f7 0%, #2ea3d8 100%);
+  box-shadow: 0 4px 16px rgba(79, 195, 247, 0.3);
+}
+
+.group-c {
+  background: linear-gradient(135deg, #5b4b8a 0%, #7c3aed 100%);
+  box-shadow: 0 4px 16px rgba(91, 75, 138, 0.3);
+}
+
+/* Rotation Sequence */
+.rotation-sequence {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 2rem 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.sequence-item {
+  text-align: center;
+  flex: 1;
+  min-width: 80px;
+}
+
+.sequence-number {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 0.5rem;
+  background: rgba(79, 195, 247, 0.2);
+  border: 2px solid #4fc3f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #4fc3f7;
+  font-size: 1.2rem;
+}
+
+/* Step Number Circles - Colored Glows by Group */
+.group-a .sequence-number {
+  background: rgba(255, 140, 0, 0.2);
+  border-color: #FF8C00;
+  color: #FF8C00;
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.4),
+              0 0 25px rgba(255, 140, 0, 0.2);
+}
+
+.group-b .sequence-number {
+  background: rgba(79, 195, 247, 0.2);
+  border-color: #4fc3f7;
+  color: #4fc3f7;
+  box-shadow: 0 0 15px rgba(79, 195, 247, 0.4),
+              0 0 25px rgba(79, 195, 247, 0.2);
+}
+
+.group-c .sequence-number {
+  background: rgba(91, 75, 138, 0.2);
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4),
+              0 0 25px rgba(139, 92, 246, 0.2);
+}
+
+.sequence-text {
+  font-size: 0.9rem;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.sequence-arrow {
+  font-size: 1.5rem;
+  color: #4fc3f7;
+  font-weight: 700;
+  flex-shrink: 0;
+  animation: float-arrow 2s ease-in-out infinite;
+}
+
+/* Floating Arrow Animation */
+@keyframes float-arrow {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+/* Rotation Note */
+.rotation-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(79, 195, 247, 0.1);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 2rem auto 0;
+}
+
+.rotation-note svg {
+  flex-shrink: 0;
+  color: #4fc3f7;
+  margin-top: 0.125rem;
+}
+
+.rotation-note p {
+  margin: 0;
+  color: #e0e0e0;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .btn-download-pdf {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .schedule-timeline-section {
+    padding: 40px 0;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .timeline {
+    padding-left: 0;
+  }
+
+  .timeline-item {
+    padding-left: 40px;
+  }
+
+  .timeline-connector {
+    left: 10px;
+  }
+
+  .timeline-item::before {
+    left: 2px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .timeline-content {
+    padding: 1rem 1.5rem;
+  }
+
+  .event-name {
+    font-size: 1.2rem;
+  }
+
+  .event-description {
+    font-size: 0.9rem;
+  }
+
+  .rotation-section {
+    padding: 40px 0;
+  }
+
+  .rotation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rotation-sequence {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sequence-arrow {
+    transform: rotate(90deg);
+    animation: float-arrow-vertical 2s ease-in-out infinite;
+  }
+
+  /* Vertical floating animation for mobile */
+  @keyframes float-arrow-vertical {
+    0%, 100% {
+      transform: rotate(90deg) translateX(0);
+    }
+    50% {
+      transform: rotate(90deg) translateX(5px);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .timeline-content {
+    padding: 1rem;
+  }
+
+  .event-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .event-icon {
+    font-size: 1.25rem;
+  }
+
+  .event-name {
+    font-size: 1.1rem;
+  }
+
+  .rotation-note {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}

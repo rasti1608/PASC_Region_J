@@ -1,0 +1,306 @@
+/*******************************************************************************
+* File: register.css
+* Purpose: Styles for Conference Registration page with form accordion
+* Project: PASC Region J Conference 2026 Website - React
+*******************************************************************************/
+
+/* Registration Forms Section */
+.registration-forms-section {
+  padding: 80px 0;
+  position: relative;
+  background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+  border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+}
+
+.registration-forms-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../img/space-nebula.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: 0;
+}
+
+.registration-forms-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.registration-forms-section .intro-content {
+  max-width: 900px;
+  margin: 0 auto 60px;
+  text-align: center;
+}
+
+.registration-forms-section .intro-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #FF8C00;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+}
+
+.registration-forms-section .intro-content p {
+  font-size: 1.1rem;
+  color: #b0b8d4;
+  line-height: 1.8;
+}
+
+.registration-forms-section .form-intro {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.registration-forms-section .form-intro h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+}
+
+/* Accordion Styles */
+.accordion-item {
+  margin-bottom: 15px;
+  background: rgba(26, 31, 58, 0.4);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Form Accordion Header */
+.accordion-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  width: 100%;
+}
+
+.form-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.form-description-preview {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #b0b8d4;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+/* Accordion button styling */
+.accordion-button {
+  padding: 1.25rem 1.5rem;
+}
+
+.accordion-button:not(.collapsed) .form-title {
+  color: #4fc3f7;
+}
+
+.accordion-button:not(.collapsed) .form-description-preview {
+  color: #8ab4d4;
+}
+
+/* Single form locked state - disable collapse functionality */
+.accordion-button.single-form-locked {
+  cursor: default;
+  pointer-events: none;
+}
+
+.accordion-button.single-form-locked::after {
+  display: none; /* Hide the collapse arrow when locked */
+}
+
+/* Loading Spinner for Registration */
+.registration-forms-section .loading-spinner {
+  text-align: center;
+  padding: 60px 20px;
+  color: #b0b8d4;
+}
+
+.registration-forms-section .spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 4px solid rgba(79, 195, 247, 0.2);
+  border-top-color: #4fc3f7;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Error Alert */
+.alert-error {
+  background: rgba(244, 67, 54, 0.1);
+  border: 2px solid rgba(244, 67, 54, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  color: #ff6b6b;
+  text-align: center;
+}
+
+/* No Form Message */
+.no-form-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #b0b8d4;
+}
+
+.no-form-message .message-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.no-form-message h2 {
+  color: #FF8C00;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.no-form-message p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.8;
+}
+
+/* Conference Details Section - matches Workshop Guidelines styling */
+.details-section {
+  padding: 80px 20px;
+  background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 35, 50, 0.9) 100%);
+}
+
+.details-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #FF8C00;
+  margin-bottom: 50px;
+  font-weight: 700;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.detail-card {
+  background: rgba(26, 35, 50, 0.6);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  border-radius: 12px;
+  padding: 30px 20px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  text-align: center;
+}
+
+.detail-card:hover {
+  transform: scale(1.02);
+  border-color: #4A90E2;
+}
+
+.detail-card h3 {
+  color: #4A90E2;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.detail-card p {
+  color: #b0b8d4;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.8) 0%, rgba(26, 31, 58, 0.8) 100%);
+}
+
+.cta-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.cta-section p {
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: #b0b8d4;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-title {
+    font-size: 1rem;
+  }
+
+  .form-description-preview {
+    font-size: 0.85rem;
+  }
+
+  .accordion-button {
+    padding: 1rem 1.25rem;
+  }
+
+  .registration-forms-section .intro-content h2 {
+    font-size: 2rem;
+  }
+
+  .details-section h2 {
+    font-size: 2rem;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .cta-buttons .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .registration-forms-section {
+    padding: 40px 0;
+  }
+
+  .details-section {
+    padding: 40px 15px;
+  }
+
+  .registration-forms-section .intro-content h2 {
+    font-size: 1.8rem;
+  }
+
+  .details-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .detail-card {
+    padding: 20px;
+  }
+}
