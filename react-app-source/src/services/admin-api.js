@@ -62,23 +62,23 @@ async function apiRequest(url, options = {}) {
 export const announcementsService = {
   getAll: () => apiRequest(`${BASE_URL}/announcements.cfc?method=getAnnouncementsAdmin`),
 
-  getById: (id) => apiRequest(`${BASE_URL}/announcements.cfc?method=getAnnouncementById&id=${id}`),
+  getById: (id) => apiRequest(`${BASE_URL}/announcements.cfc?method=getAnnouncement&id=${id}`),
 
-  create: (data) => apiRequest(`${BASE_URL}/announcements.cfc?method=createAnnouncement`, {
+  create: (data) => apiRequest(`${BASE_URL}/announcements.cfc?method=saveAnnouncement`, {
     method: 'POST',
     body: data
   }),
 
-  update: (id, data) => apiRequest(`${BASE_URL}/announcements.cfc?method=updateAnnouncement&id=${id}`, {
+  update: (id, data) => apiRequest(`${BASE_URL}/announcements.cfc?method=saveAnnouncement`, {
     method: 'POST',
-    body: data
+    body: { ...data, id }
   }),
 
   delete: (id) => apiRequest(`${BASE_URL}/announcements.cfc?method=deleteAnnouncement&id=${id}`),
 
   toggleActive: (id) => apiRequest(`${BASE_URL}/announcements.cfc?method=toggleActive&id=${id}`),
 
-  updateOrder: (id, newOrder) => apiRequest(`${BASE_URL}/announcements.cfc?method=updateOrder&id=${id}&displayOrder=${newOrder}`)
+  updateOrder: (id, newOrder) => apiRequest(`${BASE_URL}/announcements.cfc?method=updateOrder&id=${id}&newOrder=${newOrder}`)
 };
 
 // ==================== GALLERY ====================
@@ -86,24 +86,30 @@ export const announcementsService = {
 export const galleryService = {
   getAll: (location) => apiRequest(`${BASE_URL}/gallery.cfc?method=getImagesAdmin&location=${location || ''}`),
 
-  getById: (id) => apiRequest(`${BASE_URL}/gallery.cfc?method=getImageById&id=${id}`),
+  getById: (id) => apiRequest(`${BASE_URL}/gallery.cfc?method=getImage&id=${id}`),
 
   upload: (formData) => apiRequest(`${BASE_URL}/gallery.cfc?method=uploadImage`, {
     method: 'POST',
     body: formData
   }),
 
-  update: (id, data) => apiRequest(`${BASE_URL}/gallery.cfc?method=updateImage&id=${id}`, {
-    method: 'POST',
-    body: data
-  }),
+  update: (id, data) => {
+    const params = new URLSearchParams({
+      method: 'updateImage',
+      id: id.toString(),
+      title: String(data.title || ''),
+      page_location: data.page_location || 'gallery',
+      is_active: data.is_active ? '1' : '0'
+    });
+    return apiRequest(`${BASE_URL}/gallery.cfc?${params.toString()}`);
+  },
 
   delete: (id) => apiRequest(`${BASE_URL}/gallery.cfc?method=deleteImage&id=${id}`),
 
   toggleActive: (id) => apiRequest(`${BASE_URL}/gallery.cfc?method=toggleActive&id=${id}`),
 
   updateOrder: (id, newOrder, location) =>
-    apiRequest(`${BASE_URL}/gallery.cfc?method=updateOrder&id=${id}&displayOrder=${newOrder}&location=${location}`)
+    apiRequest(`${BASE_URL}/gallery.cfc?method=updateOrder&id=${id}&newOrder=${newOrder}&location=${location}`)
 };
 
 // ==================== DOCUMENTS ====================
@@ -111,7 +117,7 @@ export const galleryService = {
 export const documentsService = {
   getAll: () => apiRequest(`${BASE_URL}/documents.cfc?method=getDocumentsAdmin`),
 
-  getById: (id) => apiRequest(`${BASE_URL}/documents.cfc?method=getDocumentById&id=${id}`),
+  getById: (id) => apiRequest(`${BASE_URL}/documents.cfc?method=getDocument&id=${id}`),
 
   upload: (formData) => apiRequest(`${BASE_URL}/documents.cfc?method=uploadDocument`, {
     method: 'POST',
@@ -128,7 +134,7 @@ export const documentsService = {
   toggleActive: (id) => apiRequest(`${BASE_URL}/documents.cfc?method=toggleActive&id=${id}`),
 
   updateOrder: (id, newOrder) =>
-    apiRequest(`${BASE_URL}/documents.cfc?method=updateOrder&id=${id}&displayOrder=${newOrder}`)
+    apiRequest(`${BASE_URL}/documents.cfc?method=updateOrder&id=${id}&newOrder=${newOrder}`)
 };
 
 // ==================== FORMS ====================
@@ -136,16 +142,16 @@ export const documentsService = {
 export const formsService = {
   getAll: (location) => apiRequest(`${BASE_URL}/forms.cfc?method=getFormsAdmin&location=${location || ''}`),
 
-  getById: (id) => apiRequest(`${BASE_URL}/forms.cfc?method=getFormById&id=${id}`),
+  getById: (id) => apiRequest(`${BASE_URL}/forms.cfc?method=getForm&id=${id}`),
 
-  create: (data) => apiRequest(`${BASE_URL}/forms.cfc?method=createForm`, {
+  create: (data) => apiRequest(`${BASE_URL}/forms.cfc?method=saveForm`, {
     method: 'POST',
     body: data
   }),
 
-  update: (id, data) => apiRequest(`${BASE_URL}/forms.cfc?method=updateForm&id=${id}`, {
+  update: (id, data) => apiRequest(`${BASE_URL}/forms.cfc?method=saveForm`, {
     method: 'POST',
-    body: data
+    body: { ...data, id }
   }),
 
   delete: (id) => apiRequest(`${BASE_URL}/forms.cfc?method=deleteForm&id=${id}`),
@@ -153,23 +159,20 @@ export const formsService = {
   toggleActive: (id) => apiRequest(`${BASE_URL}/forms.cfc?method=toggleActive&id=${id}`),
 
   updateOrder: (id, newOrder, location) =>
-    apiRequest(`${BASE_URL}/forms.cfc?method=updateOrder&id=${id}&displayOrder=${newOrder}&location=${location}`)
+    apiRequest(`${BASE_URL}/forms.cfc?method=updateOrder&id=${id}&newOrder=${newOrder}&location=${location}`)
 };
 
 // ==================== CONTACTS ====================
 
 export const contactsService = {
-  getAll: () => apiRequest(`${BASE_URL}/contacts-admin.cfc?method=getContacts`),
+  getAll: () => apiRequest(`${BASE_URL}/contacts-admin.cfc?method=getSubmissionsAdmin`),
 
-  getById: (id) => apiRequest(`${BASE_URL}/contacts-admin.cfc?method=getContactById&id=${id}`),
+  getById: (id) => apiRequest(`${BASE_URL}/contacts-admin.cfc?method=getSubmission&id=${id}`),
 
   updateStatus: (id, status) =>
     apiRequest(`${BASE_URL}/contacts-admin.cfc?method=updateStatus&id=${id}&status=${status}`),
 
-  updateAdminNotes: (id, notes) => apiRequest(`${BASE_URL}/contacts-admin.cfc?method=updateNotes&id=${id}`, {
-    method: 'POST',
-    body: { notes }
-  }),
+  updateAdminNotes: (id, notes) => apiRequest(`${BASE_URL}/contacts-admin.cfc?method=updateAdminNotes&id=${id}&admin_notes=${encodeURIComponent(notes)}`),
 
   getStatusCounts: () => apiRequest(`${BASE_URL}/contacts-admin.cfc?method=getStatusCounts`),
 
@@ -215,7 +218,7 @@ export const usersService = {
 
   getRoles: () => apiRequest(`${BASE_URL}/users-admin.cfc?method=getRoles`),
 
-  checkUsernameAvailability: (username, excludeUserId) =>
+  checkUsername: (username, excludeUserId) =>
     apiRequest(`${BASE_URL}/users-admin.cfc?method=checkUsername&username=${username}&excludeId=${excludeUserId || ''}`)
 };
 

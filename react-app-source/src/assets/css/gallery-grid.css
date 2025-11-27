@@ -122,14 +122,14 @@
    GALLERY GRID
    ======================================== */
 
-.gallery-grid {
+.gallery-section .gallery-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     margin-bottom: 20px;
 }
 
-.gallery-item {
+.gallery-section .gallery-item {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     overflow: hidden;
@@ -137,12 +137,12 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.gallery-item:hover {
+.gallery-section .gallery-item:hover {
     transform: translateY(-5px) scale(1.05);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-.gallery-item img {
+.gallery-section .gallery-item img {
     width: 100%;
     height: 200px;
     object-fit: cover;
@@ -165,10 +165,11 @@
 }
 
 /* ========================================
-   LIGHTBOX MODAL
+   LIGHTBOX MODAL (Gallery)
+   Using #imageModal for specificity over App.css
    ======================================== */
 
-.modal {
+#imageModal.modal {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -178,25 +179,26 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.95);
     opacity: 1;
 }
 
-.modal-content {
+#imageModal .modal-content {
     position: relative;
     display: block;
     max-width: 90vw;
-    max-height: 90vh;
+    max-height: 85vh;
     width: auto;
     height: auto;
     object-fit: contain;
     border-radius: 8px;
     border: 3px solid white;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+    background: transparent;
 }
 
 /* Close Button */
-.close {
+#imageModal .close {
     position: absolute;
     top: 15px;
     right: 35px;
@@ -208,12 +210,12 @@
     transition: color 0.3s ease;
 }
 
-.close:hover {
+#imageModal .close:hover {
     color: #ff6b6b;
 }
 
 /* Modal Navigation Arrows */
-.modal-arrows {
+#imageModal .modal-arrows {
     position: absolute;
     top: 50%;
     width: 100%;
@@ -223,8 +225,8 @@
     z-index: 10002;
 }
 
-.arrow-left,
-.arrow-right {
+#imageModal .arrow-left,
+#imageModal .arrow-right {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -245,30 +247,30 @@
     justify-content: center;
 }
 
-.arrow-left {
+#imageModal .arrow-left {
     left: 20px;
 }
 
-.arrow-right {
+#imageModal .arrow-right {
     right: 20px;
 }
 
-.arrow-left:hover,
-.arrow-right:hover {
+#imageModal .arrow-left:hover,
+#imageModal .arrow-right:hover {
     background: rgba(0, 0, 0, 0.9);
     border-color: rgba(255, 255, 255, 0.8);
     transform: translateY(-50%) scale(1.1);
 }
 
-.arrow-left:disabled,
-.arrow-right:disabled {
+#imageModal .arrow-left:disabled,
+#imageModal .arrow-right:disabled {
     opacity: 0.3;
     cursor: not-allowed;
     transform: translateY(-50%);
 }
 
 /* Photo Counter */
-.modal-info {
+#imageModal .modal-info {
     position: absolute;
     bottom: 20px;
     left: 50%;
@@ -318,7 +320,7 @@
         padding: 50px 15px;
     }
 
-    .gallery-grid {
+    .gallery-section .gallery-grid {
         gap: 12px;
     }
 }
@@ -349,44 +351,44 @@
         font-size: 13px;
     }
 
-    .gallery-grid {
+    .gallery-section .gallery-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
 
-    .gallery-item img {
+    .gallery-section .gallery-item img {
         height: 150px;
     }
 
     /* Modal adjustments */
-    .modal-content {
+    #imageModal .modal-content {
         max-width: 95vw;
         max-height: 85vh;
     }
 
-    .close {
+    #imageModal .close {
         top: 10px;
         right: 10px;
         font-size: 32px;
     }
 
-    .arrow-left,
-    .arrow-right {
+    #imageModal .arrow-left,
+    #imageModal .arrow-right {
         width: 50px;
         height: 50px;
         font-size: 24px;
         padding: 10px;
     }
 
-    .arrow-left {
+    #imageModal .arrow-left {
         left: 10px;
     }
 
-    .arrow-right {
+    #imageModal .arrow-right {
         right: 10px;
     }
 
-    .modal-info {
+    #imageModal .modal-info {
         bottom: 10px;
         padding: 8px 16px;
         font-size: 0.9rem;
@@ -395,12 +397,12 @@
 
 /* Extra small mobile (< 480px) */
 @media (max-width: 480px) {
-    .gallery-grid {
+    .gallery-section .gallery-grid {
         grid-template-columns: 1fr;
         gap: 8px;
     }
 
-    .gallery-item img {
+    .gallery-section .gallery-item img {
         height: 120px;
     }
 

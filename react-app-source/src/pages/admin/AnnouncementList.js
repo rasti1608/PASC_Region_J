@@ -318,9 +318,9 @@ function AnnouncementList() {
                     {/* Title with Content Preview */}
                     <td data-label="TITLE">
                       <strong>{announcement.title}</strong>
-                      {announcement.is_featured && (
-                        <span className="badge" style={{ background: '#fff9c4', color: '#f57f17', fontSize: '0.75rem' }}>⭐ Featured</span>
-                      )}
+                      {announcement.is_featured ? (
+                        <span className="badge" style={{ background: '#fff9c4', color: '#f57f17', fontSize: '0.75rem', marginLeft: '8px' }}>⭐ Featured</span>
+                      ) : null}
                       <br />
                       <small className="text-muted">
                         {announcement.content?.length > 100

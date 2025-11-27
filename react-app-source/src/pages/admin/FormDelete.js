@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { formsService } from '../../services/admin-api';
 
 function FormDelete() {
@@ -27,7 +27,7 @@ function FormDelete() {
       setForm(response.data);
       setLoading(false);
     } catch (err) {
-      setError('Failed to load form');
+      setError('Failed to load form. It may have been deleted or does not exist.');
       setLoading(false);
       console.error('Error loading form:', err);
     }
@@ -51,64 +51,139 @@ function FormDelete() {
     navigate('/admin/forms');
   };
 
+  const getDescriptionPreview = (description) => {
+    if (!description) return 'No description';
+    return description.length > 100 ? description.substring(0, 100) + '...' : description;
+  };
+
   return (
     <>
+      {/* Content Header */}
       <div className="content-header">
         <h1>Delete Form</h1>
-        <p className="section-subtitle">Confirm deletion of this form</p>
+        <p className="section-subtitle">Permanently remove form from the website</p>
       </div>
 
+      {/* Back Button */}
       <div className="action-bar">
         <button className="btn btn-secondary" onClick={cancel}>
           ← Back to Forms
         </button>
       </div>
 
-      {error && (
-        <div className="alert alert-error">{error}</div>
-      )}
-
-      {loading && !form && (
-        <div className="loading-container">
-          <div className="spinner"></div>
-          <p>Loading form...</p>
-        </div>
-      )}
-
-      {form && (
-        <div className="delete-confirmation">
-          <div className="warning-box">
-            <div className="warning-icon">⚠️</div>
-            <h2>Are you sure you want to delete this form?</h2>
-            <p>This action cannot be undone.</p>
+      <div className="section">
+        {/* Loading State */}
+        {loading && !form && (
+          <div className="loading-container">
+            <div className="spinner"></div>
+            <p>Loading form...</p>
           </div>
+        )}
 
-          <div className="item-preview">
-            <h3>Form Details:</h3>
-            <div className="preview-field">
-              <strong>Name:</strong>
-              <span>{form.formname}</span>
-            </div>
-            <div className="preview-field">
-              <strong>Location:</strong>
-              <span>{form.formtype}</span>
-            </div>
-            <div className="preview-field">
-              <strong>Status:</strong>
-              <span>{form.is_active ? 'Active' : 'Inactive'}</span>
+        {/* Error State */}
+        {error && (
+          <div className="alert alert-error">
+            {error}
+            <div style={{ marginTop: '20px' }}>
+              <Link to="/admin/forms" className="btn btn-secondary">← Back to Forms</Link>
+              {form && (
+                <Link to={`/admin/forms/edit/${id}`} className="btn btn-primary" style={{ marginLeft: '10px' }}>
+                  Edit Form Instead
+                </Link>
+              )}
             </div>
           </div>
+        )}
 
-          <div className="form-actions">
-            <button className="btn btn-danger" onClick={confirmDelete} disabled={loading}>
-              {loading ? 'Deleting...' : 'Yes, Delete Form'}
-            </button>
-            <button className="btn btn-secondary" onClick={cancel} disabled={loading}>
-              Cancel
-            </button>
+        {/* Delete Confirmation */}
+        {form && !error && (
+          <div style={{ maxWidth: '700px' }}>
+            {/* Warning Box */}
+            <div style={{
+              background: '#fff3cd',
+              borderLeft: '4px solid #ffc107',
+              padding: '20px',
+              borderRadius: '8px',
+              marginBottom: '30px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '15px' }}>
+                <div style={{ fontSize: '2rem' }}>⚠️</div>
+                <div>
+                  <h3 style={{ margin: '0 0 10px 0', color: '#856404' }}>Warning: Permanent Deletion</h3>
+                  <p style={{ margin: 0, color: '#856404', lineHeight: '1.6' }}>
+                    You are about to permanently delete this form. This action cannot be undone.
+                    The form will be removed from the website immediately.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Form Details */}
+            <div className="admin-form">
+              <h3 style={{ marginBottom: '20px', color: '#2d3561' }}>Form Details:</h3>
+
+              <div className="info-row">
+                <span className="info-label">Name:</span>
+                <span className="info-value">{form.form_name}</span>
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Description:</span>
+                <span className="info-value">{getDescriptionPreview(form.form_description)}</span>
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Location:</span>
+                <span className="info-value">{form.page_location} Page</span>
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Status:</span>
+                <span className="info-value">
+                  {form.is_active ? (
+                    <span className="badge badge-success">✓ Active</span>
+                  ) : (
+                    <span className="badge badge-inactive">Inactive</span>
+                  )}
+                </span>
+              </div>
+
+              {/* Confirmation Section */}
+              <div style={{ marginTop: '30px', paddingTop: '20px', borderTop: '1px solid #e0e0e0' }}>
+                <div style={{
+                  background: '#ffebee',
+                  padding: '15px',
+                  borderRadius: '8px',
+                  marginBottom: '20px'
+                }}>
+                  <p style={{ margin: 0, color: '#c62828', fontWeight: '600' }}>
+                    Are you absolutely sure you want to delete this form?
+                  </p>
+                </div>
+
+                <div className="form-actions" style={{ margin: 0, padding: 0, border: 'none' }}>
+                  <button
+                    onClick={confirmDelete}
+                    className="btn btn-danger"
+                    disabled={loading}
+                  >
+                    🗑️ {loading ? 'Deleting...' : 'Yes, Delete Form'}
+                  </button>
+                  <button
+                    onClick={cancel}
+                    className="btn btn-secondary"
+                  >
+                    Cancel
+                  </button>
+                  <Link to={`/admin/forms/edit/${id}`} className="btn btn-primary">
+                    Edit Instead
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

@@ -189,13 +189,10 @@ function Gallery() {
                   <div key={image.id} className="gallery-item">
                     <img
                       src={image.fullpath}
-                      alt={image.title}
+                      alt={image.title || `Photo ${index + 1}`}
                       onClick={() => openModal(index)}
                       loading="lazy"
                     />
-                    <div className="info">
-                      <div className="date">{image.title}</div>
-                    </div>
                   </div>
                 ))}
               </div>

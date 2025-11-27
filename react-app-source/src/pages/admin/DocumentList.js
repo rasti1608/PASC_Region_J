@@ -65,8 +65,13 @@ function DocumentList() {
 
   const toggleActive = async (doc) => {
     try {
-      await documentsService.toggleActive(doc.id);
-      loadDocuments();
+      const response = await documentsService.toggleActive(doc.id);
+      const updated = response.data;
+
+      // Smooth single-row update instead of reloading entire list
+      setDocuments(prev => prev.map(d =>
+        d.id === doc.id ? { ...d, ...updated } : d
+      ));
     } catch (err) {
       setError('Failed to toggle status');
       console.error('Error toggling status:', err);

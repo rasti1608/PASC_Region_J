@@ -50,6 +50,8 @@
 
 .login-header .logo {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 .login-header .logo-img {
@@ -135,7 +137,6 @@
 
 .password-toggle:hover {
     color: #4fc3f7;
-    transform: scale(1.1);
 }
 
 .password-toggle:focus {
@@ -149,28 +150,42 @@
     user-select: none;
 }
 
-/* Login Button */
-.btn-login {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+/* Login Button - use !important and specific selectors to override Bootstrap/global styles */
+.btn-login,
+.btn.btn-login,
+button.btn.btn-login,
+button.btn-login {
+    width: 100% !important;
+    padding: 14px !important;
+    background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+    background-image: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+    background-color: #4fc3f7 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3) !important;
 }
 
-.btn-login:hover {
-    transform: translateY(-2px) scale(1.08);
-    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.5);
+.btn-login:hover,
+.btn.btn-login:hover,
+button.btn.btn-login:hover,
+button.btn-login:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 20px rgba(79, 195, 247, 0.5) !important;
+    background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+    background-image: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+    background-color: #4fc3f7 !important;
 }
 
-.btn-login:active {
-    transform: translateY(0);
+.btn-login:active,
+.btn.btn-login:active,
+button.btn.btn-login:active,
+button.btn-login:active {
+    transform: translateY(0) !important;
 }
 
 /* Alerts */
@@ -239,9 +254,16 @@
 }
 
 /* Loading State */
-.btn-login:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.btn-login:disabled,
+.btn.btn-login:disabled,
+button.btn.btn-login:disabled,
+button.btn-login:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+    background-image: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+    background-color: #4fc3f7 !important;
 }
 
 /* Form Instructions */

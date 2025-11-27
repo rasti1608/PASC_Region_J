@@ -658,11 +658,12 @@ a:hover {
 /* Pagination */
 .pagination-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
-  padding-top: 20px;
+  margin-top: 20px;
+  padding: 20px 0;
   border-top: 1px solid #e0e0e0;
+  width: 100%;
 }
 
 .pagination-controls {

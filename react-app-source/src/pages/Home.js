@@ -132,9 +132,9 @@ function Home() {
                   key={announcement.id}
                   className={`announcement-card ${announcement.isfeatured ? 'featured' : ''}`}
                 >
-                  {announcement.isfeatured && (
+                  {announcement.isfeatured ? (
                     <span className="featured-badge">&#11088; Featured</span>
-                  )}
+                  ) : null}
                   <h3>{announcement.title}</h3>
                   <p>{announcement.content}</p>
                   <span className="announcement-date">{formatDate(announcement.publishstart)}</span>

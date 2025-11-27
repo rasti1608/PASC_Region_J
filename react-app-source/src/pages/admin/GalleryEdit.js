@@ -29,7 +29,7 @@ function GalleryEdit() {
       const data = response.data;
       setImage(data);
       setFormData({
-        title: data.title || '',
+        title: String(data.title || ''),
         page_location: data.page_location || 'gallery',
         is_active: data.is_active || false
       });
@@ -52,7 +52,8 @@ function GalleryEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title.trim()) {
+    const title = String(formData.title || '').trim();
+    if (!title) {
       setError('Title is required');
       return;
     }

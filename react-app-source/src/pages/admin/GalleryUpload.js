@@ -13,7 +13,7 @@ function GalleryUpload() {
   const [formData, setFormData] = useState({
     title: '',
     page_location: 'gallery',
-    is_active: true
+    is_active: false
   });
 
   const handleFileChange = (e) => {
@@ -39,12 +39,12 @@ function GalleryUpload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedFile) {
-      setError('Please select an image to upload');
+    if (!formData.title.trim()) {
+      setError('Image Title is required');
       return;
     }
-    if (!formData.title.trim()) {
-      setError('Title is required');
+    if (!selectedFile) {
+      setError('Please select an image to upload');
       return;
     }
 
@@ -56,7 +56,7 @@ function GalleryUpload() {
       uploadData.append('file', selectedFile);
       uploadData.append('title', formData.title);
       uploadData.append('page_location', formData.page_location);
-      uploadData.append('is_active', formData.is_active);
+      uploadData.append('is_active', formData.is_active ? '1' : '0');
 
       await galleryService.upload(uploadData);
       navigate('/admin/gallery');
@@ -74,8 +74,8 @@ function GalleryUpload() {
   return (
     <>
       <div className="content-header">
-        <h1>Upload Image</h1>
-        <p className="section-subtitle">Add a new image to the gallery</p>
+        <h1>Upload New Image</h1>
+        <p className="section-subtitle">Add a new image to {formData.page_location === 'about_page' ? 'About Page' : 'Gallery'}</p>
       </div>
 
       <div className="action-bar">
@@ -87,30 +87,9 @@ function GalleryUpload() {
       {error && <div className="alert alert-error">{error}</div>}
 
       <form className="admin-form" onSubmit={handleSubmit}>
+        {/* Image Title */}
         <div className="form-group">
-          <label htmlFor="file">Image File <span className="required">*</span></label>
-          <input
-            type="file"
-            id="file"
-            className="form-control"
-            accept="image/*"
-            onChange={handleFileChange}
-            required
-          />
-          <small className="form-help">Supported formats: JPG, PNG, GIF, WebP</small>
-        </div>
-
-        {preview && (
-          <div className="form-group">
-            <label>Preview</label>
-            <div className="image-preview">
-              <img src={preview} alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px' }} />
-            </div>
-          </div>
-        )}
-
-        <div className="form-group">
-          <label htmlFor="title">Title <span className="required">*</span></label>
+          <label htmlFor="title">Image Title <span className="required">*</span></label>
           <input
             type="text"
             id="title"
@@ -122,8 +101,10 @@ function GalleryUpload() {
             maxLength="255"
             required
           />
+          <small className="form-help">This title will be displayed with the image</small>
         </div>
 
+        {/* Page Location */}
         <div className="form-group">
           <label htmlFor="page_location">Page Location <span className="required">*</span></label>
           <select
@@ -133,11 +114,37 @@ function GalleryUpload() {
             value={formData.page_location}
             onChange={handleInputChange}
           >
-            <option value="gallery">Gallery Page</option>
             <option value="about_page">About Page</option>
+            <option value="gallery">Gallery</option>
           </select>
+          <small className="form-help">Where should this image appear on the website?</small>
         </div>
 
+        {/* Image File Upload */}
+        <div className="form-group">
+          <label htmlFor="file">Image File <span className="required">*</span></label>
+          <input
+            type="file"
+            id="file"
+            className="form-control"
+            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+            onChange={handleFileChange}
+            required
+          />
+          <small className="form-help">Supported formats: JPG, PNG, GIF, WebP (Max 5MB)</small>
+        </div>
+
+        {/* Image Preview */}
+        {preview && (
+          <div className="form-group">
+            <label>Preview</label>
+            <div className="image-preview">
+              <img src={preview} alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px' }} />
+            </div>
+          </div>
+        )}
+
+        {/* Is Active Checkbox */}
         <div className="form-group">
           <label className="checkbox-label">
             <input

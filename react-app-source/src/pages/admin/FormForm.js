@@ -11,10 +11,10 @@ function FormForm() {
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
-    formname: '',
-    formdescription: '',
-    embedcode: '',
-    formtype: 'Workshops',
+    form_name: '',
+    form_description: '',
+    embed_code: '',
+    page_location: 'Workshops',
     is_active: false
   });
 
@@ -32,10 +32,10 @@ function FormForm() {
       const response = await formsService.getById(id);
       const data = response.data;
       setFormData({
-        formname: data.formname || '',
-        formdescription: data.formdescription || '',
-        embedcode: data.embedcode || '',
-        formtype: data.formtype || 'Workshops',
+        form_name: data.form_name || '',
+        form_description: data.form_description || '',
+        embed_code: data.embed_code || '',
+        page_location: data.page_location || 'Workshops',
         is_active: data.is_active || false
       });
       setLoading(false);
@@ -57,11 +57,11 @@ function FormForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.formname.trim()) {
+    if (!formData.form_name.trim()) {
       setError('Form name is required');
       return;
     }
-    if (!formData.embedcode.trim()) {
+    if (!formData.embed_code.trim()) {
       setError('Embed code is required');
       return;
     }
@@ -106,23 +106,23 @@ function FormForm() {
         <div className="alert alert-error">{error}</div>
       )}
 
-      {loading && !formData.formname && (
+      {loading && !formData.form_name && (
         <div className="loading-container">
           <div className="spinner"></div>
           <p>Loading form...</p>
         </div>
       )}
 
-      {(!loading || formData.formname) && (
+      {(!loading || formData.form_name) && (
         <form className="admin-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="formname">Form Name <span className="required">*</span></label>
+            <label htmlFor="form_name">Form Name <span className="required">*</span></label>
             <input
               type="text"
-              id="formname"
-              name="formname"
+              id="form_name"
+              name="form_name"
               className="form-control"
-              value={formData.formname}
+              value={formData.form_name}
               onChange={handleInputChange}
               placeholder="Enter form name"
               maxLength="255"
@@ -131,12 +131,12 @@ function FormForm() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="formdescription">Description</label>
+            <label htmlFor="form_description">Description</label>
             <textarea
-              id="formdescription"
-              name="formdescription"
+              id="form_description"
+              name="form_description"
               className="form-control"
-              value={formData.formdescription}
+              value={formData.form_description}
               onChange={handleInputChange}
               placeholder="Enter form description (optional)"
               rows="3"
@@ -144,12 +144,12 @@ function FormForm() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="formtype">Form Location <span className="required">*</span></label>
+            <label htmlFor="page_location">Form Location <span className="required">*</span></label>
             <select
-              id="formtype"
-              name="formtype"
+              id="page_location"
+              name="page_location"
               className="form-control"
-              value={formData.formtype}
+              value={formData.page_location}
               onChange={handleInputChange}
             >
               <option value="Workshops">Workshops Page</option>
@@ -159,12 +159,12 @@ function FormForm() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="embedcode">Embed Code <span className="required">*</span></label>
+            <label htmlFor="embed_code">Embed Code <span className="required">*</span></label>
             <textarea
-              id="embedcode"
-              name="embedcode"
+              id="embed_code"
+              name="embed_code"
               className="form-control"
-              value={formData.embedcode}
+              value={formData.embed_code}
               onChange={handleInputChange}
               placeholder="Paste Google Form embed code here"
               rows="8"

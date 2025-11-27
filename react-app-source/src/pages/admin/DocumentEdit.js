@@ -13,11 +13,9 @@ function DocumentEdit() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    documenttype: 'General',
+    document_type: '',
     is_active: true
   });
-
-  const documentTypes = ['General', 'Conference Materials', 'Registration', 'Guidelines', 'Resources'];
 
   useEffect(() => {
     loadDocument();
@@ -34,7 +32,7 @@ function DocumentEdit() {
       setFormData({
         title: data.title || '',
         description: data.description || '',
-        documenttype: data.documenttype || 'General',
+        document_type: data.document_type || '',
         is_active: data.is_active || false
       });
       setLoading(false);
@@ -57,7 +55,7 @@ function DocumentEdit() {
     e.preventDefault();
 
     if (!formData.title.trim()) {
-      setError('Title is required');
+      setError('Document Title is required');
       return;
     }
 
@@ -78,41 +76,82 @@ function DocumentEdit() {
     navigate('/admin/documents');
   };
 
+  const getDocumentIcon = (extension) => {
+    if (!extension) return '📁';
+    const ext = extension.toLowerCase().replace('.', '');
+    switch (ext) {
+      case 'pdf': return '📄';
+      case 'doc':
+      case 'docx': return '📝';
+      case 'xls':
+      case 'xlsx': return '📊';
+      case 'ppt':
+      case 'pptx': return '📽️';
+      default: return '📁';
+    }
+  };
+
+  const getDocIconClass = (extension) => {
+    if (!extension) return 'doc-icon';
+    const ext = extension.toLowerCase().replace('.', '');
+    return `doc-icon ${ext}`;
+  };
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return '0 B';
+    if (bytes < 1024) return bytes + ' B';
+    const kb = bytes / 1024;
+    if (kb < 1024) return kb.toFixed(1) + ' KB';
+    const mb = kb / 1024;
+    return mb.toFixed(2) + ' MB';
+  };
+
   return (
     <>
+      {/* Content Header */}
       <div className="content-header">
         <h1>Edit Document</h1>
         <p className="section-subtitle">Update document details</p>
       </div>
 
+      {/* Back Button */}
       <div className="action-bar">
         <button className="btn btn-secondary" onClick={cancel}>
           ← Back to Documents
         </button>
       </div>
 
+      {/* Error Message */}
       {error && <div className="alert alert-error">{error}</div>}
 
-      {loading && !document && (
+      {/* Loading State */}
+      {loading && !formData.title && (
         <div className="loading-container">
           <div className="spinner"></div>
           <p>Loading document...</p>
         </div>
       )}
 
-      {document && (
+      {/* Edit Form */}
+      {(!loading || formData.title) && document && (
         <form className="admin-form" onSubmit={handleSubmit}>
+          {/* Current Document Info */}
           <div className="form-group">
-            <label>Current File</label>
-            <div className="file-info">
-              <strong>{document.filename}</strong>
-              <span className="text-muted"> ({document.filesizeformatted})</span>
+            <label>Current Document</label>
+            <div className="document-info">
+              <div className={getDocIconClass(document.file_extension)}>
+                {getDocumentIcon(document.file_extension)}
+              </div>
+              <div>
+                <div><strong>{document.original_filename}</strong></div>
+                <div className="file-info">{formatFileSize(document.file_size)}</div>
+              </div>
             </div>
-            <small className="form-help">To change the file, delete this document and upload a new one</small>
           </div>
 
+          {/* Document Title */}
           <div className="form-group">
-            <label htmlFor="title">Title <span className="required">*</span></label>
+            <label htmlFor="title">Document Title <span className="required">*</span></label>
             <input
               type="text"
               id="title"
@@ -124,8 +163,10 @@ function DocumentEdit() {
               maxLength="255"
               required
             />
+            <small className="form-help">This title will be displayed on the website</small>
           </div>
 
+          {/* Description */}
           <div className="form-group">
             <label htmlFor="description">Description</label>
             <textarea
@@ -134,26 +175,29 @@ function DocumentEdit() {
               className="form-control"
               value={formData.description}
               onChange={handleInputChange}
-              placeholder="Enter document description (optional)"
+              placeholder="Brief description of this document"
               rows="3"
             ></textarea>
+            <small className="form-help">Optional description shown with the document</small>
           </div>
 
+          {/* Document Type */}
           <div className="form-group">
-            <label htmlFor="documenttype">Category <span className="required">*</span></label>
-            <select
-              id="documenttype"
-              name="documenttype"
+            <label htmlFor="document_type">Document Type</label>
+            <input
+              type="text"
+              id="document_type"
+              name="document_type"
               className="form-control"
-              value={formData.documenttype}
+              value={formData.document_type}
               onChange={handleInputChange}
-            >
-              {documentTypes.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
+              placeholder="e.g., Workshop Materials, Registration Form, etc."
+              maxLength="100"
+            />
+            <small className="form-help">Optional category or type for this document</small>
           </div>
 
+          {/* Is Active Checkbox */}
           <div className="form-group">
             <label className="checkbox-label">
               <input
@@ -162,15 +206,26 @@ function DocumentEdit() {
                 checked={formData.is_active}
                 onChange={handleInputChange}
               />
-              <span>Active (available for download)</span>
+              <span>Active (visible on website)</span>
             </label>
           </div>
 
+          {/* Form Actions */}
           <div className="form-actions">
-            <button type="submit" className="btn btn-primary" disabled={loading}>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading}
+            >
               {loading ? 'Saving...' : 'Update Document'}
             </button>
-            <button type="button" className="btn btn-secondary" onClick={cancel} disabled={loading}>
+
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={cancel}
+              disabled={loading}
+            >
               Cancel
             </button>
           </div>
