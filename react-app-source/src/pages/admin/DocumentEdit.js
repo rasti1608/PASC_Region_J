@@ -30,7 +30,7 @@ function DocumentEdit() {
       const data = response.data;
       setDocument(data);
       setFormData({
-        title: data.title || '',
+        title: String(data.title || ''),
         description: data.description || '',
         document_type: data.document_type || '',
         is_active: data.is_active || false
@@ -54,7 +54,8 @@ function DocumentEdit() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title.trim()) {
+    const title = String(formData.title || '').trim();
+    if (!title) {
       setError('Document Title is required');
       return;
     }

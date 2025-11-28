@@ -235,3 +235,5 @@ Front_End/temp-testing/
 Front_End/assets/audio/temp-garbage/
 Front_End/assets/video/temp-garbage/
 Front_End/.playwright-mcp/
+
+.playwright-mcp

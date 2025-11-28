@@ -119,6 +119,14 @@
 
 .nav-logout {
     color: #ff6b6b;
+    /* Button reset styles for React button element */
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
 }
 
 .nav-logout:hover {
@@ -307,6 +315,149 @@
     border-radius: 12px;
     padding: 25px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Email Settings Info Box - Override for blue styling */
+.email-settings-container .info-box {
+    background: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    box-shadow: none;
+}
+
+.info-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.info-content h3 {
+    margin: 0 0 10px 0;
+    color: #1565c0;
+    font-size: 1.1rem;
+}
+
+.info-content p {
+    margin: 0;
+    color: #0d47a1;
+    line-height: 1.6;
+}
+
+/* Email Settings Badges */
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-primary {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge-secondary {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.badge-active {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.badge-inactive {
+    background: #ffebee;
+    color: #c62828;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Email Settings - Add Recipient Form */
+.add-recipient-form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.email-input {
+    flex: 1;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.email-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.email-input:disabled {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+/* Email Link */
+.email-link {
+    color: #4fc3f7;
+    text-decoration: none;
+}
+
+.email-link:hover {
+    text-decoration: underline;
+}
+
+/* Email Recipients Table */
+.email-recipients-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.email-recipients-table th:nth-child(1),
+.email-recipients-table td:nth-child(1) {
+    width: 33%;
+}
+
+.email-recipients-table th:nth-child(2),
+.email-recipients-table td:nth-child(2) {
+    width: 13%;
+}
+
+.email-recipients-table th:nth-child(3),
+.email-recipients-table td:nth-child(3) {
+    width: 13%;
+}
+
+.email-recipients-table th:nth-child(4),
+.email-recipients-table td:nth-child(4) {
+    width: 23%;
+}
+
+.email-recipients-table th:nth-child(5),
+.email-recipients-table td:nth-child(5) {
+    width: 18%;
+    text-align: center;
+}
+
+/* Disabled button state */
+.actions .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .info-row {

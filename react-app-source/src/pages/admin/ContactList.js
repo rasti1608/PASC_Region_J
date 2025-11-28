@@ -261,7 +261,7 @@ function ContactList() {
             <div className="section-header">
               <h2>All Submissions ({filteredSubmissions.length})</h2>
               <Link to="/admin/contacts/email-settings" className="btn btn-primary">
-                Email Settings
+                ⚙️ Email Settings
               </Link>
             </div>
 

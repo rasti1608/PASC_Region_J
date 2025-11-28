@@ -143,7 +143,7 @@ function Dashboard() {
           </div>
           <div className="info-row">
             <span className="info-label">Website Version:</span>
-            <span className="info-value">1.5.0 React-app</span>
+            <span className="info-value">React-app v1.0</span>
           </div>
         </div>
       </div>

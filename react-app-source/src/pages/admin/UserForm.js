@@ -27,7 +27,7 @@ function UserForm() {
     username: '',
     email: '',
     full_name: '',
-    role_id: 2,
+    role_id: 0,
     is_active: true
   });
 
@@ -51,16 +51,25 @@ function UserForm() {
   const loadRoles = async () => {
     try {
       const response = await usersService.getRoles();
-      setRoles(response.data || [
+      const loadedRoles = response.data || [
         { id: 1, role_name: 'Admin' },
         { id: 2, role_name: 'Content Manager' }
-      ]);
+      ];
+      setRoles(loadedRoles);
+      // Set default role to first role (Admin) in add mode
+      if (!isEditMode && loadedRoles.length > 0) {
+        setFormData(prev => ({ ...prev, role_id: loadedRoles[0].id }));
+      }
     } catch (err) {
       console.error('Error loading roles:', err);
-      setRoles([
+      const fallbackRoles = [
         { id: 1, role_name: 'Admin' },
         { id: 2, role_name: 'Content Manager' }
-      ]);
+      ];
+      setRoles(fallbackRoles);
+      if (!isEditMode) {
+        setFormData(prev => ({ ...prev, role_id: fallbackRoles[0].id }));
+      }
     }
   };
 
@@ -96,7 +105,8 @@ function UserForm() {
     setUsernameCheckInProgress(true);
     try {
       const response = await usersService.checkUsername(username);
-      setUsernameAvailable(response.data?.available || false);
+      // API returns { available: boolean, message: string } directly
+      setUsernameAvailable(response.available === true);
     } catch (err) {
       console.error('Error checking username:', err);
       setUsernameAvailable(null);
@@ -293,11 +303,11 @@ function UserForm() {
 
             {/* Password Notice (Add Mode Only) */}
             {!isEditMode && (
-              <div className="info-box info-box-primary">
-                <p style={{ margin: 0, fontWeight: 'bold' }}>
-                  Automatic Password Generation
+              <div style={{ background: '#e3f2fd', borderLeft: '4px solid #2196f3', padding: '15px', margin: '20px 0', borderRadius: '4px' }}>
+                <p style={{ margin: 0, color: '#1565c0', fontSize: '14px' }}>
+                  <strong>🔐 Automatic Password Generation</strong>
                 </p>
-                <p style={{ margin: '8px 0 0 0' }}>
+                <p style={{ margin: '8px 0 0 0', color: '#1565c0', fontSize: '14px' }}>
                   A secure password will be automatically generated for this user.
                   An activation email will be sent to the user's email address where they can set their own password.
                 </p>
@@ -370,7 +380,7 @@ function UserForm() {
 
             {/* Password Change Section (Edit Mode Only) */}
             {isEditMode && (
-              <div className="form-section-box">
+              <div style={{ margin: '30px 0', padding: '20px', background: '#f5f7fa', borderRadius: '8px' }}>
                 <div className="form-group">
                   <label className="checkbox-label">
                     <input
@@ -463,7 +473,7 @@ function UserForm() {
 
             {/* Account Information (Edit Mode Only) */}
             {isEditMode && user && (
-              <div className="form-section-box">
+              <div style={{ margin: '30px 0', padding: '20px', background: '#f5f7fa', borderRadius: '8px' }}>
                 <h3 style={{ marginBottom: '15px', color: '#2d3561' }}>Account Information</h3>
 
                 <div className="info-row">

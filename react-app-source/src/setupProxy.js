@@ -52,4 +52,19 @@ module.exports = function(app) {
       }
     })
   );
+
+  // Proxy /assets/img/profiles for profile pictures from ColdFusion server
+  app.use(
+    '/assets/img/profiles',
+    createProxyMiddleware({
+      target: 'http://localhost:80',
+      changeOrigin: true,
+      secure: false,
+      on: {
+        proxyReq: (proxyReq, req, res) => {
+          proxyReq.path = req.originalUrl;
+        }
+      }
+    })
+  );
 };

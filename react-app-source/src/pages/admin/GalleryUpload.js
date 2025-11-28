@@ -53,7 +53,7 @@ function GalleryUpload() {
 
     try {
       const uploadData = new FormData();
-      uploadData.append('file', selectedFile);
+      uploadData.append('image_file', selectedFile);
       uploadData.append('title', formData.title);
       uploadData.append('page_location', formData.page_location);
       uploadData.append('is_active', formData.is_active ? '1' : '0');

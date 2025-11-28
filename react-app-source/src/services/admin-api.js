@@ -124,10 +124,17 @@ export const documentsService = {
     body: formData
   }),
 
-  update: (id, data) => apiRequest(`${BASE_URL}/documents.cfc?method=updateDocument&id=${id}`, {
-    method: 'POST',
-    body: data
-  }),
+  update: (id, data) => {
+    const params = new URLSearchParams({
+      method: 'updateDocument',
+      id: id.toString(),
+      title: String(data.title || ''),
+      description: data.description || '',
+      document_type: data.document_type || '',
+      is_active: data.is_active ? '1' : '0'
+    });
+    return apiRequest(`${BASE_URL}/documents.cfc?${params.toString()}`);
+  },
 
   delete: (id) => apiRequest(`${BASE_URL}/documents.cfc?method=deleteDocument&id=${id}`),
 
@@ -198,19 +205,37 @@ export const contactsService = {
 // ==================== USERS ====================
 
 export const usersService = {
-  getAll: () => apiRequest(`${BASE_URL}/users-admin.cfc?method=getUsers`),
+  getAll: () => apiRequest(`${BASE_URL}/users-admin.cfc?method=getUsersAdmin`),
 
-  getById: (id) => apiRequest(`${BASE_URL}/users-admin.cfc?method=getUserById&id=${id}`),
+  getById: (id) => apiRequest(`${BASE_URL}/users-admin.cfc?method=getUser&id=${id}`),
 
-  create: (data) => apiRequest(`${BASE_URL}/users-admin.cfc?method=createUser`, {
-    method: 'POST',
-    body: data
-  }),
+  create: (data) => {
+    const params = new URLSearchParams({
+      method: 'createUser',
+      username: data.username,
+      full_name: data.full_name,
+      email: data.email,
+      role_id: data.role_id.toString(),
+      is_active: data.is_active ? '1' : '0'
+    });
+    return apiRequest(`${BASE_URL}/users-admin.cfc?${params.toString()}`);
+  },
 
-  update: (id, data) => apiRequest(`${BASE_URL}/users-admin.cfc?method=updateUser&id=${id}`, {
-    method: 'POST',
-    body: data
-  }),
+  update: (id, data) => {
+    const params = new URLSearchParams({
+      method: 'updateUser',
+      id: id.toString(),
+      full_name: data.full_name,
+      email: data.email,
+      role_id: data.role_id.toString(),
+      is_active: data.is_active ? '1' : '0'
+    });
+    // Add password if provided
+    if (data.password) {
+      params.append('password', data.password);
+    }
+    return apiRequest(`${BASE_URL}/users-admin.cfc?${params.toString()}`);
+  },
 
   delete: (id) => apiRequest(`${BASE_URL}/users-admin.cfc?method=deleteUser&id=${id}`),
 
@@ -219,7 +244,7 @@ export const usersService = {
   getRoles: () => apiRequest(`${BASE_URL}/users-admin.cfc?method=getRoles`),
 
   checkUsername: (username, excludeUserId) =>
-    apiRequest(`${BASE_URL}/users-admin.cfc?method=checkUsername&username=${username}&excludeId=${excludeUserId || ''}`)
+    apiRequest(`${BASE_URL}/users-admin.cfc?method=checkUsernameAvailability&username=${encodeURIComponent(username)}${excludeUserId ? `&excludeUserId=${excludeUserId}` : ''}`)
 };
 
 // ==================== PROFILE ====================
