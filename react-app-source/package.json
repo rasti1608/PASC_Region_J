@@ -1,7 +1,8 @@
 {
   "name": "pasc-region-j-conference",
-  "version": "1.5.1",
+  "version": "1.0.0",
   "private": true,
+  "homepage": "/react-app",
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

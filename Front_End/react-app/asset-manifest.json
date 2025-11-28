@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/react-app/static/css/main.10306ad9.css",
+    "main.js": "/react-app/static/js/main.94100256.js",
+    "static/js/488.d00a99ed.chunk.js": "/react-app/static/js/488.d00a99ed.chunk.js",
+    "static/media/logo.png": "/react-app/static/media/logo.e65aa09353f98d7e15fc.png",
+    "static/media/hero-background.png": "/react-app/static/media/hero-background.100380563671e8e1c808.png",
+    "static/media/space-nebula.png": "/react-app/static/media/space-nebula.8eb09e050d09fb4c5aeb.png",
+    "static/media/intro-background.png": "/react-app/static/media/intro-background.f1245e84a7f672e11879.png",
+    "static/media/planet-saturn.png": "/react-app/static/media/planet-saturn.f1245e84a7f672e11879.png",
+    "static/media/planet-pink.png": "/react-app/static/media/planet-pink.3f7f2211d9279aadb18e.png",
+    "index.html": "/react-app/index.html",
+    "main.10306ad9.css.map": "/react-app/static/css/main.10306ad9.css.map",
+    "main.94100256.js.map": "/react-app/static/js/main.94100256.js.map",
+    "488.d00a99ed.chunk.js.map": "/react-app/static/js/488.d00a99ed.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.10306ad9.css",
+    "static/js/main.94100256.js"
+  ]
+}
