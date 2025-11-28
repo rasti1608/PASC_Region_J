@@ -58,11 +58,16 @@ import UserForm from './pages/admin/UserForm';
 import UserDelete from './pages/admin/UserDelete';
 import Profile from './pages/admin/Profile';
 
+// Basename for React Router
+// Development: empty (serves at localhost:3000/)
+// Production: "/react-app" (serves at pascregionj.com/react-app/)
+const basename = process.env.NODE_ENV === 'production' ? '/react-app' : '';
+
 function App() {
   return (
     <AuthProvider>
       <AudioProvider>
-        <Router>
+        <Router basename={basename}>
           {/* Scroll to top on route change */}
           <ScrollToTop />
           {/* Floating Anthem Button (Global - controlled by window.SHOW_ANTHEM_BUTTON) */}
