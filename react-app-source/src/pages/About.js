@@ -41,10 +41,10 @@ function About() {
       {/* Hero Section */}
       <section className="page-hero">
         <video ref={heroVideoDesktopRef} id="aboutVideo" className="hero-video hero-video-desktop" muted loop playsInline>
-          <source src="/assets/video/space-background.mp4" type="video/mp4" />
+          <source src={`${process.env.PUBLIC_URL}/assets/video/space-background.mp4`} type="video/mp4" />
         </video>
         <video ref={heroVideoMobileRef} id="aboutVideoMobile" className="hero-video hero-video-mobile" muted loop playsInline>
-          <source src="/assets/video/space-background.mp4" type="video/mp4" />
+          <source src={`${process.env.PUBLIC_URL}/assets/video/space-background.mp4`} type="video/mp4" />
         </video>
 
         <div className="container">
@@ -66,7 +66,7 @@ function About() {
               <p>Our region is part of a statewide network that empowers and equips students to develop and strengthen their leadership skills through conferences, events, recognition programs, and networking opportunities.</p>
             </div>
             <div className="about-logo">
-              <img src="/assets/img/logo.png" alt="PASC Region J Logo" className={`large-logo ${isPlaying ? 'rotating' : ''}`} />
+              <img src={`${process.env.PUBLIC_URL}/assets/img/logo.png`} alt="PASC Region J Logo" className={`large-logo ${isPlaying ? 'rotating' : ''}`} />
             </div>
           </div>
         </div>
@@ -96,19 +96,19 @@ function About() {
 
           <div className="activities-grid">
             <div className="activity-card">
-              <img src="/assets/img/gallery/f2.jpg" alt="Students holding PASC sign" />
+              <img src={`${process.env.PUBLIC_URL}/assets/img/gallery/f2.jpg`} alt="Students holding PASC sign" />
               <h3>Conferences & Events</h3>
               <p>We host regional conferences that bring together student leaders from across Districts 11 and 12. Our annual conference features inspiring keynote speakers, interactive workshops, and networking opportunities.</p>
             </div>
 
             <div className="activity-card">
-              <img src="/assets/img/gallery/f3.jpg" alt="Students at registration" />
+              <img src={`${process.env.PUBLIC_URL}/assets/img/gallery/f3.jpg`} alt="Students at registration" />
               <h3>Leadership Development</h3>
               <p>Through workshops, training sessions, and hands-on activities, we help students develop essential leadership skills including communication, collaboration, problem-solving, and civic engagement.</p>
             </div>
 
             <div className="activity-card">
-              <img src="/assets/img/gallery/f1.jpg" alt="Students collaborating" />
+              <img src={`${process.env.PUBLIC_URL}/assets/img/gallery/f1.jpg`} alt="Students collaborating" />
               <h3>Networking & Connection</h3>
               <p>Connect with fellow student leaders, share ideas, and build lasting relationships. Our events provide forums and opportunities for students and advisors to collaborate and learn from one another.</p>
             </div>

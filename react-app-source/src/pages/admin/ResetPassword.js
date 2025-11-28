@@ -161,7 +161,7 @@ function ResetPassword() {
         <div className="login-box">
         <div className="login-header">
           <div className="logo">
-            <img src="/assets/img/logo.png" alt="PASC Region J" className="logo-img" />
+            <img src={`${process.env.PUBLIC_URL}/assets/img/logo.png`} alt="PASC Region J" className="logo-img" />
           </div>
           <h1>Reset Your Password</h1>
           <p>PASC Region J Conference 2026</p>

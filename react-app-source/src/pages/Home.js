@@ -74,7 +74,7 @@ function Home() {
           loop
           playsInline
         >
-          <source src="/assets/video/space-background.mp4" type="video/mp4" />
+          <source src={`${process.env.PUBLIC_URL}/assets/video/space-background.mp4`} type="video/mp4" />
         </video>
 
         {/* Video Background - Mobile */}
@@ -86,7 +86,7 @@ function Home() {
           loop
           playsInline
         >
-          <source src="/assets/video/space-background_M.mp4" type="video/mp4" />
+          <source src={`${process.env.PUBLIC_URL}/assets/video/space-background_M.mp4`} type="video/mp4" />
         </video>
 
         <div className="hero-content">

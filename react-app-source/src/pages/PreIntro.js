@@ -45,11 +45,11 @@ function PreIntro() {
         loop
         playsInline
       >
-        <source src="/assets/video/intro-space-background.mp4" type="video/mp4" />
+        <source src={`${process.env.PUBLIC_URL}/assets/video/intro-space-background.mp4`} type="video/mp4" />
       </video>
 
       <div className="pre-intro-content">
-        <img src="/assets/img/logo.png" alt="PASC Region J" className="pre-intro-logo" />
+        <img src={`${process.env.PUBLIC_URL}/assets/img/logo.png`} alt="PASC Region J" className="pre-intro-logo" />
         <h1 className="pre-intro-title">PASC REGION <span className="special-j">J</span></h1>
         <p className="pre-intro-subtitle">Leadership Conference 2026</p>
         <p className="pre-intro-date">Reach for the Stars, Lead Beyond Limits - February 13, 2026</p>

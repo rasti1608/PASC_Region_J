@@ -30,7 +30,7 @@ function Header() {
         <div className="logo">
           <Link to="/home">
             <img
-              src="/assets/img/logo.png"
+              src={`${process.env.PUBLIC_URL}/assets/img/logo.png`}
               alt="PASC Region J"
               className={`logo-img ${isPlaying ? 'rotating' : ''}`}
               id="navLogo"

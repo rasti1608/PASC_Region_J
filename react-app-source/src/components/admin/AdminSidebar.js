@@ -37,7 +37,7 @@ function AdminSidebar({ isMobileOpen }) {
     <aside className={`admin-sidebar ${isMobileOpen ? 'mobile-open' : ''}`}>
       {/* Logo Header */}
       <div className="sidebar-header">
-        <img src="/assets/img/logo.png" alt="PASC Region J" className="sidebar-logo" />
+        <img src={`${process.env.PUBLIC_URL}/assets/img/logo.png`} alt="PASC Region J" className="sidebar-logo" />
         <h2>Admin Panel</h2>
       </div>
 

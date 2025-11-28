@@ -107,7 +107,7 @@ function Intro() {
         loop
         playsInline
       >
-        <source src="/assets/video/intro-space-background.mp4" type="video/mp4" />
+        <source src={`${process.env.PUBLIC_URL}/assets/video/intro-space-background.mp4`} type="video/mp4" />
       </video>
 
       <video
@@ -118,7 +118,7 @@ function Intro() {
         loop
         playsInline
       >
-        <source src="/assets/video/intro-space-background_M.mp4" type="video/mp4" />
+        <source src={`${process.env.PUBLIC_URL}/assets/video/intro-space-background_M.mp4`} type="video/mp4" />
       </video>
 
       <div className="stars" id="stars" ref={starsRef}></div>
@@ -126,22 +126,22 @@ function Intro() {
       <div className="planet-container">
         <div className="orbit orbit-1">
           <div className="planet planet-1">
-            <img src="/assets/img/orbit-planet-1.png" alt="Moon" />
+            <img src={`${process.env.PUBLIC_URL}/assets/img/orbit-planet-1.png`} alt="Moon" />
           </div>
         </div>
         <div className="orbit orbit-2">
           <div className="planet planet-2">
-            <img src="/assets/img/orbit-planet-2.png" alt="Earth" />
+            <img src={`${process.env.PUBLIC_URL}/assets/img/orbit-planet-2.png`} alt="Earth" />
           </div>
         </div>
         <div className="orbit orbit-3">
           <div className="planet planet-3">
-            <img src="/assets/img/orbit-planet-3.png" alt="Mars" />
+            <img src={`${process.env.PUBLIC_URL}/assets/img/orbit-planet-3.png`} alt="Mars" />
           </div>
         </div>
         <div className="orbit orbit-4">
           <div className="planet planet-4">
-            <img src="/assets/img/orbit-planet-4.png" alt="Saturn" />
+            <img src={`${process.env.PUBLIC_URL}/assets/img/orbit-planet-4.png`} alt="Saturn" />
           </div>
         </div>
         <div className="center-logo"></div>

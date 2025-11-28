@@ -83,10 +83,10 @@ function Workshops() {
       {/* Hero Section */}
       <section className="page-hero">
         <video ref={heroVideoDesktopRef} id="workshopsVideo" className="hero-video hero-video-desktop" muted loop playsInline>
-          <source src="/assets/video/space-background.mp4" type="video/mp4" />
+          <source src={`${process.env.PUBLIC_URL}/assets/video/space-background.mp4`} type="video/mp4" />
         </video>
         <video ref={heroVideoMobileRef} id="workshopsVideoMobile" className="hero-video hero-video-mobile" muted loop playsInline>
-          <source src="/assets/video/space-background.mp4" type="video/mp4" />
+          <source src={`${process.env.PUBLIC_URL}/assets/video/space-background.mp4`} type="video/mp4" />
         </video>
 
         <div className="container">

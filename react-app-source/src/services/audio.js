@@ -13,7 +13,7 @@ class AudioService {
   initialize() {
     if (this.initialized) return;
 
-    this.audio = new Audio('/assets/audio/instrumental_background.mp3');
+    this.audio = new Audio(`${process.env.PUBLIC_URL}/assets/audio/instrumental_background.mp3`);
     this.audio.loop = true;
     this.audio.preload = 'auto';
 

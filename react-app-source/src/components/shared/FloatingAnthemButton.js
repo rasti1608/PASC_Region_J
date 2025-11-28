@@ -204,7 +204,7 @@ function FloatingAnthemButton() {
                 playsInline
                 autoPlay
               >
-                <source src="/assets/video/intro-space-background.mp4" type="video/mp4" />
+                <source src={`${process.env.PUBLIC_URL}/assets/video/intro-space-background.mp4`} type="video/mp4" />
               </video>
 
               {/* Dark Vignette */}
@@ -219,7 +219,7 @@ function FloatingAnthemButton() {
                   loop
                   playsInline
                 >
-                  <source src="/assets/video/resources-background.mp4" type="video/mp4" />
+                  <source src={`${process.env.PUBLIC_URL}/assets/video/resources-background.mp4`} type="video/mp4" />
                 </video>
 
                 <div className="container">
@@ -234,7 +234,7 @@ function FloatingAnthemButton() {
                         loop
                         playsInline
                       >
-                        <source src="/assets/video/conference-anthem-background.mp4" type="video/mp4" />
+                        <source src={`${process.env.PUBLIC_URL}/assets/video/conference-anthem-background.mp4`} type="video/mp4" />
                       </video>
 
                       <div className="anthem-header">
@@ -261,7 +261,7 @@ function FloatingAnthemButton() {
                           onPlay={() => setIsAnthemPlaying(true)}
                           onPause={() => setIsAnthemPlaying(false)}
                         >
-                          <source src="/assets/audio/one-orbit-anthem.mp3" type="audio/mpeg" />
+                          <source src={`${process.env.PUBLIC_URL}/assets/audio/one-orbit-anthem.mp3`} type="audio/mpeg" />
                           Your browser does not support the audio element.
                         </audio>
 
