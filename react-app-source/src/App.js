@@ -11,6 +11,7 @@ import AdminRoleGuard from './guards/AdminRoleGuard';
 // Global Components
 import ScrollToTop from './components/shared/ScrollToTop';
 import FloatingAnthemButton from './components/shared/FloatingAnthemButton';
+import AdminAudioPauser from './components/shared/AdminAudioPauser';
 
 // Public Pages
 import PreIntro from './pages/PreIntro';
@@ -70,6 +71,8 @@ function App() {
         <Router basename={basename}>
           {/* Scroll to top on route change */}
           <ScrollToTop />
+          {/* Pause audio when navigating to admin routes */}
+          <AdminAudioPauser />
           {/* Floating Anthem Button (Global - controlled by window.SHOW_ANTHEM_BUTTON) */}
           <FloatingAnthemButton />
           <Routes>
