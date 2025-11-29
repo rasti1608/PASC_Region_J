@@ -14,10 +14,8 @@ Instead of clicking through menus, users simply ask:
 
 > *"How do I register for the conference?"*
 
-And the AI responds:
+And the AI responds with real information from the database, plus action buttons:
 
-> *"Registration costs $25 per student. The deadline is January 15, 2026. Would you like me to take you to the registration form?"*
->
 > **[Go to Registration]** · **[Tell me more]**
 
 ---
@@ -72,37 +70,35 @@ And the AI responds:
 
 ---
 
-## 💬 Example Conversations
+## 💬 How It Works
 
-**Basic Information:**
+**User asks a question:**
 ```
 👤 "When is the conference?"
-🤖 "The PASC Region J Conference is February 13, 2026 
-    at Neshaminy High School. Registration opens at 8 AM."
+```
+
+**AI retrieves real data from the database and responds:**
+```
+🤖 [Answers with actual conference details from the system]
     
     [View Schedule] [Register Now]
 ```
 
-**Workshop Query:**
+**Follow-up questions maintain context:**
 ```
 👤 "What workshops are available?"
-🤖 "We have 15 workshops including Leadership Skills, 
-    Team Building, and Public Speaking."
-    
-    [View All Workshops] [Filter by Topic]
-    
+🤖 [Lists actual workshops from database]
+
 👤 "Which ones are in the morning?"
-🤖 "Morning workshops include:
-    • Leadership Skills - 10:00 AM, Room 205
-    • Public Speaking - 11:15 AM, Auditorium"
+🤖 [Filters and shows morning workshops]
 ```
 
-**Navigation Request:**
+**Navigation with user control:**
 ```
 👤 "Take me to registration"
 🤖 "I can take you to the registration page."
     
-    [Go to Registration] [Tell me about costs first]
+    [Go to Registration] [Tell me more first]
 ```
 
 ---
@@ -136,17 +132,6 @@ This AI integration demonstrates:
 - **Voice Technology** - Whisper speech-to-text
 - **Full-Stack Integration** - Frontend ↔ AI Backend ↔ Database
 - **Production Deployment** - Real-world hosting and architecture
-
----
-
-## 📊 Estimated Costs
-
-| Service | Monthly |
-|---------|---------|
-| Railway.app | $0 (free tier) |
-| OpenAI GPT-4 | $10-20 |
-| Whisper API | ~$1 |
-| **Total** | **~$15-25/month** |
 
 ---
 
