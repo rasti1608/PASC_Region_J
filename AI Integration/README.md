@@ -139,8 +139,8 @@ This AI integration demonstrates:
 
 - **Live Site:** [pascregionj.com](https://pascregionj.com)
 - **Angular Version:** [pascregionj.com](https://pascregionj.com) (default)
-- **Angular Version w/ Anthem:** [pascregionj.com](https://pascregionj.com/angular-app-portfolio)
-- **React Version:** [pascregionj.com](https://pascregionj.com/react-app)
+- **Angular Version w/ Anthem:** [pascregionj.com/angular-app-portfolio](https://pascregionj.com/angular-app-portfolio)
+- **React Version:** [pascregionj.com/react-app](https://pascregionj.com/react-app)
 - **ColdFusion Version:** [pascregionj.com?cf=1](https://pascregionj.com?cf=1)
 - **Main Repository:** [GitHub](https://github.com/rasti1608/PASC_Region_J)
 
