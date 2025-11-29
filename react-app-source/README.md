@@ -1,70 +1,242 @@
-# Getting Started with Create React App
+# PASC Region J Conference 2026 - React Implementation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Live Site:** [pascregionj.com/react-app/](https://pascregionj.com/react-app/)
 
-## Available Scripts
+## 🚀 Conversion Summary
 
-In the project directory, you can run:
+**Converted from:** Angular implementation  
+**Conversion time:** ~15 hours total  
+**Completed:** November 28, 2025
 
-### `npm start`
+### Conversion Timeline
+- **Session 1 (~6 hours):** Initial React setup, all public pages converted, basic admin structure
+- **Session 2 (~5 hours):** Admin panel completion, API integration, fixing edit/delete pages
+- **Session 3 (~4 hours):** Production deployment, routing fixes, final polish
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🎯 What Was Converted
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Public Frontend (100% Complete)
+- Intro/Pre-intro splash screens with video backgrounds
+- Home page with announcements
+- About, Registration, Workshops, Schedule pages
+- Photo Gallery with lightbox
+- Resources and Contact pages
+- Background music/anthem player
+- Fully responsive design
 
-### `npm test`
+### Admin Panel (100% Complete)
+- Dashboard with stats
+- Announcements management (list/add/edit/delete)
+- Forms management
+- Gallery management with image upload
+- Documents management
+- Contact submissions with email settings
+- User management
+- Schedule editor
+- Profile settings
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🛠 Technical Details
 
-### `npm run build`
+**Built With:**
+- React 19.2
+- React Router DOM 7.9
+- ColdFusion backend APIs (shared with Angular)
+- Microsoft SQL Server database
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Key Configuration:**
+- `homepage: "/react-app"` in package.json
+- `basename="/react-app"` for React Router (production only)
+- `web.config` for IIS URL rewriting
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📁 Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+react-app-source/
+├── src/
+│   ├── components/     # Reusable components
+│   ├── pages/
+│   │   ├── public/     # Public-facing pages
+│   │   └── admin/      # Admin panel pages
+│   ├── services/       # API services
+│   ├── assets/         # Images, CSS
+│   └── App.js          # Main router
+├── public/             # Static assets
+└── package.json
+```
 
-### `npm run eject`
+## 🏃 Running Locally
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+cd react-app-source
+npm install
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Opens at: http://localhost:3000
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🏗 Building for Production
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm run build
+```
 
-## Learn More
+Copy contents of `build/` to `Front_End/react-app/`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🔧 Key Challenges Solved
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Asset paths in subdirectory** - Fixed with `homepage` in package.json
+2. **React Router in subdirectory** - Conditional `basename` for production
+3. **IIS routing for SPA** - `web.config` rewrite rules
+4. **Gallery image paths** - Moved to public folder for proper serving
+5. **Music stopping on admin entry** - Event listener on route change
 
-### Code Splitting
+## 📝 Comparison to Angular
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+| Aspect | Angular | React |
+|--------|---------|-------|
+| Conversion time | ~35 hours (7 days, ~5 hrs/day) | ~15 hours (3 sessions) |
+| Bundle size | Similar | Similar |
+| Performance | Fast | Fast |
+| Code structure | Modules | Components |
 
-### Analyzing the Bundle Size
+## 👨‍💻 Author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Rastislav Toscak**  
+Converted from Angular as a framework comparison project
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🌐 Live Versions
 
-### Advanced Configuration
+This project demonstrates the same web application built with different frameworks and technologies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+**🔷 Angular Version (Default):** [pascregionj.com](https://pascregionj.com)  
+Modern frontend using Angular with ColdFusion backend APIs
 
-### Deployment
+**🔶 ColdFusion Version:** [pascregionj.com?cf=1](https://pascregionj.com?cf=1)  
+Original full-stack ColdFusion implementation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+**🟢 React Version:** [pascregionj.com/react-app/](https://pascregionj.com/react-app/)
+Complete React 19 conversion with same functionality as Angular version
+ 
+**🔄 Future:** Multiple backend API implementations (PHP, Node.js, Java, .NET) with dynamic switching
 
-### `npm run build` fails to minify
+**Source Code:**
+- [Angular Implementation →](https://github.com/rasti1608/PASC_Region_J/tree/main/Front_End/angular-app-source)
+- [React Implementation →](https://github.com/rasti1608/PASC_Region_J/tree/main/react-app-source)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+![Live Site](https://img.shields.io/badge/status-live-brightgreen)
+![Conference](https://img.shields.io/badge/event-Feb%2013%202026-blue)
+
+## 🌟 What Is This?
+
+This is the official website for the PASC Region J Conference 2026, hosted at Neshaminy High School. The site provides information about the conference and includes a powerful admin panel that lets organizers easily update announcements without needing to know how to code.
+
+**Live Website:** [pascregionj.com](https://pascregionj.com)
+
+## 📱 What Can Visitors See?
+
+- **Conference Information** - Theme, date, location, and schedule
+- **Latest Announcements** - Important updates displayed right on the homepage
+- **Workshop Details** - Information about available sessions
+- **Photo Gallery** - Pictures from past events
+- **Registration Info** - How to sign up for the conference
+- **Resources** - Helpful materials and downloads
+- **Contact Information** - How to reach organizers
+
+The website works on phones, tablets, and computers!
+
+## 🎯 What Can Organizers Do?
+
+The admin panel (at `/admin/`) lets conference organizers:
+
+- **Post Announcements** - Share news and updates with attendees
+- **Schedule Posts** - Set announcements to appear on specific dates
+- **Highlight Important News** - Mark special announcements as "featured"
+- **Organize Content** - Easily reorder announcements by importance
+- **Control Visibility** - Show or hide announcements anytime
+- **Edit Anytime** - Update content whenever needed
+
+**No coding knowledge required!** Everything is done through simple forms and buttons.
+
+## ✨ Cool Features
+
+### For Students & Attendees
+- Clean, modern design with space theme
+- Easy navigation on any device
+- Important announcements always at the top
+- Quick access to registration and workshop info
+
+### For Conference Organizers
+- Secure login to admin area
+- Add new announcements in seconds
+- Announcements automatically appear on homepage
+- Schedule posts for future dates
+- Mark important announcements with a star
+- Drag-and-drop style ordering (via dropdowns)
+
+## 🗂️ How Was This Built?
+
+**Development Time:** ~25 hours (over one weekend)  
+**Purpose:** Built by a dad for his son's school conference  
+**Goal:** Create a professional website that's easy to manage
+
+This was a learning project that became a real, production-ready website. It proves that with the right tools (and some AI help!), you can build professional web applications quickly.
+
+## 💻 Technical Details (For Developers)
+
+**Built With:**
+- ColdFusion (backend programming)
+- Microsoft SQL Server (database)
+- HTML/CSS/JavaScript (frontend)
+- Angular (modern frontend framework)
+- Responsive design (mobile-friendly)
+
+**Code Stats:**
+- Multiple framework implementations
+- Custom CMS from scratch
+- Fully secure with HTTPS
+
+For detailed technical documentation, see the `/docs/` folder in this repository.
+
+## 🚀 Future Plans
+
+Ideas for future versions:
+- Online registration form with payment
+- Photo gallery management
+- Workshop sign-up system
+- Automated email notifications
+- Attendee check-in system
+
+## 👨‍💻 About This Project
+
+**Created By:** Rastislav Toscak  
+**For:** Oliver Toscak & PASC Region J Conference 2026  
+**When:** October 2025  
+**Why:** To provide a professional web presence for the student leadership conference
+
+Built as both a learning experience and a practical tool. The goal was to create something that looks professional, works reliably, and can be easily managed by people who aren't tech experts.
+
+## 📖 Documentation
+
+For technical details, setup instructions, and developer documentation, see:
+- `PASC_Database_Schema.sql` - Database structure
+- `PASC_Design_Implementation_Specification.md` - Technical design docs
+- `PASC_Site_Map_Navigation.md` - Site structure and navigation
+- `PASC_Business_Requirements_Document.md` - Project requirements
+
+## 📧 Contact
+
+**Questions about the website?**  
+Contact: info@pascregionj.com
+
+**Questions about the conference?**  
+Visit: [pascregionj.com/contact.cfm](https://pascregionj.com/contact.cfm)
+
+---
+
+**⭐ Like this project? Star it on GitHub!**
+
+*Last Updated: November 28, 2025*
