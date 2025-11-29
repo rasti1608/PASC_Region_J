@@ -2,7 +2,7 @@
 ## PASC Region J Conference Website - AI Voice Assistant
 
 **Document Version:** 1.0  
-**Date:** November 19, 2025  
+**Date:** November 28, 2025  
 **Project:** pascregionj.com AI Integration  
 **Author:** Rastislav Toscak  
 

@@ -40,7 +40,7 @@
     Note: All other site functionality (/admin/, /api/, .cfm files) remains
     accessible at their original URLs regardless of this redirect logic.
     
-    Created: November 19, 2025
+    Created: November 28, 2025
     Author: Rastislav Toscak
     ============================================================================ --->
 
