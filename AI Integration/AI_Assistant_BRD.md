@@ -333,7 +333,7 @@ AI: "I'm specialized in helping with the PASC Region J Conference.
 ### 6.1 Desktop View - Panel Closed
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  🚀 PASC Region J Conference 2026                                    [♪ 🔊] │
+│  🚀 PASC Region J Conference 2026                                    [♪ 🔊]  │
 │  Home    About    Workshops    Resources    Gallery    Contact              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
@@ -354,24 +354,24 @@ AI: "I'm specialized in helping with the PASC Region J Conference.
 ### 6.2 Desktop View - Panel Open
 ```
 ┌────────────────────────────────────────────────────────┬────────────────────┐
-│  🚀 PASC Region J Conference 2026               [♪ 🔊] │ 🤖 AI Assistant [X]│
+│  🚀 PASC Region J Conference 2026               [♪ 🔊] │ 🤖 AI Assistant [X] │
 │  Home    About    Workshops    Resources    Gallery    │                    │
-├────────────────────────────────────────────────────────┤ Hi! I'm your PASC │
+├────────────────────────────────────────────────────────┤ Hi! I'm your PASC  │
 │                                                        │ conference guide.  │
 │                                                        │ Ask me anything!   │
 │                                                        │                    │
 │           (Website Content - slightly narrower)        │────────────────────│
 │                                                        │                    │
-│                                                        │ 👤 When is the     │
+│                                                        │ 👤 When is the      │
 │                                                        │    conference?     │
 │                                                        │                    │
-│                                                        │ 🤖 The PASC Region │
+│                                                        │ 🤖 The PASC Region  │
 │                                                        │ J Conference is    │
 │                                                        │ February 13, 2026  │
 │                                                        │ at Neshaminy High. │
 │                                                        │                    │
-│                                                        │ 👉 [View Schedule] │
-│                                                        │ 👉 [Register Now]  │
+│                                                        │ 👉 [View Schedule]  │
+│                                                        │ 👉 [Register Now]   │
 │                                                        │                    │
 │                                                        │────────────────────│
 │                                                        │ [Ask anything...🎤]│
@@ -449,7 +449,7 @@ AI: "I'm specialized in helping with the PASC Region J Conference.
 - **Decision needed after hosting check**
 
 **AI/ML Services:**
-- OpenAI GPT-4 API - Main AI brain
+- OpenAI GPT-5 nano - Main AI brain
 - OpenAI Whisper API - Voice transcription
 - LangChain (if Python) - RAG framework
 - Vector database (Pinecone/ChromaDB) - Document storage
@@ -462,11 +462,11 @@ AI: "I'm specialized in helping with the PASC Region J Conference.
 ### 7.3 Cost Estimates (Monthly)
 | Service | Estimated Usage | Cost |
 |---------|-----------------|------|
-| OpenAI GPT-4 | ~1000 conversations | $10-20 |
+| OpenAI GPT-5 nano | ~1000 conversations | $1-2 |
 | Whisper API | ~100 minutes | $0.60 |
 | Vector DB | Free tier | $0 |
 | Hosting (if separate) | Basic tier | $0-5 |
-| **Total** | | **$10-25/month** |
+| **Total** | | **$2-8/month** |
 
 ---
 

@@ -34,9 +34,9 @@ This document defines the technical architecture for implementing an AI-powered 
 | Service | Monthly Cost |
 |---------|--------------|
 | Railway.app (Free Tier) | $0 |
-| OpenAI GPT-4 (~1000 conversations) | $10-20 |
+| OpenAI GPT-5 nano (~1000 conversations) | $1-2 |
 | Whisper API (~100 min voice) | $0.60 |
-| **Total** | **$10-25/month** |
+| **Total** | **$2-3/month** |
 
 ---
 
@@ -45,14 +45,14 @@ This document defines the technical architecture for implementing an AI-powered 
 ### 2.1 High-Level Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────┐
 │                         USER'S BROWSER                               │
-│  ┌───────────────────────────────────────────────────────────────┐  │
+│  ┌────────────────────────────────────────────────────────────────┐  │
 │  │                    ANGULAR FRONTEND                            │  │
-│  │     ┌──────────────┐    ┌──────────────┐    ┌─────────────┐   │  │
-│  │     │   Website    │    │   AI Chat    │    │    Voice    │   │  │
-│  │     │  Components  │    │  Component   │    │  Recorder   │   │  │
-│  │     └──────────────┘    └──────┬───────┘    └──────┬──────┘   │  │
+│  │     ┌──────────────┐    ┌──────────────┐    ┌─────────────┐    │  │
+│  │     │   Website    │    │   AI Chat    │    │    Voice    │    │  │
+│  │     │  Components  │    │  Component   │    │  Recorder   │    │  │
+│  │     └──────────────┘    └──────┬───────┘    └──────┬──────┘    │  │
 │  │                                │                    │          │  │
 │  │                         ┌──────┴────────────────────┘          │  │
 │  │                         │                                      │  │
@@ -64,35 +64,35 @@ This document defines the technical architecture for implementing an AI-powered 
                              │ HTTPS
                              ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    RAILWAY.APP (Python Backend)                      │
+│                    RAILWAY.APP (Python Backend)                     │
 │  ┌───────────────────────────────────────────────────────────────┐  │
-│  │                      FASTAPI SERVER                            │  │
-│  │                                                                │  │
-│  │   ┌────────────┐   ┌────────────┐   ┌────────────────────┐   │  │
-│  │   │ /api/chat  │   │ /api/voice │   │   LangChain RAG    │   │  │
-│  │   └─────┬──────┘   └─────┬──────┘   └──────────┬─────────┘   │  │
+│  │                      FASTAPI SERVER                           │  │
+│  │                                                               │  │
+│  │   ┌────────────┐   ┌────────────┐   ┌────────────────────┐    │  │
+│  │   │ /api/chat  │   │ /api/voice │   │   LangChain RAG    │    │  │
+│  │   └─────┬──────┘   └─────┬──────┘   └──────────┬─────────┘    │  │
 │  │         │                │                     │              │  │
-│  │         │          ┌─────┴─────┐              │              │  │
-│  │         │          │ Whisper   │              │              │  │
-│  │         │          │   API     │              │              │  │
-│  │         │          └───────────┘              │              │  │
-│  │         │                                     │              │  │
-│  │         └─────────────────┬───────────────────┘              │  │
+│  │         │          ┌─────┴─────┐              │               │  │
+│  │         │          │ Whisper   │              │               │  │
+│  │         │          │   API     │              │               │  │
+│  │         │          └───────────┘              │               │  │
+│  │         │                                     │               │  │
+│  │         └─────────────────┬───────────────────┘               │  │
 │  │                           │                                   │  │
-│  │              ┌────────────┼────────────┐                     │  │
-│  │              ▼            ▼            ▼                     │  │
-│  │        ┌──────────┐ ┌──────────┐ ┌──────────┐               │  │
-│  │        │ ChromaDB │ │ OpenAI   │ │ SQL Srvr │               │  │
-│  │        │ (vectors)│ │ GPT-4    │ │ (remote) │               │  │
-│  │        └──────────┘ └──────────┘ └────┬─────┘               │  │
+│  │              ┌────────────┼────────────┐                      │  │
+│  │              ▼            ▼            ▼                      │  │
+│  │        ┌──────────┐ ┌──────────┐ ┌──────────┐                 │  │
+│  │        │ ChromaDB │ │ OpenAI   │ │ SQL Srvr │                 │  │
+│  │        │ (vectors)│ │ GPT-5    │ │ (remote) │                 │  │
+│  │        └──────────┘ └──────────┘ └────┬─────┘                 │  │
 │  └───────────────────────────────────────┼───────────────────────┘  │
-└──────────────────────────────────────────┼───────────────────────────┘
+└──────────────────────────────────────────┼──────────────────────────┘
                                            │ SQL Connection
                                            ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    DAILYRAZOR (Existing)                             │
+│                    DAILYRAZOR (Existing)                            │
 │  ┌───────────────────────────────────────────────────────────────┐  │
-│  │                   SQL SERVER DATABASE                          │  │
+│  │                   SQL SERVER DATABASE                         │  │
 │  │   announcements │ workshops │ gallery │ documents │ forms     │  │
 │  └───────────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────┘
@@ -102,7 +102,7 @@ This document defines the technical architecture for implementing an AI-powered 
 
 **Text Input Flow:**
 ```
-User types → Angular → POST /api/chat → LangChain RAG → GPT-4 → Response
+User types → Angular → POST /api/chat → LangChain RAG → GPT-5 nano → Response
 ```
 
 **Voice Input Flow:**
@@ -132,7 +132,7 @@ User speaks → MediaRecorder → POST /api/voice → Whisper → Text → Same 
 | Framework | FastAPI | REST API |
 | AI Orchestration | LangChain | RAG Pipeline |
 | Vector Store | ChromaDB | Document Search |
-| LLM | OpenAI GPT-4 | AI Responses |
+| LLM | OpenAI GPT-5 nano | AI Responses |
 | Transcription | OpenAI Whisper | Voice-to-Text |
 | DB Driver | pyodbc | SQL Server |
 
@@ -140,7 +140,7 @@ User speaks → MediaRecorder → POST /api/voice → Whisper → Text → Same 
 
 | Service | Provider | Cost |
 |---------|----------|------|
-| LLM | OpenAI GPT-4 | ~$0.01/conversation |
+| LLM | OpenAI GPT-5 nano | ~$0.001/conversation |
 | Transcription | Whisper API | $0.006/minute |
 | Hosting | Railway.app | Free tier |
 
@@ -250,7 +250,7 @@ SELECT title, file_url, category FROM documents
 4. Augmentation
    - System prompt + Context + History + Question
        ↓
-5. Generation (GPT-4)
+5. Generation (GPT-5 nano)
        ↓
 6. Action Detection
        ↓

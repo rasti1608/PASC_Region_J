@@ -39,7 +39,7 @@ And the AI responds with real information from the database, plus action buttons
 |-------|------------|
 | **Frontend** | Angular (existing site) |
 | **AI Backend** | Python, FastAPI, LangChain |
-| **LLM** | OpenAI GPT-4 |
+| **LLM** | OpenAI GPT-5 nano |
 | **Voice** | OpenAI Whisper API |
 | **Vector Store** | ChromaDB |
 | **Database** | SQL Server (existing) |
@@ -58,7 +58,7 @@ And the AI responds with real information from the database, plus action buttons
                           ▼
 ┌─────────────────────────────────────────────────────────┐
 │                  RAILWAY.APP (Python)                   │
-│     FastAPI + LangChain + Whisper + OpenAI GPT-4        │
+│     FastAPI + LangChain + Whisper + OpenAI GPT-5 nano   │
 └─────────────────────────┬───────────────────────────────┘
                           │
                           ▼
