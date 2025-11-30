@@ -43,8 +43,8 @@
     transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Mobile Styles - Show hamburger on mobile */
-@media (max-width: 768px) {
+/* Mobile/Tablet Styles - Show hamburger on screens up to 1024px */
+@media (max-width: 1024px) {
     .mobile-menu-toggle {
         display: flex;
     }
@@ -122,7 +122,7 @@
 }
 
 /* Desktop - ensure menu is always visible */
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
     .nav-menu {
         display: flex !important;
         position: static;
@@ -131,7 +131,7 @@
         background: transparent;
         padding: 0;
     }
-    
+
     .nav-menu li {
         opacity: 1 !important;
         transform: none !important;

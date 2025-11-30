@@ -92,6 +92,7 @@ $border-color: rgba(79, 195, 247, 0.3);
   right: -400px; // Hidden off-screen
   width: 380px;
   height: 100vh;
+  height: 100dvh; // Dynamic viewport height for mobile browser chrome
   background: $bg-panel;
   border-left: 1px solid $border-color;
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
@@ -113,6 +114,7 @@ $border-color: rgba(79, 195, 247, 0.3);
   padding: 16px 20px;
   background: linear-gradient(135deg, rgba(79, 195, 247, 0.15) 0%, rgba(26, 35, 50, 0.9) 100%);
   border-bottom: 1px solid $border-color;
+  flex-shrink: 0; // Never shrink the header
 
   .header-title {
     display: flex;
@@ -187,6 +189,7 @@ $border-color: rgba(79, 195, 247, 0.3);
 
 .messages-container {
   flex: 1;
+  min-height: 0; // Critical for flexbox overflow to work properly
   overflow-y: auto;
   padding: 20px;
   display: flex;
@@ -393,6 +396,9 @@ $border-color: rgba(79, 195, 247, 0.3);
   background: rgba(26, 35, 50, 0.9);
   border-top: 1px solid $border-color;
   min-height: 80px;
+  flex-shrink: 0; // Never shrink - must always be visible
+  // Safe area padding for iOS home indicator
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }
 
 /* Recording Container - ChatGPT-style waveform UI */
@@ -604,6 +610,40 @@ $border-color: rgba(79, 195, 247, 0.3);
    RESPONSIVE STYLES
    ======================================== */
 
+/* Tablet (iPad) - 768px to 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ai-chat-btn {
+    width: 56px;
+    height: 56px;
+    bottom: 24px;
+    right: 24px;
+  }
+
+  .ai-chat-panel {
+    width: 380px;
+    right: -380px;
+
+    &.open {
+      right: 0;
+    }
+  }
+
+  // Ensure input area is always visible on tablet
+  .input-area {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    min-height: 76px;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .messages-container {
+    flex: 1;
+    min-height: 0; // Important for flexbox to allow shrinking
+    overflow-y: auto;
+  }
+}
+
+/* Mobile (phones) - up to 768px */
 @media (max-width: 768px) {
   .ai-chat-btn {
     width: 54px;
@@ -616,6 +656,8 @@ $border-color: rgba(79, 195, 247, 0.3);
     width: 100%;
     right: -100%;
     max-width: 100vw;
+    height: 100vh;
+    height: 100dvh; // Dynamic viewport height accounts for browser chrome
 
     &.open {
       right: 0;
@@ -627,6 +669,9 @@ $border-color: rgba(79, 195, 247, 0.3);
   }
 
   .messages-container {
+    flex: 1;
+    min-height: 0; // Critical for flexbox to allow proper shrinking
+    overflow-y: auto;
     padding: 16px;
   }
 
@@ -634,9 +679,13 @@ $border-color: rgba(79, 195, 247, 0.3);
     max-width: 95%;
   }
 
+  // CRITICAL: Input area must always be visible and not cut off
   .input-area {
+    flex-shrink: 0; // Never shrink the input area
     padding: 12px 16px;
     min-height: 72px;
+    // Add safe area padding for iOS home indicator
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .message-input {
@@ -675,6 +724,7 @@ $border-color: rgba(79, 195, 247, 0.3);
   }
 }
 
+/* Small phones - up to 480px */
 @media (max-width: 480px) {
   .ai-chat-btn {
     width: 50px;
@@ -690,6 +740,7 @@ $border-color: rgba(79, 195, 247, 0.3);
 
   .panel-header {
     padding: 12px 16px;
+    flex-shrink: 0;
 
     .header-title {
       font-size: 1rem;
@@ -707,6 +758,14 @@ $border-color: rgba(79, 195, 247, 0.3);
   .action-btn {
     font-size: 0.8rem;
     padding: 6px 10px;
+  }
+
+  // Ensure input is always visible on small phones
+  .input-area {
+    flex-shrink: 0;
+    padding: 10px 12px;
+    min-height: 68px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   }
 }
 
