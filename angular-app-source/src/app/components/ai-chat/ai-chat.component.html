@@ -1,0 +1,193 @@
+<!-- Floating AI Chat Button -->
+<button
+  class="ai-chat-btn"
+  [class.panel-open]="isPanelOpen()"
+  (click)="togglePanel()"
+  [title]="isPanelOpen() ? 'Close AI Assistant' : 'Open AI Assistant'"
+  aria-label="Toggle AI Assistant">
+  <span class="ai-icon">
+    @if (isPanelOpen()) {
+      <!-- Close icon when open -->
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    } @else {
+      <!-- Chat/AI icon when closed -->
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        <circle cx="8" cy="10" r="1.5"/>
+        <circle cx="12" cy="10" r="1.5"/>
+        <circle cx="16" cy="10" r="1.5"/>
+      </svg>
+    }
+  </span>
+  @if (!isBackendConnected() && !isPanelOpen()) {
+    <span class="status-indicator offline" title="AI Backend Offline"></span>
+  }
+</button>
+
+<!-- Chat Panel (Slide-out) -->
+<div class="ai-chat-panel" [class.open]="isPanelOpen()">
+  <!-- Panel Header -->
+  <div class="panel-header">
+    <div class="header-title">
+      <img src="assets/img/ai-assistant-icon.png" alt="AI" class="ai-header-icon">
+      <span>AI Assistant</span>
+    </div>
+    <div class="header-actions">
+      @if (hasMessages()) {
+        <button class="clear-btn" (click)="clearConversation()" title="Clear conversation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+          </svg>
+        </button>
+      }
+      <button class="close-btn" (click)="closePanel()" title="Close" aria-label="Close panel">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Backend Status Warning -->
+  @if (!isBackendConnected()) {
+    <div class="backend-warning">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+      <span>Backend offline - Start server at localhost:8001</span>
+    </div>
+  }
+
+  <!-- Messages Area -->
+  <div class="messages-container" #messagesContainer>
+    @for (message of messages(); track message.timestamp) {
+      <div class="message" [class.user]="message.role === 'user'" [class.assistant]="message.role === 'assistant'">
+        @if (message.role === 'assistant') {
+          <div class="message-avatar">
+            <img src="assets/img/ai-assistant-icon.png" alt="AI" class="ai-message-icon">
+          </div>
+        }
+        <div class="message-content">
+          <p>{{ message.content }}</p>
+
+          <!-- Action Buttons -->
+          @if (message.actions && message.actions.length > 0) {
+            <div class="message-actions">
+              @for (action of message.actions; track action.label) {
+                <button
+                  type="button"
+                  class="action-btn"
+                  (click)="executeAction(action, $event)">
+                  👉 {{ action.label }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+        @if (message.role === 'user') {
+          <div class="message-avatar user">👤</div>
+        }
+      </div>
+    }
+
+    <!-- Loading Indicator -->
+    @if (isLoading()) {
+      <div class="message assistant">
+        <div class="message-avatar">
+          <img src="assets/img/ai-assistant-icon.png" alt="AI" class="ai-message-icon">
+        </div>
+        <div class="message-content loading">
+          <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Transcribing Indicator -->
+  @if (isTranscribing()) {
+    <div class="transcribing-indicator">
+      <div class="transcribing-pulse"></div>
+      <span>Transcribing...</span>
+    </div>
+  }
+
+  <!-- Input Area -->
+  <div class="input-area">
+    @if (isRecording()) {
+      <!-- Recording Mode: Waveform Visualization -->
+      <div class="recording-container">
+        <canvas #waveformCanvas class="waveform-canvas"></canvas>
+        <div class="recording-time">{{ recordingTime() }}</div>
+        <div class="recording-controls">
+          <button
+            class="recording-btn cancel"
+            (click)="cancelRecording()"
+            title="Cancel recording"
+            aria-label="Cancel recording">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+          <button
+            class="recording-btn confirm"
+            (click)="confirmRecording()"
+            title="Send recording"
+            aria-label="Send recording">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    } @else {
+      <!-- Normal Mode: Text Input -->
+      <textarea
+        #messageInput
+        class="message-input"
+        placeholder="Ask me anything..."
+        [value]="currentMessage()"
+        (input)="onTextInput($event)"
+        (keydown)="onKeyDown($event)"
+        [disabled]="isLoading() || isTranscribing()"
+        rows="1"
+      ></textarea>
+
+      <!-- Mic Button -->
+      <button
+        class="mic-btn"
+        (click)="startRecording()"
+        [disabled]="isLoading() || isTranscribing()"
+        title="Start voice input"
+        aria-label="Voice input">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+        </svg>
+      </button>
+
+      <!-- Send Button -->
+      <button
+        class="send-btn"
+        (click)="sendMessage()"
+        [disabled]="!currentMessage().trim() || isLoading() || isTranscribing()"
+        title="Send message"
+        aria-label="Send message">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    }
+  </div>
+</div>
+
+<!-- Panel Backdrop (for mobile) -->
+@if (isPanelOpen()) {
+  <div class="panel-backdrop" (click)="closePanel()"></div>
+}

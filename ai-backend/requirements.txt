@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+pydantic
+openai
+python-multipart
+# For scraping PASC website (one-time knowledge base build)
+beautifulsoup4
+requests

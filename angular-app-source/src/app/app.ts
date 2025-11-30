@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { HeaderComponent } from './components/shared/header.component';
 import { FooterComponent } from './components/shared/footer.component';
+import { AiChatComponent } from './components/ai-chat/ai-chat.component';
 import { FaviconService } from './core/services/favicon.service';
 import { AudioService } from './services/audio.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, AiChatComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -50,12 +51,18 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     private audioService: AudioService
   ) {}
 
+  // Bound event handler for anthem modal custom event
+  private anthemModalHandler = () => this.openAnthemModal();
+
   ngOnInit(): void {
     // Initialize favicon service
     this.faviconService.initialize();
 
     // Load playback position from localStorage
     this.loadPlaybackPosition();
+
+    // Listen for custom event from AI chat to open anthem modal
+    window.addEventListener('openAnthemModal', this.anthemModalHandler);
 
     // Pause music when navigating to admin routes
     this.router.events
@@ -96,6 +103,9 @@ export class App implements OnInit, AfterViewInit, OnDestroy {
     if (this.anthemAudio && !this.anthemAudio.nativeElement.paused) {
       this.anthemAudio.nativeElement.pause();
     }
+
+    // Remove custom event listener
+    window.removeEventListener('openAnthemModal', this.anthemModalHandler);
   }
 
   private loadPlaybackPosition(): void {

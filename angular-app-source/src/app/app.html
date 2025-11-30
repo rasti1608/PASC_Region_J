@@ -1,20 +1,28 @@
+<!-- Page Wrapper - gets pushed when AI chat opens -->
+<div class="page-wrapper">
+  @if (showHeaderFooter()) {
+    <app-header></app-header>
+  }
+
+  <main class="main-content" [class.fullscreen]="!showHeaderFooter()">
+    <router-outlet></router-outlet>
+  </main>
+
+  @if (showHeaderFooter()) {
+    <app-footer></app-footer>
+  }
+
+  <!-- Floating Anthem Button (Global - appears on all pages) -->
+  @if (showHeaderFooter() && shouldShowAnthemButton) {
+    <button class="floating-anthem-btn" (click)="openAnthemModal()" title="Conference Anthem">
+      <span class="anthem-icon">🎵</span>
+    </button>
+  }
+</div>
+
+<!-- AI Chat Assistant - OUTSIDE page-wrapper so it doesn't get pushed -->
 @if (showHeaderFooter()) {
-  <app-header></app-header>
-}
-
-<main class="main-content" [class.fullscreen]="!showHeaderFooter()">
-  <router-outlet></router-outlet>
-</main>
-
-@if (showHeaderFooter()) {
-  <app-footer></app-footer>
-}
-
-<!-- Floating Anthem Button (Global - appears on all pages) -->
-@if (showHeaderFooter() && shouldShowAnthemButton) {
-  <button class="floating-anthem-btn" (click)="openAnthemModal()" title="Conference Anthem">
-    <span class="anthem-icon">🎵</span>
-  </button>
+  <app-ai-chat></app-ai-chat>
 }
 
 <!-- Conference Anthem Modal (Global) -->

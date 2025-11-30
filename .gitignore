@@ -71,6 +71,10 @@ Application.local.cfc
 .env.local
 .env.*.local
 
+__pycache__/
+*.pyc
+.env
+
 # ColdFusion component caching
 WEB-INF/cfclasses/
 

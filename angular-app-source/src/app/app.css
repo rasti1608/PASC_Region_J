@@ -15,7 +15,7 @@
 .floating-anthem-btn {
   position: fixed;
   bottom: 30px;
-  right: 30px;
+  left: 30px;
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -471,7 +471,7 @@
     width: 60px;
     height: 60px;
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     font-size: 1.5rem;
   }
 
@@ -541,4 +541,33 @@
   .song-artist { font-size: 0.85rem; }
   .song-description { font-size: 0.75rem; }
   .custom-audio-player { padding: 15px; margin: 15px 0; }
+}
+
+/* ========================================
+   PAGE WRAPPER - Container for pushable content
+   ======================================== */
+
+.page-wrapper {
+  min-height: 100vh;
+  transition: margin-right 0.3s ease;
+}
+
+/* ========================================
+   AI CHAT PANEL - PUSH CONTENT EFFECT
+   ======================================== */
+
+/* When chat panel is open, push all content to the left */
+body.ai-chat-open {
+  overflow-x: hidden;
+}
+
+body.ai-chat-open .page-wrapper {
+  margin-right: 380px;
+}
+
+/* On mobile, don't push content - use overlay instead */
+@media (max-width: 768px) {
+  body.ai-chat-open .page-wrapper {
+    margin-right: 0;
+  }
 }
