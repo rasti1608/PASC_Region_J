@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -37,8 +38,8 @@ export interface TranscriptionResponse {
   providedIn: 'root'
 })
 export class AiService {
-  // Backend URL - change to production URL when deployed
-  private readonly API_URL = 'http://localhost:8000/api';
+  // Backend URL - configured via environment files
+  private readonly API_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
