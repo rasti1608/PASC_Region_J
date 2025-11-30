@@ -565,8 +565,9 @@ body.ai-chat-open .page-wrapper {
   margin-right: 380px;
 }
 
-/* On mobile, don't push content - use overlay instead */
-@media (max-width: 768px) {
+/* On phones only, don't push content - use overlay instead */
+/* Tablets (768px+) get push behavior like desktop */
+@media (max-width: 600px) {
   body.ai-chat-open .page-wrapper {
     margin-right: 0;
   }
