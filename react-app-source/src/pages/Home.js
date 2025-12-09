@@ -158,7 +158,7 @@ function Home() {
             <div className="info-card">
               <div className="info-icon">&#127891;</div>
               <h3>Who Can Attend</h3>
-              <p>Student Council Members within Region J</p>
+              <p>Student Council Members within Region J or by invitation</p>
             </div>
 
             <div className="info-card">
