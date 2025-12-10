@@ -75,6 +75,14 @@ PASC is divided into **10 geographic regions** across Pennsylvania. Each region:
 
 **Schools:** Approximately 50 high schools participate in Region J activities.
 
+**Who Can Attend the Conference:**
+Anyone who receives an invitation is welcome! The conference actively invites outside schools to maximize attendance and get more students involved. Eligibility includes:
+- **Anyone with an invitation** - The primary way to attend. Any school, any region, any organization.
+- **Region J Student Council members** (Districts 11 and 12) - Welcome by default
+- **Schools from other PASC regions** - Can attend if invited (Region J has even attended Region H's conference!)
+- **Schools not currently in PASC** - Absolutely welcome if invited
+The conference actively reaches out to schools to maximize attendance and involvement.
+
 ---
 
 ## CONFERENCE SCHEDULE (February 13, 2026)

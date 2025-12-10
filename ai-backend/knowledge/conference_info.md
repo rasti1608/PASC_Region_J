@@ -19,7 +19,15 @@ The Pennsylvania Association of Student Councils (PASC) was founded in 1932 and 
 "The Pennsylvania Association of Student Councils envisions leaders being inspired, confident, and empowered to use their voices and put their skills into action for good in their schools, communities, and world."
 
 ## Who Can Attend
-Student Council members within PASC Region J (Districts 11 and 12) are eligible to attend.
+**Anyone who receives an invitation is welcome to attend!** The conference actively invites schools from outside the region to maximize attendance and get more students involved in student council.
+
+Eligibility includes:
+- **Anyone with an invitation** - This is the primary way to attend. Schools from any region or organization can participate if invited.
+- **Region J Student Council members** (Districts 11 and 12) - Welcome by default without needing a special invitation
+- **Schools from other PASC regions** - Can attend if invited (we've even attended Region H's conference ourselves!)
+- **Schools not currently in PASC** - Absolutely welcome if invited. We want to get more schools involved!
+
+The conference actively reaches out to schools to maximize attendance. If your school is interested, contact us - we want you there!
 
 ## What to Expect
 - Keynote speakers

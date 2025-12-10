@@ -137,3 +137,28 @@
         transform: none !important;
     }
 }
+
+/* Medium screens - tighter nav spacing to fit mute button (school laptops ~1100-1400px) */
+@media (min-width: 1101px) and (max-width: 1400px) {
+    .nav-menu {
+        gap: 0.5rem;
+    }
+
+    .nav-menu a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .nav-container {
+        padding: 0 15px !important;
+        gap: 15px !important;
+    }
+
+    .logo-img {
+        height: 90px;
+    }
+
+    .logo-text {
+        font-size: 0.9rem;
+    }
+}

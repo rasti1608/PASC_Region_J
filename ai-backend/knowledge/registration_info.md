@@ -5,7 +5,15 @@
 - **Closes:** January 23, 2026
 
 ## Who Can Register
-Student Council members from schools within PASC Region J (Districts 11 and 12) are eligible to register.
+**Anyone with an invitation can register!** The conference welcomes students from any school, region, or organization.
+
+Registration is open to:
+- **Anyone who receives an invitation** - This is the primary eligibility. If you're invited, you can register!
+- **Region J Student Council members** (Districts 11 and 12) - Welcome by default
+- **Schools from other PASC regions** - Can register if invited
+- **Schools not currently in PASC** - Welcome to register if invited
+
+We actively invite schools from outside the region to maximize attendance. Contact us if you're interested in attending!
 
 ## Registration Process
 Registration will be available through the website during the registration window. Check the Registration page on the website starting January 5, 2026.
