@@ -19,6 +19,11 @@
             --roof: #943126;
         }
         
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 60px;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -479,6 +484,115 @@
                 font-size: 2em;
             }
         }
+        
+        /* Drawing Link Buttons */
+        .drawing-link {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 3px 3px 3px 0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .drawing-link:hover { 
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+        .drawing-links {
+            margin: 10px 0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            position: relative;
+            width: 98vw;
+            height: 96vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .modal-image {
+            max-width: 98vw;
+            max-height: 96vh;
+            object-fit: contain;
+            cursor: grab;
+            transition: transform 0.1s;
+            pointer-events: auto;
+        }
+        .modal-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10001;
+        }
+        .modal-btn {
+            background: rgba(255,255,255,0.95);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .modal-btn:hover { background: #f0f0f0; }
+        .modal-close {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #e74c3c;
+            color: white;
+            z-index: 10001;
+        }
+        .modal-close:hover { background: #c0392b; }
+        .modal-title {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 10001;
+        }
+        .zoom-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 10001;
+        }
     </style>
 </head>
 <body>
@@ -508,6 +622,7 @@
         <li><a href="#waste">♻️ Waste</a></li>
         <li><a href="#costs">💰 Costs</a></li>
         <li><a href="#order">📦 Order</a></li>
+        <li><a href="#drawings">📄 Drawings</a></li>
     </ul>
 </nav>
 
@@ -550,6 +665,22 @@
         <div class="info-box success">
             <strong>✅ Validation Status:</strong> All base dimensions user-confirmed. 4-report comparison analysis complete with 0% variance on locked values.
         </div>
+        
+        <div class="info-box note">
+            <strong>📄 View Drawings:</strong> Click any button to open drawing with zoom/pan controls<br><br>
+            <div class="drawing-links">
+                <span class="drawing-link" onclick="openModal('page_01_A-1.png', 'Sheet A-1 - General Notes & Site Plan')">A-1 Notes</span>
+                <span class="drawing-link" onclick="openModal('page_02_S-1.png', 'Sheet S-1 - Foundation Plan')">S-1 Foundation</span>
+                <span class="drawing-link" onclick="openModal('page_03_A-2.png', 'Sheet A-2 - First Floor Plan')">A-2 Floor 1</span>
+                <span class="drawing-link" onclick="openModal('page_04_A-3.png', 'Sheet A-3 - Second Floor / Half Story')">A-3 Floor 2</span>
+                <span class="drawing-link" onclick="openModal('page_05_A-4.png', 'Sheet A-4 - Roof Plan')">A-4 Roof</span>
+                <span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6 - South & East Elevations')">A-6 S/E Elev</span>
+                <span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7 - North & West Elevations')">A-7 N/W Elev</span>
+                <span class="drawing-link" onclick="openModal('page_09_A-8.png', 'Sheet A-8 - Sections A & B')">A-8 Sections</span>
+                <span class="drawing-link" onclick="openModal('page_10_A-9.png', 'Sheet A-9 - Sections C & D')">A-9 Sections</span>
+                <span class="drawing-link" onclick="openModal('page_11_A-10.png', 'Sheet A-10 - Section E')">A-10 Section</span>
+            </div>
+        </div>
     </section>
 
     <!-- Building Dimensions -->
@@ -557,6 +688,10 @@
         <h2>📐 Building Dimensions</h2>
         
         <h3>Main Building</h3>
+        <div class="drawing-links">
+            <span class="drawing-link" onclick="openModal('page_02_S-1.png', 'Sheet S-1 - Foundation Plan')">📄 S-1 Foundation</span>
+            <span class="drawing-link" onclick="openModal('page_11_A-10.png', 'Sheet A-10 - Section E')">📄 A-10 Section</span>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -638,6 +773,11 @@
         <h2>🏠 Roof Area Calculations</h2>
         
         <h3>Roof Parameters</h3>
+        <div class="drawing-links">
+            <span class="drawing-link" onclick="openModal('page_05_A-4.png', 'Sheet A-4 - Roof Plan')">📄 A-4 Roof Plan</span>
+            <span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6 - South & East Elevations')">📄 A-6 Elevations</span>
+            <span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7 - North & West Elevations')">📄 A-7 Elevations</span>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -750,6 +890,11 @@
         <h2>🧱 Wall Areas for Cladding</h2>
         
         <h3>Gross Wall Area by Elevation</h3>
+        <div class="drawing-links">
+            <span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6 - South & East Elevations')">📄 A-6 South/East</span>
+            <span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7 - North & West Elevations')">📄 A-7 North/West</span>
+            <span class="drawing-link" onclick="openModal('page_11_A-10.png', 'Sheet A-10 - Section E (Height)')">📄 A-10 Section</span>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -855,6 +1000,10 @@
         <h2>🪟 Openings (Deductions)</h2>
         
         <h3>Windows by Elevation</h3>
+        <div class="drawing-links">
+            <span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6 - South & East Elevations')">📄 A-6 South/East</span>
+            <span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7 - North & West Elevations')">📄 A-7 North/West</span>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -957,6 +1106,10 @@
         <h2>🎨 Material Zones & Specifications</h2>
         
         <h3>Stone Veneer Zone (Grade to 5'-0")</h3>
+        <div class="drawing-links">
+            <span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6 - South & East Elevations')">📄 A-6 South/East</span>
+            <span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7 - North & West Elevations')">📄 A-7 North/West</span>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -1258,8 +1411,9 @@
     </section>
 
     <!-- Drawing References -->
-    <section>
+    <section id="drawings">
         <h2>📋 Drawing References</h2>
+        <p style="margin-bottom: 15px; color: #666;">Click any sheet to view the drawing:</p>
         
         <table>
             <thead>
@@ -1267,6 +1421,7 @@
                     <th>Sheet</th>
                     <th>Title</th>
                     <th>Data Used</th>
+                    <th>View</th>
                 </tr>
             </thead>
             <tbody>
@@ -1274,41 +1429,61 @@
                     <td>A-1</td>
                     <td>General Notes, Site Plan</td>
                     <td>Project data, porch area (122 SF)</td>
+                    <td><span class="drawing-link" onclick="openModal('page_01_A-1.png', 'Sheet A-1')">📄 View</span></td>
                 </tr>
                 <tr>
                     <td>S-1</td>
                     <td>Foundation Plan</td>
                     <td>Building dimensions (31' × 50')</td>
+                    <td><span class="drawing-link" onclick="openModal('page_02_S-1.png', 'Sheet S-1')">📄 View</span></td>
                 </tr>
                 <tr>
                     <td>A-2</td>
                     <td>First Floor Plan</td>
                     <td>Deck layout</td>
+                    <td><span class="drawing-link" onclick="openModal('page_03_A-2.png', 'Sheet A-2')">📄 View</span></td>
                 </tr>
                 <tr>
                     <td>A-3</td>
                     <td>Second Floor / Half Story</td>
                     <td>Balcony layout</td>
+                    <td><span class="drawing-link" onclick="openModal('page_04_A-3.png', 'Sheet A-3')">📄 View</span></td>
                 </tr>
                 <tr>
                     <td>A-4</td>
                     <td>Roof Plan</td>
                     <td>Ridge direction (N-S), pitches</td>
+                    <td><span class="drawing-link" onclick="openModal('page_05_A-4.png', 'Sheet A-4')">📄 View</span></td>
                 </tr>
                 <tr>
                     <td>A-6</td>
                     <td>South & East Elevations</td>
                     <td>Window counts, materials, stone zone</td>
+                    <td><span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6')">📄 View</span></td>
                 </tr>
                 <tr>
                     <td>A-7</td>
                     <td>North & West Elevations</td>
                     <td>Window counts, materials</td>
+                    <td><span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-8</td>
+                    <td>Sections A & B</td>
+                    <td>Building sections</td>
+                    <td><span class="drawing-link" onclick="openModal('page_09_A-8.png', 'Sheet A-8')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-9</td>
+                    <td>Sections C & D</td>
+                    <td>Building sections</td>
+                    <td><span class="drawing-link" onclick="openModal('page_10_A-9.png', 'Sheet A-9')">📄 View</span></td>
                 </tr>
                 <tr>
                     <td>A-10</td>
                     <td>Section E</td>
                     <td>Wall height (24'-0" grade to soffit)</td>
+                    <td><span class="drawing-link" onclick="openModal('page_11_A-10.png', 'Sheet A-10')">📄 View</span></td>
                 </tr>
             </tbody>
         </table>
@@ -1403,35 +1578,110 @@
     </div>
 </div>
 
+<!-- No JavaScript needed - CSS handles smooth scrolling -->
+
+<!-- Image Modal Viewer -->
+<div id="imageModal" class="modal" onclick="if(event.target === this) closeModal();">
+    <button class="modal-btn modal-close" onclick="event.stopPropagation(); closeModal();" title="Close (ESC)">✕</button>
+    <div class="modal-controls">
+        <button class="modal-btn" onclick="event.stopPropagation(); zoomIn()" title="Zoom In (+)">+</button>
+        <button class="modal-btn" onclick="event.stopPropagation(); zoomOut()" title="Zoom Out (-)">−</button>
+        <button class="modal-btn" onclick="event.stopPropagation(); resetZoom()" title="Reset (0)">⟲</button>
+    </div>
+    <div class="modal-content">
+        <img id="modalImage" class="modal-image" src="" alt="Drawing">
+    </div>
+    <div id="modalTitle" class="modal-title"></div>
+    <div id="zoomInfo" class="zoom-info">100%</div>
+</div>
+
 <script>
-    // Smooth scrolling for navigation
-    document.querySelectorAll('.nav a').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+    const baseUrl = '300dpi/';
+    let currentZoom = 1;
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
+    
+    function openModal(imageName, title) {
+        const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImage');
+        const titleEl = document.getElementById('modalTitle');
+        
+        img.src = baseUrl + imageName;
+        titleEl.textContent = title;
+        modal.classList.add('active');
+        resetZoom();
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        document.getElementById('imageModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+    
+    function zoomIn() {
+        currentZoom = Math.min(currentZoom + 0.25, 5);
+        applyZoom();
+    }
+    
+    function zoomOut() {
+        currentZoom = Math.max(currentZoom - 0.25, 0.5);
+        applyZoom();
+    }
+    
+    function resetZoom() {
+        currentZoom = 1;
+        translateX = 0;
+        translateY = 0;
+        applyZoom();
+    }
+    
+    function applyZoom() {
+        const img = document.getElementById('modalImage');
+        img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+        document.getElementById('zoomInfo').textContent = Math.round(currentZoom * 100) + '%';
+    }
+    
+    // Drag to pan
+    const modalImage = document.getElementById('modalImage');
+    
+    modalImage.addEventListener('mousedown', (e) => {
+        if (currentZoom > 1) {
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            modalImage.style.cursor = 'grabbing';
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
+        }
     });
     
-    // Highlight current section in nav
-    window.addEventListener('scroll', () => {
-        const sections = document.querySelectorAll('section, .waste-config, .cost-section');
-        const navLinks = document.querySelectorAll('.nav a');
-        
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            if (scrollY >= sectionTop) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        navLinks.forEach(link => {
-            link.style.background = '';
-            if (link.getAttribute('href') === '#' + current) {
-                link.style.background = 'var(--accent)';
-            }
-        });
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            applyZoom();
+        }
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        modalImage.style.cursor = currentZoom > 1 ? 'grab' : 'default';
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (document.getElementById('imageModal').classList.contains('active')) {
+            if (e.key === 'Escape') closeModal();
+            if (e.key === '+' || e.key === '=') zoomIn();
+            if (e.key === '-') zoomOut();
+            if (e.key === '0') resetZoom();
+        }
+    });
+    
+    // Mouse wheel zoom
+    document.getElementById('modalImage').addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.deltaY < 0) zoomIn();
+        else zoomOut();
     });
 </script>
 
