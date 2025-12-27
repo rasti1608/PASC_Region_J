@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Takeoff Report - DEC-CATAQUET RESIDENCE</title>
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --secondary: #2d5a87;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --stone: #8b7355;
+            --siding: #5d6d7e;
+            --shake: #6b4423;
+            --roof: #943126;
+            --metal: #4a6741;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 60px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .header .address {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            display: inline-block;
+        }
+        
+        .header .meta {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .header .meta-item {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .validation-badge {
+            margin-top: 20px;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success) 0%, #1e8449 100%);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+        
+        /* Navigation */
+        .nav {
+            background: var(--dark);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .nav a:hover {
+            background: var(--accent);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .summary-card.roof {
+            border-top: 5px solid var(--roof);
+        }
+        
+        .summary-card.metal {
+            border-top: 5px solid var(--metal);
+        }
+        
+        .summary-card.wall {
+            border-top: 5px solid var(--siding);
+        }
+        
+        .summary-card.stone {
+            border-top: 5px solid var(--stone);
+        }
+        
+        .summary-card.shake {
+            border-top: 5px solid var(--shake);
+        }
+        
+        .summary-card.windows {
+            border-top: 5px solid var(--secondary);
+        }
+        
+        .summary-card .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card .value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .summary-card .label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .summary-card .order-qty {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ddd;
+            font-size: 0.85em;
+            color: var(--success);
+        }
+        
+        /* Sections */
+        section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        section h2 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        section h3 {
+            color: var(--secondary);
+            margin: 20px 0 15px 0;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e8f4fc;
+        }
+        
+        .table-highlight {
+            background: #fff3cd !important;
+            font-weight: bold;
+        }
+        
+        .table-subtotal {
+            background: #e8f5e9 !important;
+            font-weight: 600;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Status Badges */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .badge-confirmed {
+            background: var(--success);
+            color: white;
+        }
+        
+        .badge-locked {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .badge-variance {
+            background: var(--success);
+            color: white;
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box.success {
+            background: #d4edda;
+            border-left: 5px solid var(--success);
+        }
+        
+        .info-box.warning {
+            background: #fff3cd;
+            border-left: 5px solid var(--warning);
+        }
+        
+        .info-box.info {
+            background: #d1ecf1;
+            border-left: 5px solid var(--secondary);
+        }
+        
+        /* Building Dimensions Box */
+        .dimensions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .dimension-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .dimension-item .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .dimension-item .label {
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        /* Material Zone Visual */
+        .zone-visual {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .zone-bar {
+            padding: 15px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .zone-shake {
+            background: var(--shake);
+            height: 60px;
+        }
+        
+        .zone-clapboard {
+            background: var(--siding);
+            height: 100px;
+        }
+        
+        .zone-stone {
+            background: var(--stone);
+            height: 40px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .footer .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .footer .powered-by {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9em;
+            color: #aaa;
+        }
+        
+        /* Print Styles */
+        @media print {
+            .nav { display: none; }
+            body { background: white; }
+            section { box-shadow: none; border: 1px solid #ddd; }
+        }
+        
+        /* Drawing Link Buttons */
+        .drawing-link {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 3px 3px 3px 0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .drawing-link:hover { 
+            background: var(--accent);
+            transform: translateY(-1px);
+        }
+        .drawing-links {
+            margin: 10px 0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            position: relative;
+            width: 98vw;
+            height: 96vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .modal-image {
+            max-width: 98vw;
+            max-height: 96vh;
+            object-fit: contain;
+            cursor: grab;
+            transition: transform 0.1s;
+            pointer-events: auto;
+        }
+        .modal-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10001;
+        }
+        .modal-btn {
+            background: rgba(255,255,255,0.95);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .modal-btn:hover { background: #f0f0f0; }
+        .modal-close {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #e74c3c;
+            color: white;
+            z-index: 10001;
+        }
+        .modal-close:hover { background: #c0392b; }
+        .modal-title {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 10001;
+        }
+        .zoom-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 10001;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>📐 EXTERIOR TAKEOFF REPORT</h1>
+    <div class="subtitle">Final Quantities - 4-Way Validated</div>
+    <div class="address">📍 502 Twelfth Avenue, Borough of Belmar, NJ</div>
+    <div class="meta">
+        <div class="meta-item">📋 Project #240307</div>
+        <div class="meta-item">🏗️ DEC-CATAQUET RESIDENCE</div>
+        <div class="meta-item">📅 December 27, 2025</div>
+        <div class="meta-item">✅ All Values User-Confirmed</div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+    <ul>
+        <li><a href="#summary">📊 Summary</a></li>
+        <li><a href="#dimensions">📐 Dimensions</a></li>
+        <li><a href="#roofing">🏠 Roofing</a></li>
+        <li><a href="#cladding">🧱 Cladding</a></li>
+        <li><a href="#openings">🪟 Openings</a></li>
+        <li><a href="#order">📦 Order</a></li>
+        <li><a href="#drawings">📋 Drawings</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+
+    <!-- Quick Summary Cards -->
+    <section id="summary">
+        <h2>📊 Quick Summary</h2>
+        
+        <div class="summary-grid">
+            <div class="summary-card roof">
+                <div class="icon">🏠</div>
+                <div class="value">2,561 SF</div>
+                <div class="label">Asphalt Shingles</div>
+                <div class="order-qty">Order: 2,817 SF (+10%)</div>
+            </div>
+            
+            <div class="summary-card metal">
+                <div class="icon">🔩</div>
+                <div class="value">182 SF</div>
+                <div class="label">Standing Seam Metal</div>
+                <div class="order-qty">Order: 191 SF (+5%)</div>
+            </div>
+            
+            <div class="summary-card stone">
+                <div class="icon">🧱</div>
+                <div class="value">655 SF</div>
+                <div class="label">Stone Veneer</div>
+                <div class="order-qty">Order: 721 SF (+10%)</div>
+            </div>
+            
+            <div class="summary-card wall">
+                <div class="icon">📏</div>
+                <div class="value">2,644 SF</div>
+                <div class="label">Hardie Clapboard</div>
+                <div class="order-qty">Order: 2,908 SF (+10%)</div>
+            </div>
+            
+            <div class="summary-card shake">
+                <div class="icon">🪵</div>
+                <div class="value">794 SF</div>
+                <div class="label">Shake Siding</div>
+                <div class="order-qty">Order: 873 SF (+10%)</div>
+            </div>
+            
+            <div class="summary-card windows">
+                <div class="icon">🪟</div>
+                <div class="value">54</div>
+                <div class="label">Windows</div>
+                <div class="order-qty">5 Exterior Doors</div>
+            </div>
+        </div>
+        
+        <div class="info-box success">
+            <strong>✓ Validation Status:</strong> All base dimensions user-confirmed. 4-report comparison analysis complete with 0% variance on locked values.
+        </div>
+        
+        <div class="info-box" style="background: #e8f4fc; border-left: 5px solid var(--secondary);">
+            <strong>📋 View Drawings:</strong> Click any button to open drawing with zoom/pan controls
+            <div class="drawing-links" style="margin-top: 15px;">
+                <span class="drawing-link" onclick="openModal('page_01_A-1.png', 'Sheet A-1 - Notes')">A-1 Notes</span>
+                <span class="drawing-link" onclick="openModal('page_02_S-1.png', 'Sheet S-1 - Foundation')">S-1 Foundation</span>
+                <span class="drawing-link" onclick="openModal('page_03_A-2.png', 'Sheet A-2 - Floor 1')">A-2 Floor 1</span>
+                <span class="drawing-link" onclick="openModal('page_04_A-3.png', 'Sheet A-3 - Floor 2')">A-3 Floor 2</span>
+                <span class="drawing-link" onclick="openModal('page_05_A-4.png', 'Sheet A-4 - Roof')">A-4 Roof</span>
+                <span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6 - S/E Elevations')">A-6 S/E Elev</span>
+                <span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7 - N/W Elevations')">A-7 N/W Elev</span>
+                <span class="drawing-link" onclick="openModal('page_09_A-8.png', 'Sheet A-8 - Sections')">A-8 Sections</span>
+                <span class="drawing-link" onclick="openModal('page_10_A-9.png', 'Sheet A-9 - Sections')">A-9 Sections</span>
+                <span class="drawing-link" onclick="openModal('page_11_A-10.png', 'Sheet A-10 - Section E')">A-10 Section</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Building Dimensions -->
+    <section id="dimensions">
+        <h2>📐 Building Dimensions</h2>
+        
+        <div class="dimensions-grid">
+            <div class="dimension-item">
+                <div class="value">31'-0" × 50'-0"</div>
+                <div class="label">Building Footprint</div>
+            </div>
+            <div class="dimension-item">
+                <div class="value">1,550 SF</div>
+                <div class="label">Footprint Area</div>
+            </div>
+            <div class="dimension-item">
+                <div class="value">24'-0"</div>
+                <div class="label">Wall Height (to soffit)</div>
+            </div>
+            <div class="dimension-item">
+                <div class="value">35'-0"</div>
+                <div class="label">Building Height (to peak)</div>
+            </div>
+            <div class="dimension-item">
+                <div class="value">9:12</div>
+                <div class="label">Main Roof Pitch</div>
+            </div>
+            <div class="dimension-item">
+                <div class="value">N-S</div>
+                <div class="label">Ridge Direction</div>
+            </div>
+        </div>
+        
+        <h3>Material Zone Heights</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Material</th>
+                    <th>Height Range</th>
+                    <th>Zone Height</th>
+                    <th>Elevations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Stone Veneer</td>
+                    <td>0' to 5'-0"</td>
+                    <td class="text-center">5'-0"</td>
+                    <td>N, E, W only (S covered by porch)</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Hardie Clapboard</td>
+                    <td>5'-0" to 17'-0" (S/N)<br>5'-0" to 24'-0" (E/W)</td>
+                    <td class="text-center">12'-0" / 19'-0"</td>
+                    <td>All 4 elevations</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Cement Shake</td>
+                    <td>17'-0" to 24'-0" + gables</td>
+                    <td class="text-center">7'-0" + gables</td>
+                    <td>S, N only (gable ends)</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Board & Batten</td>
+                    <td>Stair tower accent</td>
+                    <td class="text-center">~14'-0"</td>
+                    <td>E only</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Visual Zone Representation -->
+        <h3>Material Zone Visual (Gable End)</h3>
+        <div class="zone-visual">
+            <div class="zone-bar zone-shake">SHAKE (7' + gable)<br>17' to 24'</div>
+            <div class="zone-bar zone-clapboard">CLAPBOARD (12')<br>5' to 17'</div>
+            <div class="zone-bar zone-stone">STONE (5')<br>0' to 5'</div>
+        </div>
+    </section>
+
+    <!-- Roofing -->
+    <section id="roofing">
+        <h2>🏠 Roofing Materials</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Specification</th>
+                    <th>Location</th>
+                    <th class="text-right">Net Area</th>
+                    <th class="text-center">Waste</th>
+                    <th class="text-right">Order Qty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Asphalt Shingles</strong></td>
+                    <td>GAF Timberline HDZ 40-Year</td>
+                    <td>Main roof, dormers, stair tower</td>
+                    <td class="text-right">2,561 SF</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>2,817 SF</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Standing Seam Metal</strong></td>
+                    <td>Englert Series 1300</td>
+                    <td>Front porch only</td>
+                    <td class="text-right">182 SF</td>
+                    <td class="text-center">5%</td>
+                    <td class="text-right"><strong>191 SF</strong></td>
+                </tr>
+                <tr class="table-highlight">
+                    <td colspan="3"><strong>TOTAL ROOFING</strong></td>
+                    <td class="text-right"><strong>2,743 SF</strong></td>
+                    <td class="text-center">-</td>
+                    <td class="text-right"><strong>3,008 SF</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Roof Component Breakdown</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Plan Dimensions</th>
+                    <th>Pitch</th>
+                    <th>Multiplier</th>
+                    <th class="text-right">Actual Area</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Main Roof (with overhang)</td>
+                    <td>34' × 53'</td>
+                    <td>9:12</td>
+                    <td>1.250</td>
+                    <td class="text-right">2,253 SF</td>
+                </tr>
+                <tr>
+                    <td>Dormers (4 @ 30 SF plan each)</td>
+                    <td>6' × 5' each</td>
+                    <td>9:12</td>
+                    <td>1.250</td>
+                    <td class="text-right">150 SF</td>
+                </tr>
+                <tr>
+                    <td>Stair Tower Roof</td>
+                    <td>11' × 11.5'</td>
+                    <td>9:12</td>
+                    <td>1.250</td>
+                    <td class="text-right">158 SF</td>
+                </tr>
+                <tr class="table-subtotal">
+                    <td colspan="4"><strong>Subtotal Asphalt Shingles</strong></td>
+                    <td class="text-right"><strong>2,561 SF</strong></td>
+                </tr>
+                <tr>
+                    <td>Front Porch Roof</td>
+                    <td>15' × 11.5'</td>
+                    <td>4:12</td>
+                    <td>1.054</td>
+                    <td class="text-right">182 SF</td>
+                </tr>
+                <tr class="table-subtotal">
+                    <td colspan="4"><strong>Subtotal Standing Seam Metal</strong></td>
+                    <td class="text-right"><strong>182 SF</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="info-box info">
+            <strong>📝 Roofing Notes:</strong>
+            <ul style="margin-top: 10px; margin-left: 20px;">
+                <li>Total roofing: 2,743 SF = <strong>~27.4 squares</strong></li>
+                <li>With waste: 3,008 SF = <strong>~30 squares</strong></li>
+                <li>Metal roof on porch only - per Roof Plan callout</li>
+                <li>Overhang: 1'-6" applied to 3 sides (attached structures)</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Wall Cladding -->
+    <section id="cladding">
+        <h2>🧱 Wall Cladding Materials</h2>
+        
+        <h3>Gross Areas by Material</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Specification</th>
+                    <th>Elevations</th>
+                    <th class="text-right">Gross Area</th>
+                    <th class="text-center">Waste</th>
+                    <th class="text-right">Order Qty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Stone Veneer</strong></td>
+                    <td>Cultured Stone</td>
+                    <td>N, E, W (0' to 5')</td>
+                    <td class="text-right">655 SF</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>721 SF</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Hardie Clapboard</strong></td>
+                    <td>HardiePlank Cedarmill</td>
+                    <td>All 4 (5' to 17'/24')</td>
+                    <td class="text-right">2,644 SF</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>2,908 SF</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Cement Shake</strong></td>
+                    <td>HardieShingle</td>
+                    <td>S, N only (17' to 24' + gables)</td>
+                    <td class="text-right">794 SF</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>873 SF</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Board & Batten</strong></td>
+                    <td>HardiePanel Vertical</td>
+                    <td>E only (stair tower)</td>
+                    <td class="text-right">84 SF</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>92 SF</strong></td>
+                </tr>
+                <tr class="table-highlight">
+                    <td colspan="3"><strong>TOTAL CLADDING (GROSS)</strong></td>
+                    <td class="text-right"><strong>4,177 SF</strong></td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>4,594 SF</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Cladding by Elevation</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Elevation</th>
+                    <th class="text-right">Stone</th>
+                    <th class="text-right">Clapboard</th>
+                    <th class="text-right">Shake</th>
+                    <th class="text-right">B&B</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>South (Front)</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">372 SF</td>
+                    <td class="text-right">397 SF</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">769 SF</td>
+                </tr>
+                <tr>
+                    <td>North (Rear)</td>
+                    <td class="text-right">155 SF</td>
+                    <td class="text-right">372 SF</td>
+                    <td class="text-right">397 SF</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">924 SF</td>
+                </tr>
+                <tr>
+                    <td>East (Side)</td>
+                    <td class="text-right">250 SF</td>
+                    <td class="text-right">950 SF</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">84 SF</td>
+                    <td class="text-right">1,284 SF</td>
+                </tr>
+                <tr>
+                    <td>West (Side)</td>
+                    <td class="text-right">250 SF</td>
+                    <td class="text-right">950 SF</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">1,200 SF</td>
+                </tr>
+                <tr class="table-highlight">
+                    <td><strong>TOTAL</strong></td>
+                    <td class="text-right"><strong>655 SF</strong></td>
+                    <td class="text-right"><strong>2,644 SF</strong></td>
+                    <td class="text-right"><strong>794 SF</strong></td>
+                    <td class="text-right"><strong>84 SF</strong></td>
+                    <td class="text-right"><strong>4,177 SF</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Deductions & Net Areas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th class="text-right">Gross Area</th>
+                    <th class="text-right">Deductions</th>
+                    <th class="text-right">Net Area</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Cladding</td>
+                    <td class="text-right">4,177 SF</td>
+                    <td class="text-right">816 SF</td>
+                    <td class="text-right"><strong>3,361 SF</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Openings -->
+    <section id="openings">
+        <h2>🪟 Openings</h2>
+        
+        <h3>Windows</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Elevation</th>
+                    <th class="text-center">Count</th>
+                    <th>Size</th>
+                    <th class="text-right">Total SF</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>South (Front)</td>
+                    <td class="text-center">15</td>
+                    <td>Avg 3' × 4'</td>
+                    <td class="text-right">180 SF</td>
+                </tr>
+                <tr>
+                    <td>North (Rear)</td>
+                    <td class="text-center">8</td>
+                    <td>Avg 3' × 4'</td>
+                    <td class="text-right">96 SF</td>
+                </tr>
+                <tr>
+                    <td>East (Side)</td>
+                    <td class="text-center">15</td>
+                    <td>Avg 3' × 4'</td>
+                    <td class="text-right">180 SF</td>
+                </tr>
+                <tr>
+                    <td>West (Side)</td>
+                    <td class="text-center">16</td>
+                    <td>Avg 3' × 4'</td>
+                    <td class="text-right">192 SF</td>
+                </tr>
+                <tr class="table-highlight">
+                    <td><strong>TOTAL WINDOWS</strong></td>
+                    <td class="text-center"><strong>54</strong></td>
+                    <td>@ 12 SF avg</td>
+                    <td class="text-right"><strong>648 SF</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Exterior Doors</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Type</th>
+                    <th>Size</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-right">Total SF</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>South (Front)</td>
+                    <td>Entry Door</td>
+                    <td>3'-0" × 8'-0"</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">24 SF</td>
+                </tr>
+                <tr>
+                    <td>North (Rear)</td>
+                    <td>Sliding Glass Door</td>
+                    <td>6'-0" × 8'-0"</td>
+                    <td class="text-center">2</td>
+                    <td class="text-right">96 SF</td>
+                </tr>
+                <tr>
+                    <td>East (Side)</td>
+                    <td>Entry Door</td>
+                    <td>3'-0" × 8'-0"</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">24 SF</td>
+                </tr>
+                <tr>
+                    <td>West (Side)</td>
+                    <td>Entry Door</td>
+                    <td>3'-0" × 8'-0"</td>
+                    <td class="text-center">1</td>
+                    <td class="text-right">24 SF</td>
+                </tr>
+                <tr class="table-highlight">
+                    <td colspan="3"><strong>TOTAL DOORS</strong></td>
+                    <td class="text-center"><strong>5</strong></td>
+                    <td class="text-right"><strong>168 SF</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="info-box info">
+            <strong>📝 Window Specifications:</strong> Andersen 400 Series, Black Exterior
+        </div>
+    </section>
+
+    <!-- Order Quantities -->
+    <section id="order">
+        <h2>📦 Order Quantities Summary</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Item</th>
+                    <th class="text-right">Net Qty</th>
+                    <th class="text-center">Waste</th>
+                    <th class="text-right">Order Qty</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">🏠 <strong>ROOFING</strong></td>
+                    <td>Asphalt Shingles (GAF HDZ)</td>
+                    <td class="text-right">2,561</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>2,817</strong></td>
+                    <td>SF</td>
+                </tr>
+                <tr>
+                    <td>Standing Seam Metal (Englert)</td>
+                    <td class="text-right">182</td>
+                    <td class="text-center">5%</td>
+                    <td class="text-right"><strong>191</strong></td>
+                    <td>SF</td>
+                </tr>
+                <tr class="table-highlight">
+                    <td></td>
+                    <td><strong>TOTAL ROOFING</strong></td>
+                    <td class="text-right"><strong>2,743</strong></td>
+                    <td class="text-center">-</td>
+                    <td class="text-right"><strong>3,008</strong></td>
+                    <td><strong>SF</strong></td>
+                </tr>
+                <tr>
+                    <td rowspan="4">🧱 <strong>CLADDING</strong></td>
+                    <td>Stone Veneer</td>
+                    <td class="text-right">655</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>721</strong></td>
+                    <td>SF</td>
+                </tr>
+                <tr>
+                    <td>Hardie Clapboard</td>
+                    <td class="text-right">2,644</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>2,908</strong></td>
+                    <td>SF</td>
+                </tr>
+                <tr>
+                    <td>Cement Shake</td>
+                    <td class="text-right">794</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>873</strong></td>
+                    <td>SF</td>
+                </tr>
+                <tr>
+                    <td>Board & Batten</td>
+                    <td class="text-right">84</td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>92</strong></td>
+                    <td>SF</td>
+                </tr>
+                <tr class="table-highlight">
+                    <td></td>
+                    <td><strong>TOTAL CLADDING (GROSS)</strong></td>
+                    <td class="text-right"><strong>4,177</strong></td>
+                    <td class="text-center">10%</td>
+                    <td class="text-right"><strong>4,594</strong></td>
+                    <td><strong>SF</strong></td>
+                </tr>
+                <tr>
+                    <td rowspan="2">🪟 <strong>OPENINGS</strong></td>
+                    <td>Windows (Andersen 400)</td>
+                    <td class="text-right">54</td>
+                    <td class="text-center">-</td>
+                    <td class="text-right"><strong>54</strong></td>
+                    <td>EA</td>
+                </tr>
+                <tr>
+                    <td>Exterior Doors</td>
+                    <td class="text-right">5</td>
+                    <td class="text-center">-</td>
+                    <td class="text-right"><strong>5</strong></td>
+                    <td>EA</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="info-box warning" style="margin-top: 30px;">
+            <strong>⚠️ Important Notes:</strong>
+            <ul style="margin-top: 10px; margin-left: 20px;">
+                <li>Roofing: 3,008 SF ÷ 100 = <strong>~30 squares</strong></li>
+                <li>Stone on 3 elevations only (N, E, W) - South covered by porch</li>
+                <li>Shake on gable ends only (S, N) - E/W have clapboard to soffit</li>
+                <li>Window sizes are averages - verify with schedule for ordering</li>
+                <li>Add 5-10% contingency for unforeseen conditions</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Drawing References -->
+    <section id="drawings">
+        <h2>📋 Drawing References</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Sheet</th>
+                    <th>Title</th>
+                    <th>Data Used</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A-1</td>
+                    <td>General Notes, Site Plan</td>
+                    <td>Project data, porch area</td>
+                    <td><span class="drawing-link" onclick="openModal('page_01_A-1.png', 'Sheet A-1')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>S-1</td>
+                    <td>Foundation Plan</td>
+                    <td>Building dimensions (31' × 50')</td>
+                    <td><span class="drawing-link" onclick="openModal('page_02_S-1.png', 'Sheet S-1')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-2</td>
+                    <td>First Floor Plan</td>
+                    <td>Porch dimensions, door locations</td>
+                    <td><span class="drawing-link" onclick="openModal('page_03_A-2.png', 'Sheet A-2')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-3</td>
+                    <td>Second Floor / Half Story</td>
+                    <td>Balcony layout</td>
+                    <td><span class="drawing-link" onclick="openModal('page_04_A-3.png', 'Sheet A-3')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-4</td>
+                    <td>Roof Plan</td>
+                    <td>Ridge direction, pitches, metal roof callout</td>
+                    <td><span class="drawing-link" onclick="openModal('page_05_A-4.png', 'Sheet A-4')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-6</td>
+                    <td>South & East Elevations</td>
+                    <td>Window counts, material zones, stone height</td>
+                    <td><span class="drawing-link" onclick="openModal('page_07_A-6.png', 'Sheet A-6')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-7</td>
+                    <td>North & West Elevations</td>
+                    <td>Window counts, material zones</td>
+                    <td><span class="drawing-link" onclick="openModal('page_08_A-7.png', 'Sheet A-7')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-8</td>
+                    <td>Sections A & B</td>
+                    <td>Building sections</td>
+                    <td><span class="drawing-link" onclick="openModal('page_09_A-8.png', 'Sheet A-8')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-9</td>
+                    <td>Sections C & D</td>
+                    <td>Building sections</td>
+                    <td><span class="drawing-link" onclick="openModal('page_10_A-9.png', 'Sheet A-9')">📄 View</span></td>
+                </tr>
+                <tr>
+                    <td>A-10</td>
+                    <td>Section E</td>
+                    <td>Wall height (24'-0" grade to soffit)</td>
+                    <td><span class="drawing-link" onclick="openModal('page_11_A-10.png', 'Sheet A-10')">📄 View</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="logo">📐 TakeoffReader AI</div>
+    <div>Automated Construction Takeoff System</div>
+    <div class="powered-by">
+        <br>
+        DEC-CATAQUET RESIDENCE | Comm. No. 240307<br>
+        Report Generated: December 27, 2025<br>
+        Architect: M. B. Hearn Architecture, LLC<br>
+        <br>
+        <em>All values validated through 4-report comparison analysis</em><br>
+        <em>User confirmations received via interactive form</em>
+    </div>
+</div>
+
+<!-- Image Modal Viewer -->
+<div id="imageModal" class="modal" onclick="if(event.target === this) closeModal();">
+    <button class="modal-btn modal-close" onclick="event.stopPropagation(); closeModal();" title="Close (ESC)">✕</button>
+    <div class="modal-controls">
+        <button class="modal-btn" onclick="event.stopPropagation(); zoomIn()" title="Zoom In (+)">+</button>
+        <button class="modal-btn" onclick="event.stopPropagation(); zoomOut()" title="Zoom Out (-)">−</button>
+        <button class="modal-btn" onclick="event.stopPropagation(); resetZoom()" title="Reset (0)">⟲</button>
+    </div>
+    <div class="modal-content">
+        <img id="modalImage" class="modal-image" src="" alt="Drawing">
+    </div>
+    <div id="modalTitle" class="modal-title"></div>
+    <div id="zoomInfo" class="zoom-info">100%</div>
+</div>
+
+<script>
+    const baseUrl = '300dpi/';
+    let currentZoom = 1;
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
+    
+    function openModal(imageName, title) {
+        const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImage');
+        const titleEl = document.getElementById('modalTitle');
+        
+        img.src = baseUrl + imageName;
+        titleEl.textContent = title;
+        modal.classList.add('active');
+        resetZoom();
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        document.getElementById('imageModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+    
+    function zoomIn() {
+        currentZoom = Math.min(currentZoom + 0.25, 5);
+        applyZoom();
+    }
+    
+    function zoomOut() {
+        currentZoom = Math.max(currentZoom - 0.25, 0.5);
+        applyZoom();
+    }
+    
+    function resetZoom() {
+        currentZoom = 1;
+        translateX = 0;
+        translateY = 0;
+        applyZoom();
+    }
+    
+    function applyZoom() {
+        const img = document.getElementById('modalImage');
+        img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+        document.getElementById('zoomInfo').textContent = Math.round(currentZoom * 100) + '%';
+    }
+    
+    // Drag to pan
+    const modalImage = document.getElementById('modalImage');
+    
+    modalImage.addEventListener('mousedown', (e) => {
+        if (currentZoom > 1) {
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+            modalImage.style.cursor = 'grabbing';
+            e.preventDefault();
+        }
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            applyZoom();
+        }
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        modalImage.style.cursor = currentZoom > 1 ? 'grab' : 'default';
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (document.getElementById('imageModal').classList.contains('active')) {
+            if (e.key === 'Escape') closeModal();
+            if (e.key === '+' || e.key === '=') zoomIn();
+            if (e.key === '-') zoomOut();
+            if (e.key === '0') resetZoom();
+        }
+    });
+    
+    // Mouse wheel zoom
+    document.getElementById('modalImage').addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.deltaY < 0) zoomIn();
+        else zoomOut();
+    });
+</script>
+
+</body>
+</html>
