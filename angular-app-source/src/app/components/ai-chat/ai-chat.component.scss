@@ -133,6 +133,19 @@ $border-color: rgba(79, 195, 247, 0.3);
       padding: 2px;
       filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.5));
     }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .multilingual-badge {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: $text-secondary;
+      opacity: 0.85;
+    }
   }
 
   .header-actions {
