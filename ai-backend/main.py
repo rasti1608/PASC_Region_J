@@ -7,6 +7,7 @@ Uses OpenAI GPT-5 nano for intelligent responses about the conference.
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Optional
 import os
@@ -15,6 +16,7 @@ import logging
 import tempfile
 import json
 import re
+import io
 from dotenv import load_dotenv
 from openai import OpenAI, RateLimitError, AuthenticationError
 
@@ -71,6 +73,12 @@ PERSONALITY:
 - Be friendly, helpful, and enthusiastic about student leadership
 - Keep responses concise but informative (2-4 sentences usually)
 - Use the space theme language when appropriate (stars, orbit, launch, etc.)
+
+MULTILINGUAL:
+- You are FULLY MULTILINGUAL. If a user writes in Slovak, Polish, Spanish, German, or ANY other language, respond in THAT language.
+- If asked "Can you speak Slovak/Polish/etc?" - the answer is YES, then demonstrate by responding in that language.
+- If asked to translate something, do it.
+- Match the user's language throughout the conversation.
 
 CRITICAL INSTRUCTIONS:
 1. Answer questions FULLY using the KNOWLEDGE BASE below. Share the actual information - don't just tell users to "check a page".
@@ -150,6 +158,10 @@ class HealthResponse(BaseModel):
 class TranscriptionResponse(BaseModel):
     text: str
     duration: Optional[float] = None
+
+
+class SpeakRequest(BaseModel):
+    text: str
 
 
 # Keyword-based navigation detection
@@ -361,19 +373,19 @@ async def transcribe_voice(audio: UploadFile = File(...)):
             temp_file_path = temp_file.name
 
         try:
-            # Call OpenAI Whisper API with optimized settings
+            # Call OpenAI Whisper API - no language param so it auto-detects
+            # This preserves Slovak, Polish, and other languages
             with open(temp_file_path, "rb") as audio_file:
                 transcription = client.audio.transcriptions.create(
                     model="whisper-1",
-                    file=audio_file,
-                    language="en",  # Specify English for better accuracy
-                    response_format="text"
+                    file=audio_file
                 )
 
-            logger.info(f"Transcription successful ({len(transcription) if transcription else 0} chars): {transcription[:100] if transcription else 'empty'}...")
+            transcribed_text = transcription.text if transcription else ""
+            logger.info(f"Transcription successful ({len(transcribed_text)} chars): {transcribed_text[:100] if transcribed_text else 'empty'}...")
 
             return TranscriptionResponse(
-                text=transcription.strip() if transcription else "",
+                text=transcribed_text.strip(),
                 duration=None  # Could extract from audio if needed
             )
 
@@ -404,6 +416,74 @@ async def transcribe_voice(audio: UploadFile = File(...)):
         )
 
 
+@app.post("/api/speak")
+async def text_to_speech(request: SpeakRequest):
+    """
+    Text-to-Speech endpoint - uses OpenAI TTS API to convert text to audio.
+    Returns MP3 audio stream.
+    """
+    if not request.text or not request.text.strip():
+        raise HTTPException(status_code=400, detail="Text cannot be empty")
+
+    # Check if OpenAI client is configured
+    if client is None:
+        logger.error("OpenAI client not configured for TTS")
+        raise HTTPException(
+            status_code=503,
+            detail="AI service is not configured. Please check that the OPENAI_API_KEY is set."
+        )
+
+    try:
+        # Limit text length to avoid excessive API costs
+        text = request.text.strip()[:1000]  # Max 1000 chars
+
+        logger.info(f"Generating TTS for text ({len(text)} chars): {text[:50]}...")
+
+        # Call OpenAI TTS API
+        response = client.audio.speech.create(
+            model="tts-1",
+            voice="nova",
+            input=text
+        )
+
+        # Stream the audio response
+        audio_data = io.BytesIO()
+        for chunk in response.iter_bytes():
+            audio_data.write(chunk)
+        audio_data.seek(0)
+
+        logger.info("TTS audio generated successfully")
+
+        return StreamingResponse(
+            audio_data,
+            media_type="audio/mpeg",
+            headers={
+                "Content-Disposition": "inline; filename=speech.mp3"
+            }
+        )
+
+    except RateLimitError as e:
+        logger.error(f"OpenAI quota exceeded for TTS: {str(e)}")
+        raise HTTPException(
+            status_code=429,
+            detail="AI service has reached its usage limit. Please try again later."
+        )
+
+    except AuthenticationError as e:
+        logger.error(f"OpenAI authentication failed for TTS: {str(e)}")
+        raise HTTPException(
+            status_code=503,
+            detail="AI service configuration error."
+        )
+
+    except Exception as e:
+        logger.error(f"TTS error: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate speech. Please try again."
+        )
+
+
 @app.get("/")
 async def root():
     """
@@ -417,7 +497,8 @@ async def root():
         "endpoints": {
             "health": "/api/health",
             "chat": "/api/chat",
-            "voice": "/api/voice"
+            "voice": "/api/voice",
+            "speak": "/api/speak"
         }
     }
 

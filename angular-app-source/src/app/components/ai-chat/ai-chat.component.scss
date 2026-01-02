@@ -132,6 +132,12 @@ $border-color: rgba(79, 195, 247, 0.3);
       background: rgba(255, 255, 255, 0.9);
       padding: 2px;
       filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.5));
+      transition: all 0.3s ease;
+
+      &.speaking {
+        animation: avatar-speaking 1s ease-in-out infinite;
+        filter: drop-shadow(0 0 12px rgba(79, 195, 247, 0.8));
+      }
     }
 
     .header-text {
@@ -176,7 +182,34 @@ $border-color: rgba(79, 195, 247, 0.3);
 
   .close-btn:hover {
     background: rgba(244, 67, 54, 0.3);
-    color: #f44336;
+  }
+
+  .auto-read-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: $text-secondary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: $text-primary;
+    }
+
+    &.enabled {
+      color: $primary-color;
+      background: rgba(79, 195, 247, 0.15);
+
+      &:hover {
+        background: rgba(79, 195, 247, 0.25);
+      }
+    }
   }
 }
 
@@ -264,11 +297,38 @@ $border-color: rgba(79, 195, 247, 0.3);
     background: rgba(255, 255, 255, 0.9);
     padding: 2px;
     filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.5));
+    transition: all 0.3s ease;
+  }
+
+  &.speaking .ai-message-icon {
+    animation: avatar-speaking 1s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px rgba(79, 195, 247, 0.8));
   }
 
   &.user {
     background: linear-gradient(135deg, $accent-color 0%, #FF6500 100%);
   }
+}
+
+@keyframes avatar-speaking {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(79, 195, 247, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(79, 195, 247, 0);
+  }
+}
+
+/* Avatar Column (avatar + speaker button) */
+.avatar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding-top: 2px;
 }
 
 .message-content {
@@ -302,6 +362,67 @@ $border-color: rgba(79, 195, 247, 0.3);
   flex-direction: column;
   gap: 8px;
   margin-top: 12px;
+}
+
+/* TTS Play/Stop Button (under avatar) */
+.speak-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(79, 195, 247, 0.1);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  color: $text-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(79, 195, 247, 0.25);
+    border-color: $primary-color;
+    color: $primary-color;
+    transform: scale(1.1);
+  }
+
+  // Loading state - show stop icon, subtle animation
+  &.loading {
+    background: rgba(255, 152, 0, 0.15);
+    border-color: #FF9800;
+    color: #FF9800;
+    animation: pulse-loading 1s ease-in-out infinite;
+  }
+
+  // Playing state - show stop icon, blue pulse
+  &.playing {
+    background: rgba(244, 67, 54, 0.15);
+    border-color: #f44336;
+    color: #f44336;
+  }
+
+  svg {
+    display: block;
+  }
+}
+
+@keyframes pulse-loading {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-speak {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
 }
 
 .action-btn {

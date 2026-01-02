@@ -83,6 +83,18 @@ export class AiService {
   }
 
   /**
+   * Convert text to speech using OpenAI TTS API
+   * Returns audio blob that can be played
+   */
+  speakText(text: string): Observable<Blob> {
+    return this.http.post(`${this.API_URL}/speak`, { text }, {
+      responseType: 'blob'
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
    * Handle HTTP errors
    */
   private handleError(error: HttpErrorResponse): Observable<never> {

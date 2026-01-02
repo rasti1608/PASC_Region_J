@@ -40,6 +40,11 @@ export class SecureJsonInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    // Skip processing for blob requests (e.g., TTS audio, file downloads)
+    if (request.responseType === 'blob') {
+      return next.handle(request);
+    }
+
     // For CFC API requests, force responseType to 'text' to prevent auto-parsing
     let modifiedRequest = request;
     if (request.url.includes('/api/')) {

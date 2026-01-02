@@ -28,6 +28,7 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
   private mediaStream: MediaStream | null = null;
+  private recordingMimeType: string = 'audio/webm;codecs=opus';
 
   // Web Audio API for waveform
   private audioContext: AudioContext | null = null;
@@ -38,6 +39,15 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   // Textarea auto-resize flag
   private needsTextareaResize = false;
+
+  // Text-to-Speech State
+  isLoadingTTS = signal(false);    // True while fetching audio from API
+  isPlayingTTS = signal(false);    // True while audio is actually playing
+  speakingMessageIndex = signal<number | null>(null);
+  autoReadEnabled = signal(true);  // Auto-read AI responses by default
+  private ttsAudio: HTMLAudioElement | null = null;
+  private ttsAbortController: AbortController | null = null;
+  private readonly AUTO_READ_KEY = 'ai-chat-auto-read';
 
   // Chat State
   messages = signal<ChatMessage[]>([]);
@@ -53,12 +63,20 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   ) {}
 
   ngOnInit(): void {
+    // Load auto-read preference from localStorage
+    const savedAutoRead = localStorage.getItem(this.AUTO_READ_KEY);
+    if (savedAutoRead !== null) {
+      this.autoReadEnabled.set(savedAutoRead === 'true');
+    }
+
     // Check backend health on init
     this.checkBackendHealth();
 
-    // Add welcome message
+    // Add welcome message (will auto-read when panel opens)
     this.addAssistantMessage(
-      "Hi! I'm your PASC Region J Conference assistant. Ask me anything about the conference, workshops, registration, or navigate the site!"
+      "Hi! I'm your PASC Region J Conference assistant. Ask me anything about the conference, workshops, registration, or navigate the site!",
+      undefined,
+      false  // Don't auto-read yet - wait for panel to open
     );
   }
 
@@ -67,6 +85,8 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     document.body.classList.remove('ai-chat-open');
     // Stop any ongoing recording
     this.cleanupRecording();
+    // Stop any TTS audio
+    this.stopSpeaking();
   }
 
   ngAfterViewChecked(): void {
@@ -83,10 +103,19 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Start recording audio with waveform visualization
+   * Optimized for multilingual speech recognition (Whisper)
    */
   async startRecording(): Promise<void> {
     try {
-      this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Request high-quality audio optimized for speech recognition
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          sampleRate: 16000,        // Whisper's native sample rate
+          channelCount: 1,          // Mono is optimal for speech
+          echoCancellation: true,   // Reduce echo for clearer speech
+          noiseSuppression: true    // Reduce background noise
+        }
+      });
 
       // Set up Web Audio API for waveform visualization
       this.audioContext = new AudioContext();
@@ -95,10 +124,30 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       const source = this.audioContext.createMediaStreamSource(this.mediaStream);
       source.connect(this.analyser);
 
-      // Set up MediaRecorder
-      this.mediaRecorder = new MediaRecorder(this.mediaStream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
+      // Determine best audio format for speech recognition
+      // Prefer less compressed formats for better multilingual accuracy
+      if (MediaRecorder.isTypeSupported('audio/wav')) {
+        this.recordingMimeType = 'audio/wav';
+      } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        this.recordingMimeType = 'audio/webm;codecs=opus';
+      } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+        this.recordingMimeType = 'audio/webm';
+      } else {
+        this.recordingMimeType = 'audio/webm';
+      }
+
+      // Set up MediaRecorder with higher bitrate for better quality
+      const recorderOptions: MediaRecorderOptions = {
+        mimeType: this.recordingMimeType
+      };
+
+      // Add higher bitrate for webm/opus to improve speech clarity
+      if (this.recordingMimeType.includes('webm')) {
+        recorderOptions.audioBitsPerSecond = 128000;
+      }
+
+      this.mediaRecorder = new MediaRecorder(this.mediaStream, recorderOptions);
+      console.log('Recording with format:', this.recordingMimeType);
 
       this.audioChunks = [];
 
@@ -133,9 +182,10 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   confirmRecording(): void {
     if (this.mediaRecorder && this.isRecording()) {
       this.mediaRecorder.onstop = () => {
-        // Process the recorded audio
+        // Process the recorded audio with matching mimeType
         if (this.audioChunks.length > 0) {
-          const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+          const audioBlob = new Blob(this.audioChunks, { type: this.recordingMimeType });
+          console.log('Audio blob created:', audioBlob.size, 'bytes,', this.recordingMimeType);
           this.transcribeAudio(audioBlob);
         }
         this.cleanupRecordingResources();
@@ -327,14 +377,25 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
    * Toggle the chat panel
    */
   togglePanel(): void {
+    const wasOpen = this.isPanelOpen();
     this.isPanelOpen.update(open => !open);
     this.updateBodyClass();
 
-    // Focus input when panel opens
-    if (this.isPanelOpen()) {
+    // When panel opens
+    if (this.isPanelOpen() && !wasOpen) {
       setTimeout(() => {
         this.messageInput?.nativeElement?.focus();
       }, 300);
+
+      // Auto-read welcome message if enabled and this is first open
+      if (this.autoReadEnabled() && this.messages().length === 1) {
+        setTimeout(() => this.speakMessage(0), 500);
+      }
+    }
+
+    // Stop speaking when panel closes
+    if (!this.isPanelOpen() && wasOpen) {
+      this.stopSpeaking();
     }
   }
 
@@ -446,7 +507,7 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   /**
    * Add an assistant message to the chat
    */
-  private addAssistantMessage(content: string, actions?: ChatAction[]): void {
+  private addAssistantMessage(content: string, actions?: ChatAction[], autoRead: boolean = true): void {
     this.messages.update(msgs => [...msgs, {
       role: 'assistant',
       content,
@@ -454,6 +515,12 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       actions
     }]);
     this.scrollToBottom();
+
+    // Auto-read if enabled and requested
+    if (autoRead && this.autoReadEnabled() && this.isPanelOpen()) {
+      const messageIndex = this.messages().length - 1;
+      setTimeout(() => this.speakMessage(messageIndex), 300);
+    }
   }
 
   /**
@@ -518,14 +585,116 @@ export class AiChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     window.dispatchEvent(new CustomEvent('openAnthemModal'));
   }
 
+  // ========================================
+  // TEXT-TO-SPEECH METHODS
+  // ========================================
+
+  /**
+   * Speak an AI message using TTS
+   */
+  speakMessage(messageIndex: number): void {
+    const message = this.messages()[messageIndex];
+    if (!message || message.role !== 'assistant') return;
+
+    // If already speaking/loading this message, stop it
+    if (this.speakingMessageIndex() === messageIndex) {
+      this.stopSpeaking();
+      return;
+    }
+
+    // Stop any current speech
+    this.stopSpeaking();
+
+    // Set loading state (not playing yet)
+    this.isLoadingTTS.set(true);
+    this.isPlayingTTS.set(false);
+    this.speakingMessageIndex.set(messageIndex);
+
+    this.aiService.speakText(message.content).subscribe({
+      next: (audioBlob) => {
+        // Check if we were cancelled during loading
+        if (this.speakingMessageIndex() !== messageIndex) {
+          return;
+        }
+
+        // Create audio element
+        const audioUrl = URL.createObjectURL(audioBlob);
+        this.ttsAudio = new Audio(audioUrl);
+
+        // When audio is ready to play
+        this.ttsAudio.oncanplaythrough = () => {
+          // Check if still supposed to play
+          if (this.speakingMessageIndex() !== messageIndex || !this.ttsAudio) {
+            URL.revokeObjectURL(audioUrl);
+            return;
+          }
+
+          this.ttsAudio.play().then(() => {
+            // Audio actually started playing
+            this.isLoadingTTS.set(false);
+            this.isPlayingTTS.set(true);
+          }).catch(err => {
+            console.error('Failed to play TTS audio:', err);
+            this.stopSpeaking();
+            URL.revokeObjectURL(audioUrl);
+          });
+        };
+
+        this.ttsAudio.onended = () => {
+          this.stopSpeaking();
+          URL.revokeObjectURL(audioUrl);
+        };
+
+        this.ttsAudio.onerror = () => {
+          console.error('TTS audio playback error');
+          this.stopSpeaking();
+          URL.revokeObjectURL(audioUrl);
+        };
+      },
+      error: (err) => {
+        console.error('TTS error:', err);
+        this.stopSpeaking();
+      }
+    });
+  }
+
+  /**
+   * Stop current TTS playback
+   */
+  stopSpeaking(): void {
+    if (this.ttsAudio) {
+      this.ttsAudio.pause();
+      this.ttsAudio.currentTime = 0;
+      this.ttsAudio = null;
+    }
+    this.isLoadingTTS.set(false);
+    this.isPlayingTTS.set(false);
+    this.speakingMessageIndex.set(null);
+  }
+
+  /**
+   * Toggle auto-read setting
+   */
+  toggleAutoRead(): void {
+    const newValue = !this.autoReadEnabled();
+    this.autoReadEnabled.set(newValue);
+    localStorage.setItem(this.AUTO_READ_KEY, String(newValue));
+
+    // Stop current speech if disabling
+    if (!newValue) {
+      this.stopSpeaking();
+    }
+  }
+
   /**
    * Clear the conversation
    */
   clearConversation(): void {
+    this.stopSpeaking();
     this.messages.set([]);
     this.conversationId.set(undefined);
     this.addAssistantMessage(
-      "Conversation cleared! How can I help you with the PASC Region J Conference?"
+      "Hi! I'm your PASC Region J Conference assistant. Ask me anything about the conference, workshops, registration, or navigate the site!"
     );
   }
 
