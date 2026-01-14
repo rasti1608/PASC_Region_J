@@ -163,10 +163,16 @@ Version: 1.0
                 }
             }>
 
+            <cfcatch type="database">
+                <cfset result = {
+                    "success" = false,
+                    "message" = "DB Error: #cfcatch.message# | Detail: #cfcatch.detail# | SQL: #cfcatch.sql# | NativeErrorCode: #cfcatch.nativeErrorCode#"
+                }>
+            </cfcatch>
             <cfcatch type="any">
                 <cfset result = {
                     "success" = false,
-                    "message" = "Login error: #cfcatch.message#"
+                    "message" = "Login error: #cfcatch.message# | Type: #cfcatch.type# | Detail: #cfcatch.detail#"
                 }>
             </cfcatch>
         </cftry>

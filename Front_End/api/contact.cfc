@@ -5,11 +5,17 @@ Description: API endpoint for contact form submissions with validation,
              rate limiting, and email notifications
 Author: Auto-generated for Angular migration
 Date: 2025-11-11
-Version: 1.0
+Version: 1.1 - Updated SMTP to use Purelymail
 ================================================================================
 --->
 
 <cfcomponent output="false">
+
+    <!--- SMTP Configuration --->
+    <cfset variables.smtpServer = "mailserver.purelymail.com">
+    <cfset variables.smtpPort = "465">
+    <cfset variables.smtpUsername = "info@pascregionj.com">
+    <cfset variables.smtpPassword = "Oliver007!Oliver007!">
 
     <!--- ================================================================== --->
     <!--- SUBMIT CONTACT FORM --->
@@ -132,7 +138,12 @@ Version: 1.0
                     to="#recipientList#"
                     from="info@pascregionj.com"
                     subject="New Contact Form Submission: #trim(arguments.subject)#"
-                    type="html">
+                    type="html"
+                    server="#variables.smtpServer#"
+                    port="#variables.smtpPort#"
+                    username="#variables.smtpUsername#"
+                    password="#variables.smtpPassword#"
+                    usessl="true">
                     <html>
                     <head>
                         <style>
@@ -194,7 +205,12 @@ Version: 1.0
                 to="#trim(arguments.email)#"
                 from="info@pascregionj.com"
                 subject="Thank you for contacting PASC Region J"
-                type="html">
+                type="html"
+                server="#variables.smtpServer#"
+                port="#variables.smtpPort#"
+                username="#variables.smtpUsername#"
+                password="#variables.smtpPassword#"
+                usessl="true">
                 <html>
                 <head>
                     <style>
