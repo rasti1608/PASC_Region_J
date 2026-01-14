@@ -1,24 +1,24 @@
 <!--- testmail.cfm - DELETE THIS FILE AFTER TESTING --->
 <cfset smtpServer = "mailserver.purelymail.com">
-<cfset smtpPort = "465">
+<cfset smtpPort = "587">
 <cfset smtpUsername = "info@pascregionj.com">
 <cfset smtpPassword = "Oliver007!Oliver007!">
 
-<h2>SMTP Test</h2>
+<h2>SMTP Test - Port 587 TLS</h2>
 
 <cftry>
     <cfmail
         to="rasto@comcast.net"
         from="info@pascregionj.com"
-        subject="SMTP Test from DailyRazor"
+        subject="SMTP Test from DailyRazor - Port 587"
         type="text"
         server="#smtpServer#"
         port="#smtpPort#"
         username="#smtpUsername#"
         password="#smtpPassword#"
-        usessl="true"
+        usetls="true"
         spoolenable="false">
-This is a test email sent directly through Purelymail SMTP.
+This is a test email sent directly through Purelymail SMTP on port 587.
     </cfmail>
     
     <p style="color:green; font-weight:bold;">SUCCESS - Email sent without errors!</p>
